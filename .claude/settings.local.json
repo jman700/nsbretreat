@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "Bash(node -e \"console.log\\('ok'\\)\")",
+      "Bash(node build.js)",
+      "Bash(start \"C:/Users/anton/Documents/Claude-Code/Freshdesk/jsl-support.html\")",
+      "Bash(node -e ' *)",
+      "Bash(start *)",
+      "Bash(node *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
+    ]
+  }
+}
