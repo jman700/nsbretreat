@@ -771,3 +771,15 @@ h3 { font-size: 1.1rem; }
   .hero h1 { font-size: 1.875rem; }
   .gallery-grid { grid-template-columns: 1fr; }
 }
+
+/* --- Utilities --- */
+.img-frame {
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  border: 1px solid var(--mid-green);
+}
+.img-frame img { width: 100%; height: 360px; object-fit: cover; }
+
+.mt-28 { margin-top: 28px; }
+.mb-28 { margin-bottom: 28px; }
+.align-center { align-items: center; }
