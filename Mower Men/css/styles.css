@@ -28,6 +28,12 @@ a  { text-decoration: none; color: inherit; }
   --gold:        #c8a94a;
   --cream:       #f5f0e8;
   --muted:       #a0b090;
+  --error:      #c0392b;
+  --error-text: #e74c3c;
+  --dim-1:      #666;
+  --dim-2:      #555;
+  --dim-3:      #444;
+  --dim-4:      #333;
 
   --font-serif: Georgia, 'Times New Roman', serif;
   --font-sans:  Arial, Helvetica, sans-serif;
@@ -232,7 +238,7 @@ h3 { font-size: 1.1rem; }
   flex-shrink: 0;
 }
 .testimonial__name  { font-size: 0.6875rem; color: var(--gold); font-weight: 700; }
-.testimonial__role  { font-size: 0.5625rem; color: #666; margin-top: 2px; }
+.testimonial__role  { font-size: 0.5625rem; color: var(--dim-1); margin-top: 2px; }
 
 /* --- Bullet List --- */
 .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
@@ -290,7 +296,6 @@ h3 { font-size: 1.1rem; }
 .hero__content {
   position: relative;
   z-index: 1;
-  max-width: var(--max-width);
   margin: 0 auto;
   padding: 120px 24px 80px;
   max-width: 680px;
@@ -429,7 +434,7 @@ h3 { font-size: 1.1rem; }
 .marquee-label {
   text-align: center;
   font-size: 0.5625rem;
-  color: #444;
+  color: var(--dim-3);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   margin-bottom: 20px;
@@ -492,8 +497,8 @@ h3 { font-size: 1.1rem; }
 .form-group select option { background: var(--deep-forest); }
 .form-group--error input,
 .form-group--error select,
-.form-group--error textarea { border-color: #c0392b; }
-.form-error-msg { font-size: 0.625rem; color: #e74c3c; margin-top: 4px; }
+.form-group--error textarea { border-color: var(--error); }
+.form-error-msg { font-size: 0.625rem; color: var(--error-text); margin-top: 4px; }
 
 .checkbox-grid {
   display: grid;
@@ -567,7 +572,7 @@ h3 { font-size: 1.1rem; }
 .footer-col p,
 .footer-col a {
   font-size: 0.6875rem;
-  color: #555;
+  color: var(--dim-2);
   line-height: 2;
   display: block;
 }
@@ -580,7 +585,7 @@ h3 { font-size: 1.1rem; }
   justify-content: space-between;
   align-items: center;
   font-size: 0.5625rem;
-  color: #333;
+  color: var(--dim-4);
 }
 
 /* --- About Page --- */
