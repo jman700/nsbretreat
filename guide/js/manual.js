@@ -38,3 +38,14 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
     trigger.closest('.acc-item').classList.toggle('open');
   });
 });
+
+document.querySelectorAll('.around-code[data-copy-val]').forEach(el => {
+  el.addEventListener('click', () => {
+    navigator.clipboard.writeText(el.dataset.copyVal).then(() => showToast());
+  });
+});
+
+document.querySelectorAll('[id$="-phone"]').forEach(el => {
+  el.href = 'tel:' + CONFIG.host_phone.replace(/\D/g, '');
+  el.textContent = CONFIG.host_phone;
+});
