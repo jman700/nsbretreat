@@ -49,3 +49,14 @@ document.querySelectorAll('[id$="-phone"]').forEach(el => {
   el.href = 'tel:' + CONFIG.host_phone.replace(/\D/g, '');
   el.textContent = CONFIG.host_phone;
 });
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.place-card').forEach(card => {
+      card.classList.toggle('hidden', card.dataset.category !== filter);
+    });
+  });
+});
