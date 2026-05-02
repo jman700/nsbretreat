@@ -365,11 +365,42 @@
       </ul>
     </section>
 
+    <section class="manual-section" id="guestbook">
+      <h2 class="manual-section-title">Guest Book</h2>
+      <p style="color:var(--charcoal-light); font-size:0.9rem; margin-bottom:1.5rem">Enjoyed your stay? Leave a note for future guests!</p>
+
+      <form class="gb-form" id="gb-form">
+        <div class="gb-form-row">
+          <input type="text" id="gb-name" placeholder="Your name" required maxlength="60">
+          <input type="text" id="gb-city" placeholder="Home city" maxlength="60">
+        </div>
+        <textarea id="gb-message" placeholder="Share your experience..." required maxlength="400" rows="3"></textarea>
+        <div class="gb-rating">
+          <span>Rating:</span>
+          <div class="stars" id="gb-stars">
+            <button type="button" data-val="1">★</button>
+            <button type="button" data-val="2">★</button>
+            <button type="button" data-val="3">★</button>
+            <button type="button" data-val="4">★</button>
+            <button type="button" data-val="5">★</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-dark gb-submit">Leave a Note</button>
+        <p class="gb-status" id="gb-status"></p>
+      </form>
+
+      <div class="gb-entries" id="gb-entries">
+        <p style="color:var(--charcoal-light); font-size:0.9rem">Loading entries...</p>
+      </div>
+    </section>
+
   </main>
 
   <script src="../js/config.js"></script>
   <script src="js/manual.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="js/chatbot.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/guestbook.js"></script>
 </body>
 </html>

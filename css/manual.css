@@ -373,3 +373,55 @@
   background-position: center;
 }
 .check-item span { font-size: 0.9rem; color: var(--charcoal-light); }
+
+/* ── Guest Book ── */
+.gb-form { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+.gb-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+@media (max-width: 420px) { .gb-form-row { grid-template-columns: 1fr; } }
+.gb-form input, .gb-form textarea {
+  padding: 0.875rem 1rem;
+  border: 1.5px solid var(--tan);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  background: var(--white);
+  color: var(--charcoal);
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.gb-form input:focus, .gb-form textarea:focus { border-color: var(--charcoal); }
+.gb-rating { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--charcoal-light); }
+.stars { display: flex; gap: 0.25rem; }
+.stars button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--tan);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.stars button.active { color: var(--accent); }
+.gb-submit { align-self: flex-start; }
+.gb-status { font-size: 0.85rem; min-height: 1.25rem; }
+
+.gb-entries { display: flex; flex-direction: column; gap: 0.75rem; }
+.gb-entry {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+.gb-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.gb-entry-header strong { font-family: var(--font-serif); font-size: 1rem; }
+.gb-city { font-size: 0.8rem; color: var(--charcoal-light); }
+.gb-stars-display { color: var(--accent); font-size: 0.9rem; margin-left: auto; }
+.gb-entry-message { font-size: 0.9rem; color: var(--charcoal-light); line-height: 1.6; margin-bottom: 0.5rem; }
+.gb-entry-date { font-size: 0.75rem; color: var(--tan); }
