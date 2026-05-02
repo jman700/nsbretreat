@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>House Manual — NSB Retreat</title>
+  <meta name="description" content="Your guide to The New Smyrna Beach Retreat at 815 Carol Ave.">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/manual.css">
+</head>
+<body class="manual-body">
+
+  <nav class="manual-nav" id="manual-nav">
+    <div class="manual-nav-inner">
+      <a href="../" class="manual-nav-logo">← NSB Retreat</a>
+      <div class="manual-tabs" id="manual-tabs">
+        <a href="#quick" class="tab-link active">Quick Info</a>
+        <a href="#ask" class="tab-link">Ask</a>
+        <a href="#house" class="tab-link">The House</a>
+        <a href="#around" class="tab-link">Getting Around</a>
+        <a href="#hottub" class="tab-link">Hot Tub</a>
+        <a href="#local" class="tab-link">Local Guide</a>
+        <a href="#beach" class="tab-link">Beach</a>
+        <a href="#checkout" class="tab-link">Checkout</a>
+        <a href="#guestbook" class="tab-link">Guest Book</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="manual-main">
+
+    <section class="manual-section" id="quick">
+      <h2 class="manual-section-title">Quick Info</h2>
+      <div class="quick-grid">
+        <div class="quick-card" data-copy-key="wifi_name">
+          <span class="quick-label">WiFi Network</span>
+          <span class="quick-value" id="qv-wifi-name">—</span>
+          <span class="quick-hint">Tap to copy</span>
+        </div>
+        <div class="quick-card" data-copy-key="wifi_password">
+          <span class="quick-label">WiFi Password</span>
+          <span class="quick-value" id="qv-wifi-pass">—</span>
+          <span class="quick-hint">Tap to copy</span>
+        </div>
+        <div class="quick-card" data-copy-key="door_code_note">
+          <span class="quick-label">Door Code</span>
+          <span class="quick-value" id="qv-door">—</span>
+          <span class="quick-hint">Tap to copy</span>
+        </div>
+        <div class="quick-card">
+          <span class="quick-label">Check-out</span>
+          <span class="quick-value" id="qv-checkout">—</span>
+          <span class="quick-hint">Check-in: 4:00 PM</span>
+        </div>
+      </div>
+      <div class="toast" id="copy-toast">Copied!</div>
+    </section>
+
+  </main>
+
+  <script src="../js/config.js"></script>
+  <script src="js/manual.js"></script>
+</body>
+</html>

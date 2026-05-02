@@ -1,0 +1,106 @@
+.manual-body { background: var(--blush); padding-top: 0; }
+
+.manual-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(249,236,232,0.97);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--tan);
+}
+.manual-nav-inner {
+  display: flex;
+  flex-direction: column;
+}
+.manual-nav-logo {
+  padding: 0.75rem 1.25rem 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--charcoal-light);
+  text-decoration: none;
+}
+.manual-tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 1rem 0;
+  gap: 0;
+}
+.manual-tabs::-webkit-scrollbar { display: none; }
+.tab-link {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--charcoal-light);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: 0.15s;
+}
+.tab-link:hover, .tab-link.active {
+  color: var(--charcoal);
+  border-bottom-color: var(--accent);
+}
+
+.manual-main { max-width: 680px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+.manual-section { margin-bottom: 3rem; scroll-margin-top: 90px; }
+.manual-section-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.quick-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.quick-card:active { transform: scale(0.97); }
+.quick-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--charcoal-light);
+}
+.quick-value {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--charcoal);
+  word-break: break-all;
+}
+.quick-hint { font-size: 0.7rem; color: var(--accent); }
+
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--charcoal);
+  color: var(--white);
+  padding: 0.6rem 1.5rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s;
+  z-index: 999;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
