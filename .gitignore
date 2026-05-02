@@ -1,0 +1,6 @@
+js/config.js
+assets/photos/*
+!assets/photos/.gitkeep
+node_modules/
+.DS_Store
+Thumbs.db
