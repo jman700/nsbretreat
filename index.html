@@ -167,6 +167,28 @@
     </div>
   </section>
 
+  <section class="availability" id="availability">
+    <div class="container">
+      <p class="section-label" style="text-align:center">Check Dates</p>
+      <h2 class="section-title" style="text-align:center">Availability</h2>
+      <div class="calendar-wrap">
+        <div class="calendar-nav">
+          <button id="cal-prev" aria-label="Previous month">&#8592;</button>
+          <span id="cal-month-label"></span>
+          <button id="cal-next" aria-label="Next month">&#8594;</button>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+        <div class="calendar-legend">
+          <span class="legend-available">Available</span>
+          <span class="legend-booked">Booked</span>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:2rem">
+        <a href="#" data-airbnb-link class="btn btn-dark">Book on Airbnb</a>
+      </div>
+    </div>
+  </section>
+
   <section class="local-teaser" id="local">
     <div class="container">
       <p class="section-label" style="text-align:center">Explore NSB</p>
@@ -238,7 +260,9 @@
     <button class="lightbox-next" id="lightbox-next" aria-label="Next">&#x203A;</button>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/calendar.js"></script>
 </body>
 </html>
