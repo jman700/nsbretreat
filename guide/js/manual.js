@@ -32,3 +32,9 @@ function showToast() {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 1800);
 }
+
+document.querySelectorAll('.acc-trigger').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    trigger.closest('.acc-item').classList.toggle('open');
+  });
+});

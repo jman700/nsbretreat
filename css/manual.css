@@ -163,3 +163,43 @@
   cursor: pointer;
 }
 .chat-input-row button:hover { opacity: 0.85; }
+
+/* ── Accordion ── */
+.accordion { display: flex; flex-direction: column; gap: 0.5rem; }
+.acc-item {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.acc-trigger {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--charcoal);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.acc-trigger::after {
+  content: '+';
+  font-size: 1.25rem;
+  color: var(--accent);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.acc-item.open .acc-trigger::after { transform: rotate(45deg); }
+.acc-body {
+  display: none;
+  padding: 0 1.25rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--charcoal-light);
+  line-height: 1.7;
+}
+.acc-item.open .acc-body { display: block; }
