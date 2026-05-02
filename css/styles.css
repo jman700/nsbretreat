@@ -330,3 +330,42 @@ section { padding: var(--section-pad-y) 0; }
 .lightbox-close { top: 1rem; right: 1rem; }
 .lightbox-prev { left: 1rem; top: 50%; transform: translateY(-50%); font-size: 3rem; }
 .lightbox-next { right: 1rem; top: 50%; transform: translateY(-50%); font-size: 3rem; }
+
+.amenities { background: var(--sand); }
+.amenities-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+.amenity-group {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+}
+.amenity-group-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--tan);
+}
+.amenity-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.amenity-list li {
+  font-size: 0.9rem;
+  color: var(--charcoal-light);
+  padding-left: 1rem;
+  position: relative;
+}
+.amenity-list li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
