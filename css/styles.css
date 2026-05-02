@@ -29,6 +29,7 @@
   --z-toast: 300;
 
   --radius-full: 100px;
+  --nav-h: 64px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -105,7 +106,7 @@ section { padding: var(--section-pad-y) 0; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: var(--nav-h);
 }
 .nav-logo {
   font-family: var(--font-serif);
@@ -150,7 +151,7 @@ section { padding: var(--section-pad-y) 0; }
   .nav-links {
     display: none;
     position: absolute;
-    top: 64px; left: 0; right: 0;
+    top: var(--nav-h); left: 0; right: 0;
     flex-direction: column;
     background: var(--blush);
     padding: 1.5rem;

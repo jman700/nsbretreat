@@ -25,12 +25,8 @@ if (navToggle && navLinks) {
   });
 }
 
-// Wire Airbnb URL from config to all [data-airbnb-link] elements and #nav-book-btn
-document.addEventListener('DOMContentLoaded', () => {
-  const airbnbUrl = typeof CONFIG !== 'undefined' ? CONFIG.airbnb_url : '#';
-  document.querySelectorAll('[data-airbnb-link]').forEach(el => {
-    el.href = airbnbUrl;
-  });
-  const bookBtn = document.getElementById('nav-book-btn');
-  if (bookBtn) bookBtn.href = airbnbUrl;
+// Wire Airbnb URL from config to all [data-airbnb-link] elements
+const airbnbUrl = typeof CONFIG !== 'undefined' ? CONFIG.airbnb_url : '#';
+document.querySelectorAll('[data-airbnb-link]').forEach(el => {
+  el.href = airbnbUrl;
 });
