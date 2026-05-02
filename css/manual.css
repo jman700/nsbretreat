@@ -309,3 +309,67 @@
 @media (max-width: 400px) {
   .place-card img { width: 90px; }
 }
+
+.tips-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+.tips-list li {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--charcoal-light);
+  box-shadow: var(--shadow);
+  line-height: 1.5;
+}
+
+.checklist-progress {
+  height: 6px;
+  background: var(--tan);
+  border-radius: 100px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+.checklist-bar {
+  height: 100%;
+  background: var(--charcoal);
+  border-radius: 100px;
+  width: 0%;
+  transition: width 0.3s;
+}
+.checklist-count {
+  font-size: 0.8rem;
+  color: var(--charcoal-light);
+  margin-bottom: 1rem;
+}
+.checklist { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+  transition: opacity 0.2s;
+}
+.check-item.done { opacity: 0.5; }
+.check-item.done span { text-decoration: line-through; }
+.check-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--tan);
+  background: none;
+  cursor: pointer;
+  transition: 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.check-item.done .check-btn {
+  background: var(--charcoal);
+  border-color: var(--charcoal);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.check-item span { font-size: 0.9rem; color: var(--charcoal-light); }

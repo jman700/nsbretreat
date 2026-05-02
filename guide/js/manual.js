@@ -60,3 +60,21 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     });
   });
 });
+
+const checkItems = document.querySelectorAll('.check-item');
+const total = checkItems.length;
+
+function updateProgress() {
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('checklist-bar').style.width = `${(done / total) * 100}%`;
+  document.getElementById('checklist-count').textContent = `${done} of ${total} complete`;
+}
+
+checkItems.forEach(item => {
+  item.querySelector('.check-btn').addEventListener('click', () => {
+    item.classList.toggle('done');
+    updateProgress();
+  });
+});
+
+updateProgress();
