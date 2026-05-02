@@ -56,9 +56,26 @@
       <div class="toast" id="copy-toast">Copied!</div>
     </section>
 
+    <section class="manual-section" id="ask">
+      <h2 class="manual-section-title">Ask a Question</h2>
+      <div class="chat-wrap">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-bubble chat-bot">
+            Hi! Ask me anything about the house, local area, or your stay. 👋
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" placeholder="e.g. What's the WiFi password?" autocomplete="off">
+          <button id="chat-send">Send</button>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <script src="../js/config.js"></script>
   <script src="js/manual.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+  <script src="js/chatbot.js"></script>
 </body>
 </html>
