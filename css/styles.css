@@ -289,7 +289,7 @@ section { padding: var(--section-pad-y) 0; }
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
-  padding: 2rem 0 3rem;
+  padding: 1.5rem 0;
   border-bottom: 1px solid var(--tan);
   margin-bottom: 3rem;
 }
