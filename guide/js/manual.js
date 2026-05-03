@@ -1,5 +1,13 @@
 // manual.js — House Manual Core Interactivity
 
+// Nav scroll shadow (matches main site)
+const manualNav = document.getElementById('manual-nav');
+if (manualNav) {
+  window.addEventListener('scroll', () => {
+    manualNav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+}
+
 // Populate quick info from CONFIG if available
 (function initQuickInfo() {
   const info = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info : {};
