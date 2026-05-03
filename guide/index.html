@@ -21,7 +21,7 @@
         <a href="#local" class="guide-tab">Local Guide</a>
         <a href="#beach" class="guide-tab">Beach</a>
         <a href="#checkout" class="guide-tab">Checkout</a>
-        <a href="#recommendations" class="guide-tab">Leave a Review</a>
+        <a href="#recommendations" class="guide-tab">Feedback</a>
         <a href="#reviews" class="guide-tab">Reviews</a>
       </div>
     </div>
@@ -609,8 +609,8 @@
     </section>
 
     <section class="manual-section" id="recommendations">
-      <h2 class="manual-section-title">Leave a Review</h2>
-      <p style="color:var(--charcoal-light); font-size:0.9rem">We'd love to hear about your stay. Your feedback means the world to us and helps future guests feel at home.</p>
+      <h2 class="manual-section-title">Share Your Feedback</h2>
+      <p style="color:var(--charcoal-light); font-size:0.9rem">Have a suggestion or something we could improve? We read every note and genuinely appreciate the input.</p>
 
       <form class="rec-form" id="rec-form" novalidate>
 
@@ -620,29 +620,13 @@
         </div>
 
         <div class="rec-field">
-          <label class="rec-label" for="rec-stay-month">When did you stay? <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
-          <input class="rec-input" type="text" id="rec-stay-month" placeholder="e.g. April 2025">
+          <label class="rec-label" for="rec-comment">Your Comment or Suggestion</label>
+          <textarea class="rec-textarea" id="rec-comment" rows="5" placeholder="e.g. The beds were great! One suggestion — it'd be nice to have a beach umbrella in the garage."></textarea>
         </div>
 
-        <div class="rec-field">
-          <span class="rec-label">Rating</span>
-          <div class="star-rating" id="star-rating" role="group" aria-label="Star rating">
-            <button type="button" class="star-btn" data-val="1" aria-label="1 star">★</button>
-            <button type="button" class="star-btn" data-val="2" aria-label="2 stars">★</button>
-            <button type="button" class="star-btn" data-val="3" aria-label="3 stars">★</button>
-            <button type="button" class="star-btn" data-val="4" aria-label="4 stars">★</button>
-            <button type="button" class="star-btn active" data-val="5" aria-label="5 stars">★</button>
-          </div>
-        </div>
+        <button type="submit" class="btn btn-dark" id="rec-submit" style="align-self:flex-start">Send Feedback</button>
 
-        <div class="rec-field">
-          <label class="rec-label" for="rec-comment">Your Review</label>
-          <textarea class="rec-textarea" id="rec-comment" rows="4" placeholder="What did you love about your stay? Any highlights to share with future guests?"></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-dark" id="rec-submit" style="align-self:flex-start">Submit Review</button>
-
-        <div class="rec-msg success" id="rec-success">Thank you for your kind words! Your review has been received — we're so grateful for the feedback.</div>
+        <div class="rec-msg success" id="rec-success">Thanks for the note! We really appreciate you taking the time to share.</div>
         <div class="rec-msg error" id="rec-error">Something went wrong. Please try again.</div>
 
       </form>
@@ -708,29 +692,6 @@
       var SUPABASE_ANON = 'sb_publishable_AxzdizEiC3FOPYdzS3lPWA_H1aH9hSV';
       var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-      // Star rating
-      var selectedRating = 5;
-      var starBtns = document.querySelectorAll('.star-btn');
-
-      function updateStars(val) {
-        starBtns.forEach(function (btn) {
-          btn.classList.toggle('active', parseInt(btn.dataset.val) <= val);
-        });
-      }
-
-      starBtns.forEach(function (btn) {
-        btn.addEventListener('mouseenter', function () { updateStars(parseInt(btn.dataset.val)); });
-        btn.addEventListener('click', function () {
-          selectedRating = parseInt(btn.dataset.val);
-          updateStars(selectedRating);
-        });
-      });
-      document.getElementById('star-rating').addEventListener('mouseleave', function () {
-        updateStars(selectedRating);
-      });
-      updateStars(selectedRating);
-
-      // Form submit
       var form = document.getElementById('rec-form');
       var submitBtn = document.getElementById('rec-submit');
       var successMsg = document.getElementById('rec-success');
@@ -740,29 +701,25 @@
         e.preventDefault();
 
         var guestName = document.getElementById('rec-guest-name').value.trim();
-        var stayMonth = document.getElementById('rec-stay-month').value.trim();
         var comment = document.getElementById('rec-comment').value.trim();
 
         successMsg.classList.remove('show');
         errorMsg.classList.remove('show');
 
         if (!guestName || !comment) {
-          errorMsg.textContent = 'Please enter your name and review before submitting.';
+          errorMsg.textContent = 'Please enter your name and message before submitting.';
           errorMsg.classList.add('show');
           return;
         }
 
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting…';
+        submitBtn.textContent = 'Sending…';
 
-        var payload = { guest_name: guestName, rating: selectedRating, review: comment };
-        if (stayMonth) payload.stay_month = stayMonth;
-
-        var _a = await sb.from('guest_reviews').insert(payload);
+        var _a = await sb.from('guest_feedback').insert({ guest_name: guestName, message: comment });
         var error = _a.error;
 
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Review';
+        submitBtn.textContent = 'Send Feedback';
 
         if (error) {
           errorMsg.textContent = 'Something went wrong. Please try again.';
@@ -770,12 +727,8 @@
           return;
         }
 
-        // Success — clear form
         document.getElementById('rec-guest-name').value = '';
-        document.getElementById('rec-stay-month').value = '';
         document.getElementById('rec-comment').value = '';
-        selectedRating = 5;
-        updateStars(5);
         successMsg.classList.add('show');
       });
     })();
