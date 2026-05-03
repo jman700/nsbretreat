@@ -109,6 +109,10 @@
 }
 .quick-card:hover { background: var(--sand); }
 .quick-card:active { transform: scale(0.97); }
+.quick-card-link {
+  text-decoration: none;
+  color: inherit;
+}
 .quick-label {
   font-size: 0.68rem;
   text-transform: uppercase;

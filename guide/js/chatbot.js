@@ -32,7 +32,7 @@ const KB = [
   { q: ['massage','chair','relax','zero gravity'],
     a: 'The zero-gravity massage chair is in the <strong>first floor master bedroom</strong>. Use the remote to pick a program. Recline with the footrest lever. See <a href="#house">The House → Massage Chair</a>.' },
   { q: ['contact','host','antonio','yani','help','problem','issue','emergency'],
-    a: 'For any urgent issues, contact your host Antonio. His contact info is in your Airbnb booking confirmation.' },
+    a: 'For any questions or urgent issues, call or text Antonio directly: <a href="tel:4075066654">(407) 506-6654</a>' },
   { q: ['golf','putting','green','putt'],
     a: 'There\'s a putting green in the backyard! Putters are available — enjoy.' },
   { q: ['restaurant','eat','food','dinner','lunch','breakfast','dining'],

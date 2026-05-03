@@ -6,6 +6,6 @@ const CONFIG = {
     wifi_name:     'NSB Retreat',
     wifi_password: 'seashells815!',
     checkout_time: '10:00 AM',
-    host_phone:    '',   // e.g. '(407) 555-1234'
+    host_phone:    '(407) 506-6654',
   },
 };
