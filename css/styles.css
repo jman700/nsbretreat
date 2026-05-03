@@ -690,6 +690,12 @@ section { padding: var(--section-pad-y) 0; }
 }
 .footer-name { font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: 0.25rem; }
 .footer-address { font-size: 0.85rem; opacity: 0.6; }
+.footer-instagram {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.8rem; color: rgba(255,255,255,0.55); text-decoration: none;
+  margin-top: 0.5rem; transition: color 0.15s;
+}
+.footer-instagram:hover { color: rgba(255,255,255,0.85); }
 .footer-actions {
   display: flex;
   flex-direction: row;
