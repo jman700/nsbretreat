@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
 
 .manual-body {
-  background: var(--blush);
+  background: var(--sand);
   min-height: 100vh;
   overflow-x: hidden;
   max-width: 100%;
@@ -88,7 +88,7 @@
   font-size: 1.75rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--tan);
+  border-bottom: 2px solid var(--accent);
 }
 
 /* ── Quick Info ── */
@@ -102,17 +102,46 @@
   border-radius: var(--radius-sm);
   padding: 1.25rem;
   cursor: pointer;
-  transition: background var(--transition), transform var(--transition);
+  transition: background var(--transition), transform var(--transition), border-color var(--transition), box-shadow var(--transition);
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   user-select: none;
+  border: 1.5px solid transparent;
 }
-.quick-card:hover { background: var(--sand); }
+.quick-card:hover {
+  background: #f0e4df;
+  border-color: var(--accent);
+  box-shadow: 0 2px 10px rgba(184,150,126,0.15);
+}
 .quick-card:active { transform: scale(0.97); }
 .quick-card-link {
   text-decoration: none;
   color: inherit;
+}
+
+/* Address card — accent border always visible, subtle tint */
+.quick-card-address {
+  border-color: var(--accent);
+  background: rgba(184,150,126,0.07);
+}
+.quick-card-address:hover {
+  background: rgba(184,150,126,0.14);
+  border-color: var(--accent);
+  box-shadow: 0 2px 12px rgba(184,150,126,0.2);
+}
+.quick-card-address .quick-value {
+  font-size: 1.15rem;
+}
+.quick-card-address .quick-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.quick-card-address .quick-hint svg {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
 }
 .quick-label {
   font-size: 0.68rem;
@@ -637,7 +666,6 @@
   .manual-section { padding: 1.5rem 1rem; }
   .manual-section-title { font-size: 1.5rem; }
   .quick-grid { grid-template-columns: 1fr 1fr; }
-  .quick-card-link { grid-column: span 2; } /* phone card fills full row on mobile */
   .chat-modal-panel {
     width: 100vw;
     height: 90vh;
