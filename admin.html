@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — NSB Retreat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blush: #f9ece8;
+      --sand: #e8ddd0;
+      --tan: #d4c4b0;
+      --accent: #b8967e;
+      --charcoal: #2d2926;
+      --charcoal-light: #6b6460;
+      --white: #fff;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Inter', sans-serif;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --shadow: 0 2px 12px rgba(45,41,38,0.08);
+      --shadow-lg: 0 8px 32px rgba(45,41,38,0.14);
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--sand);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .admin-header {
+      background: var(--charcoal);
+      color: var(--white);
+      padding: 0 1.5rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .admin-header-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      letter-spacing: 0.02em;
+    }
+    .admin-header-title span {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.55);
+      display: block;
+      margin-top: 1px;
+    }
+    .btn-logout {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.875rem;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.18); }
+
+    /* ── Login Screen ── */
+    .login-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 56px);
+      padding: 2rem 1rem;
+    }
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-title {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      margin-bottom: 0.375rem;
+    }
+    .login-sub {
+      font-size: 0.85rem;
+      color: var(--charcoal-light);
+      margin-bottom: 2rem;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .login-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+    .login-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--charcoal-light);
+    }
+    .login-input {
+      border: 1.5px solid var(--tan);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .login-input:focus { border-color: var(--accent); }
+    .btn-primary {
+      background: var(--charcoal);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.875rem 1.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      margin-top: 0.5rem;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .login-error {
+      display: none;
+      background: rgba(220,53,69,0.08);
+      color: #b91c1c;
+      border: 1.5px solid rgba(220,53,69,0.3);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+    .login-error.show { display: block; }
+
+    /* ── Dashboard ── */
+    .dashboard {
+      display: none;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .dashboard.visible { display: block; }
+
+    .dash-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .dash-heading {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+    }
+    .dash-count {
+      font-size: 0.8rem;
+      color: var(--charcoal-light);
+      margin-top: 2px;
+    }
+
+    /* Filter bar */
+    .dash-filters {
+      display: flex;
+      gap: 0.375rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .dash-filter-btn {
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--tan);
+      background: var(--white);
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--charcoal-light);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .dash-filter-btn.active,
+    .dash-filter-btn:hover {
+      background: var(--charcoal);
+      color: var(--white);
+      border-color: var(--charcoal);
+    }
+
+    /* Cards grid */
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .rec-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      transition: box-shadow 0.15s;
+    }
+    .rec-card.featured {
+      border: 2px solid var(--accent);
+    }
+    .rec-card:hover { box-shadow: var(--shadow-lg); }
+
+    .rec-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .rec-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: var(--blush);
+      color: var(--accent);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .rec-date {
+      font-size: 0.68rem;
+      color: var(--charcoal-light);
+      white-space: nowrap;
+    }
+    .rec-place {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--charcoal);
+      line-height: 1.3;
+    }
+    .rec-guest {
+      font-size: 0.75rem;
+      color: var(--charcoal-light);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .rec-comment {
+      font-size: 0.875rem;
+      color: var(--charcoal-light);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .rec-card-footer {
+      margin-top: 0.25rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--sand);
+    }
+    .btn-feature {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--tan);
+      background: var(--white);
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      color: var(--charcoal-light);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .btn-feature:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-feature.featured {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--white);
+    }
+    .btn-feature .star { font-size: 0.9rem; line-height: 1; }
+
+    /* Empty state */
+    .dash-empty {
+      display: none;
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--charcoal-light);
+    }
+    .dash-empty.show { display: block; }
+    .dash-empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .dash-empty p { font-size: 0.9rem; }
+
+    /* Loading */
+    .dash-loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--charcoal-light);
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 600px) {
+      .dashboard { padding: 1.5rem 1rem 4rem; }
+      .rec-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="admin-header" id="admin-header">
+    <div class="admin-header-title">
+      NSB Retreat
+      <span>Admin Dashboard</span>
+    </div>
+    <button class="btn-logout" id="btn-logout" style="display:none">Log Out</button>
+  </header>
+
+  <!-- Login -->
+  <div class="login-wrap" id="login-wrap">
+    <div class="login-card">
+      <h1 class="login-title">Admin Login</h1>
+      <p class="login-sub">NSB Retreat · Recommendations Dashboard</p>
+      <form class="login-form" id="login-form" novalidate>
+        <div class="login-field">
+          <label class="login-label" for="login-email">Email</label>
+          <input class="login-input" type="email" id="login-email" autocomplete="email" placeholder="you@example.com">
+        </div>
+        <div class="login-field">
+          <label class="login-label" for="login-password">Password</label>
+          <input class="login-input" type="password" id="login-password" autocomplete="current-password" placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-primary" id="login-btn">Sign In</button>
+        <div class="login-error" id="login-error">Invalid email or password.</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard" id="dashboard">
+    <div class="dash-top">
+      <div>
+        <h2 class="dash-heading">Guest Recommendations</h2>
+        <p class="dash-count" id="dash-count">Loading…</p>
+      </div>
+    </div>
+
+    <div class="dash-filters" id="dash-filters">
+      <button class="dash-filter-btn active" data-filter="">All</button>
+      <button class="dash-filter-btn" data-filter="restaurant">Restaurant</button>
+      <button class="dash-filter-btn" data-filter="bar">Bar</button>
+      <button class="dash-filter-btn" data-filter="cafe">Café</button>
+      <button class="dash-filter-btn" data-filter="activity">Activity</button>
+      <button class="dash-filter-btn" data-filter="beach">Beach</button>
+      <button class="dash-filter-btn" data-filter="shopping">Shopping</button>
+      <button class="dash-filter-btn" data-filter="other">Other</button>
+    </div>
+
+    <div class="rec-grid" id="rec-grid">
+      <div class="dash-loading">Loading recommendations…</div>
+    </div>
+    <div class="dash-empty" id="dash-empty">
+      <div class="dash-empty-icon">✦</div>
+      <p>No recommendations yet.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    var SUPABASE_URL = 'https://xittuxwilxmzzawjdivd.supabase.co';
+    var SUPABASE_ANON = 'sb_publishable_AxzdizEiC3FOPYdzS3lPWA_H1aH9hSV';
+    var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    var allRecs = [];
+    var activeFilter = '';
+
+    // ── Auth state ──
+    sb.auth.onAuthStateChange(function (event, session) {
+      if (session) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    });
+
+    function showLogin() {
+      document.getElementById('login-wrap').style.display = 'flex';
+      document.getElementById('dashboard').classList.remove('visible');
+      document.getElementById('btn-logout').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('login-wrap').style.display = 'none';
+      document.getElementById('dashboard').classList.add('visible');
+      document.getElementById('btn-logout').style.display = 'block';
+      loadRecs();
+    }
+
+    // ── Login ──
+    document.getElementById('login-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var email = document.getElementById('login-email').value.trim();
+      var password = document.getElementById('login-password').value;
+      var errEl = document.getElementById('login-error');
+      var btn = document.getElementById('login-btn');
+
+      errEl.classList.remove('show');
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+
+      var _a = await sb.auth.signInWithPassword({ email: email, password: password });
+      var error = _a.error;
+
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+
+      if (error) {
+        errEl.textContent = error.message || 'Invalid email or password.';
+        errEl.classList.add('show');
+      }
+    });
+
+    // ── Logout ──
+    document.getElementById('btn-logout').addEventListener('click', async function () {
+      await sb.auth.signOut();
+    });
+
+    // ── Load recommendations ──
+    async function loadRecs() {
+      var _a = await sb.from('recommendations').select('*').order('created_at', { ascending: false });
+      var data = _a.data, error = _a.error;
+
+      if (error) {
+        document.getElementById('rec-grid').innerHTML = '<p style="color:#b91c1c;font-size:0.875rem">Failed to load recommendations.</p>';
+        return;
+      }
+
+      allRecs = data || [];
+      renderRecs();
+    }
+
+    function renderRecs() {
+      var filtered = activeFilter
+        ? allRecs.filter(function (r) { return r.category === activeFilter; })
+        : allRecs;
+
+      var total = allRecs.length;
+      document.getElementById('dash-count').textContent =
+        total === 0 ? 'No submissions yet' :
+        total === 1 ? '1 submission' :
+        total + ' submissions';
+
+      var grid = document.getElementById('rec-grid');
+      var empty = document.getElementById('dash-empty');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.add('show');
+        return;
+      }
+
+      empty.classList.remove('show');
+      grid.innerHTML = filtered.map(function (r) {
+        var date = new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        var catLabel = r.category.charAt(0).toUpperCase() + r.category.slice(1);
+        return '<div class="rec-card' + (r.featured ? ' featured' : '') + '" data-id="' + r.id + '">'
+          + '<div class="rec-card-top">'
+          +   '<span class="rec-badge">' + catLabel + '</span>'
+          +   '<span class="rec-date">' + date + '</span>'
+          + '</div>'
+          + '<div class="rec-place">' + esc(r.place_name) + '</div>'
+          + '<div class="rec-guest">' + esc(r.guest_name) + '</div>'
+          + '<p class="rec-comment">' + esc(r.comment) + '</p>'
+          + '<div class="rec-card-footer">'
+          +   '<button class="btn-feature' + (r.featured ? ' featured' : '') + '" data-id="' + r.id + '" data-featured="' + r.featured + '">'
+          +     '<span class="star">&#9733;</span> ' + (r.featured ? 'Featured' : 'Feature')
+          +   '</button>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+
+      // Feature toggle handlers
+      grid.querySelectorAll('.btn-feature').forEach(function (btn) {
+        btn.addEventListener('click', toggleFeature.bind(null, btn));
+      });
+    }
+
+    async function toggleFeature(btn) {
+      var id = btn.dataset.id;
+      var currentlyFeatured = btn.dataset.featured === 'true';
+      var newVal = !currentlyFeatured;
+
+      btn.disabled = true;
+
+      var _a = await sb.from('recommendations').update({ featured: newVal }).eq('id', id);
+      var error = _a.error;
+
+      if (error) {
+        alert('Failed to update. Please try again.');
+        btn.disabled = false;
+        return;
+      }
+
+      // Update local cache
+      var rec = allRecs.find(function (r) { return r.id === id; });
+      if (rec) rec.featured = newVal;
+      renderRecs();
+    }
+
+    // ── Filter buttons ──
+    document.getElementById('dash-filters').addEventListener('click', function (e) {
+      var btn = e.target.closest('.dash-filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.dash-filter-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      renderRecs();
+    });
+
+    function esc(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
