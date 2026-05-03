@@ -222,7 +222,24 @@ function closeLightbox() {
   track.addEventListener('scroll', updateDots, { passive: true });
 })();
 
-// ── Lightbox ──────────────────────────────���───────────────────────────────
+// ── Reviews Carousel ─────────────────────────────────────────────────────
+(function initReviews() {
+  const track = document.getElementById('reviews-track');
+  const prev  = document.getElementById('reviews-prev');
+  const next  = document.getElementById('reviews-next');
+  if (!track) return;
+
+  function cardW() {
+    const card = track.querySelector('.review-card');
+    if (!card) return 320;
+    return card.offsetWidth + parseInt(getComputedStyle(track).gap || 20);
+  }
+
+  if (prev) prev.addEventListener('click', () => track.scrollBy({ left: -cardW(), behavior: 'smooth' }));
+  if (next) next.addEventListener('click', () => track.scrollBy({ left:  cardW(), behavior: 'smooth' }));
+})();
+
+// ── Lightbox ─────────────────────────────────────────────────────────────
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
 document.getElementById('lightbox').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeLightbox();
