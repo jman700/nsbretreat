@@ -34,6 +34,38 @@ if (navToggle && navLinks) {
   });
 }
 
+// Contact dropdown
+(function() {
+  const btn  = document.getElementById('nav-contact-btn');
+  const drop = document.getElementById('nav-drop');
+  if (!btn || !drop) return;
+
+  function openDrop() {
+    const rect = btn.getBoundingClientRect();
+    // Position below the button, right-aligned to its right edge
+    drop.style.top  = (rect.bottom + 6) + 'px';
+    const left = Math.min(rect.right - 240, window.innerWidth - 248);
+    drop.style.left = Math.max(8, left) + 'px';
+    drop.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    drop.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeDrop() {
+    drop.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    drop.setAttribute('aria-hidden', 'true');
+  }
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    drop.classList.contains('open') ? closeDrop() : openDrop();
+  });
+
+  document.addEventListener('click', closeDrop);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrop(); });
+})();
+
 // Wire Airbnb URL from config
 const airbnbUrl = typeof CONFIG !== 'undefined' ? CONFIG.airbnb_url : '#';
 document.querySelectorAll('[data-airbnb-link]').forEach(el => { el.href = airbnbUrl; });

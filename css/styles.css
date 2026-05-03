@@ -137,6 +137,50 @@ section { padding: var(--section-pad-y) 0; }
   transition: color var(--transition);
 }
 .nav-links a:hover { color: var(--accent); }
+
+/* Contact button — matches nav link style exactly */
+.nav-contact-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition);
+}
+.nav-contact-btn:hover { color: var(--accent); }
+
+/* Contact Dropdown */
+.nav-drop {
+  position: fixed;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--tan);
+  width: 240px;
+  overflow: hidden;
+  display: none;
+  z-index: calc(var(--z-nav) + 20);
+}
+.nav-drop.open { display: block; }
+.nav-drop-item {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  color: var(--charcoal);
+  transition: background var(--transition);
+}
+.nav-drop-item:hover { background: var(--blush); }
+.nav-drop-item + .nav-drop-item { border-top: 1px solid var(--tan); }
+.nav-drop-item svg { flex-shrink: 0; width: 20px; height: 20px; color: var(--accent); }
+.nav-drop-label { display: block; font-size: 0.875rem; font-weight: 500; }
+.nav-drop-sub { display: block; font-size: 0.72rem; color: var(--charcoal-light); margin-top: 0.15rem; }
+
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -176,6 +220,7 @@ section { padding: var(--section-pad-y) 0; }
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links li { flex-shrink: 0; }
   .nav-links a { padding: 0 0.75rem; font-size: 0.72rem; white-space: nowrap; }
+  .nav-contact-btn { padding: 0 0.75rem; font-size: 0.72rem; white-space: nowrap; }
   .nav-links .btn {
     padding: 0.5rem 1rem;
     font-size: 0.7rem;

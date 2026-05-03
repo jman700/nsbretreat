@@ -93,7 +93,7 @@
 /* ── Quick Info ── */
 .quick-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 0.875rem;
 }
 .quick-card {
@@ -637,6 +637,7 @@
   .manual-section { padding: 1.5rem 1rem; }
   .manual-section-title { font-size: 1.5rem; }
   .quick-grid { grid-template-columns: 1fr 1fr; }
+  .quick-card-link { grid-column: span 2; } /* phone card fills full row on mobile */
   .chat-modal-panel {
     width: 100vw;
     height: 90vh;
