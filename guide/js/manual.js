@@ -119,7 +119,7 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
 // ── Active Tab on Scroll ───────────────────────────────
 (function initScrollSpy() {
   const sections = Array.from(document.querySelectorAll('.manual-section[id]'));
-  const links    = document.querySelectorAll('.tab-link');
+  const links    = document.querySelectorAll('.guide-tab');
 
   function update() {
     let current = sections[0]?.id || '';
