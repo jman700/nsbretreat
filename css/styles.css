@@ -586,3 +586,29 @@ section { padding: var(--section-pad-y) 0; }
 }
 .legend-available::before { content: '■'; color: var(--blush); margin-right: 4px; }
 .legend-booked::before { content: '■'; color: var(--tan); margin-right: 4px; }
+
+/* ── Jump to Top ── */
+.jump-top {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 140;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1.5px solid var(--tan);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s, background var(--transition);
+  color: var(--charcoal);
+}
+.jump-top:hover { background: var(--sand); }
+.jump-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.jump-top svg { width: 18px; height: 18px; }
