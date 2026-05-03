@@ -6,7 +6,7 @@ const CONFIG = {
   // ── Analytics ──────────────────────────────────────────────────────────
   // Paste your GA4 Measurement ID here (from analytics.google.com)
   // Format: 'G-XXXXXXXXXX'
-  ga_measurement_id: 'G-XXXXXXXXXX',
+  ga_measurement_id: 'G-4RH6VTHJPH',
 
   quick_info: {
     wifi_name:     'NSB Retreat',
