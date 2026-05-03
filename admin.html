@@ -217,7 +217,7 @@
     /* Cards grid */
     .rec-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1rem;
     }
     .rec-card {
@@ -227,7 +227,7 @@
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.625rem;
+      gap: 0.75rem;
       transition: box-shadow 0.15s;
     }
     .rec-card.featured {
@@ -241,45 +241,33 @@
       justify-content: space-between;
       gap: 0.5rem;
     }
-    .rec-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      background: var(--blush);
+    .rec-stars {
       color: var(--accent);
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 500;
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      line-height: 1;
     }
+    .rec-stars .empty { color: var(--tan); }
     .rec-date {
       font-size: 0.68rem;
       color: var(--charcoal-light);
       white-space: nowrap;
+      flex-shrink: 0;
     }
-    .rec-place {
-      font-family: var(--font-serif);
-      font-size: 1.15rem;
+    .rec-review {
+      font-size: 0.9rem;
       color: var(--charcoal);
-      line-height: 1.3;
+      line-height: 1.65;
+      flex: 1;
+      font-style: italic;
     }
-    .rec-guest {
+    .rec-byline {
       font-size: 0.75rem;
       color: var(--charcoal-light);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
     }
-    .rec-comment {
-      font-size: 0.875rem;
-      color: var(--charcoal-light);
-      line-height: 1.6;
-      flex: 1;
-    }
+    .rec-byline strong { color: var(--charcoal); font-style: normal; }
     .rec-card-footer {
-      margin-top: 0.25rem;
       padding-top: 0.75rem;
       border-top: 1px solid var(--sand);
     }
@@ -349,7 +337,7 @@
   <div class="login-wrap" id="login-wrap">
     <div class="login-card">
       <h1 class="login-title">Admin Login</h1>
-      <p class="login-sub">NSB Retreat · Recommendations Dashboard</p>
+      <p class="login-sub">NSB Retreat &middot; Guest Reviews</p>
       <form class="login-form" id="login-form" novalidate>
         <div class="login-field">
           <label class="login-label" for="login-email">Email</label>
@@ -369,28 +357,25 @@
   <div class="dashboard" id="dashboard">
     <div class="dash-top">
       <div>
-        <h2 class="dash-heading">Guest Recommendations</h2>
-        <p class="dash-count" id="dash-count">Loading…</p>
+        <h2 class="dash-heading">Guest Reviews</h2>
+        <p class="dash-count" id="dash-count">Loading&hellip;</p>
       </div>
     </div>
 
     <div class="dash-filters" id="dash-filters">
-      <button class="dash-filter-btn active" data-filter="">All</button>
-      <button class="dash-filter-btn" data-filter="restaurant">Restaurant</button>
-      <button class="dash-filter-btn" data-filter="bar">Bar</button>
-      <button class="dash-filter-btn" data-filter="cafe">Café</button>
-      <button class="dash-filter-btn" data-filter="activity">Activity</button>
-      <button class="dash-filter-btn" data-filter="beach">Beach</button>
-      <button class="dash-filter-btn" data-filter="shopping">Shopping</button>
-      <button class="dash-filter-btn" data-filter="other">Other</button>
+      <button class="dash-filter-btn active" data-filter="all">All</button>
+      <button class="dash-filter-btn" data-filter="featured">Featured</button>
+      <button class="dash-filter-btn" data-filter="5">★★★★★</button>
+      <button class="dash-filter-btn" data-filter="4">★★★★</button>
+      <button class="dash-filter-btn" data-filter="3">★★★ &amp; below</button>
     </div>
 
     <div class="rec-grid" id="rec-grid">
-      <div class="dash-loading">Loading recommendations…</div>
+      <div class="dash-loading">Loading reviews&hellip;</div>
     </div>
     <div class="dash-empty" id="dash-empty">
       <div class="dash-empty-icon">✦</div>
-      <p>No recommendations yet.</p>
+      <p>No reviews yet.</p>
     </div>
   </div>
 
@@ -400,8 +385,8 @@
     var SUPABASE_ANON = 'sb_publishable_AxzdizEiC3FOPYdzS3lPWA_H1aH9hSV';
     var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-    var allRecs = [];
-    var activeFilter = '';
+    var allReviews = [];
+    var activeFilter = 'all';
 
     // ── Auth state ──
     sb.auth.onAuthStateChange(function (event, session) {
@@ -422,7 +407,7 @@
       document.getElementById('login-wrap').style.display = 'none';
       document.getElementById('dashboard').classList.add('visible');
       document.getElementById('btn-logout').style.display = 'block';
-      loadRecs();
+      loadReviews();
     }
 
     // ── Login ──
@@ -454,30 +439,47 @@
       await sb.auth.signOut();
     });
 
-    // ── Load recommendations ──
-    async function loadRecs() {
-      var _a = await sb.from('recommendations').select('*').order('created_at', { ascending: false });
+    // ── Load reviews ──
+    async function loadReviews() {
+      var _a = await sb.from('guest_reviews').select('*').order('created_at', { ascending: false });
       var data = _a.data, error = _a.error;
 
       if (error) {
-        document.getElementById('rec-grid').innerHTML = '<p style="color:#b91c1c;font-size:0.875rem">Failed to load recommendations.</p>';
+        document.getElementById('rec-grid').innerHTML = '<p style="color:#b91c1c;font-size:0.875rem;padding:2rem">Failed to load reviews.</p>';
         return;
       }
 
-      allRecs = data || [];
-      renderRecs();
+      allReviews = data || [];
+      renderReviews();
     }
 
-    function renderRecs() {
-      var filtered = activeFilter
-        ? allRecs.filter(function (r) { return r.category === activeFilter; })
-        : allRecs;
+    function starsHtml(rating) {
+      var html = '';
+      for (var i = 1; i <= 5; i++) {
+        html += i <= rating ? '★' : '<span class="empty">★</span>';
+      }
+      return html;
+    }
 
-      var total = allRecs.length;
+    function renderReviews() {
+      var filtered;
+      if (activeFilter === 'featured') {
+        filtered = allReviews.filter(function (r) { return r.featured; });
+      } else if (activeFilter === '5') {
+        filtered = allReviews.filter(function (r) { return r.rating === 5; });
+      } else if (activeFilter === '4') {
+        filtered = allReviews.filter(function (r) { return r.rating === 4; });
+      } else if (activeFilter === '3') {
+        filtered = allReviews.filter(function (r) { return r.rating <= 3; });
+      } else {
+        filtered = allReviews;
+      }
+
+      var total = allReviews.length;
       document.getElementById('dash-count').textContent =
-        total === 0 ? 'No submissions yet' :
-        total === 1 ? '1 submission' :
-        total + ' submissions';
+        total === 0 ? 'No reviews yet' :
+        total === 1 ? '1 review' :
+        total + ' reviews';
 
       var grid = document.getElementById('rec-grid');
       var empty = document.getElementById('dash-empty');
@@ -491,15 +493,15 @@
       empty.classList.remove('show');
       grid.innerHTML = filtered.map(function (r) {
         var date = new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        var catLabel = r.category.charAt(0).toUpperCase() + r.category.slice(1);
+        var byline = esc(r.guest_name);
+        if (r.stay_month) byline += ' &middot; ' + esc(r.stay_month);
         return '<div class="rec-card' + (r.featured ? ' featured' : '') + '" data-id="' + r.id + '">'
           + '<div class="rec-card-top">'
-          +   '<span class="rec-badge">' + catLabel + '</span>'
+          +   '<span class="rec-stars">' + starsHtml(r.rating || 5) + '</span>'
           +   '<span class="rec-date">' + date + '</span>'
           + '</div>'
-          + '<div class="rec-place">' + esc(r.place_name) + '</div>'
-          + '<div class="rec-guest">' + esc(r.guest_name) + '</div>'
-          + '<p class="rec-comment">' + esc(r.comment) + '</p>'
+          + '<p class="rec-review">&ldquo;' + esc(r.review) + '&rdquo;</p>'
+          + '<div class="rec-byline">&mdash; <strong>' + byline + '</strong></div>'
           + '<div class="rec-card-footer">'
           +   '<button class="btn-feature' + (r.featured ? ' featured' : '') + '" data-id="' + r.id + '" data-featured="' + r.featured + '">'
           +     '<span class="star">&#9733;</span> ' + (r.featured ? 'Featured' : 'Feature')
@@ -521,7 +523,7 @@
 
       btn.disabled = true;
 
-      var _a = await sb.from('recommendations').update({ featured: newVal }).eq('id', id);
+      var _a = await sb.from('guest_reviews').update({ featured: newVal }).eq('id', id);
       var error = _a.error;
 
       if (error) {
@@ -530,10 +532,9 @@
         return;
       }
 
-      // Update local cache
-      var rec = allRecs.find(function (r) { return r.id === id; });
-      if (rec) rec.featured = newVal;
-      renderRecs();
+      var review = allReviews.find(function (r) { return r.id === id; });
+      if (review) review.featured = newVal;
+      renderReviews();
     }
 
     // ── Filter buttons ──
@@ -543,7 +544,7 @@
       document.querySelectorAll('.dash-filter-btn').forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
       activeFilter = btn.dataset.filter;
-      renderRecs();
+      renderReviews();
     });
 
     function esc(str) {
