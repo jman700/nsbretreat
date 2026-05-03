@@ -70,30 +70,16 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
   });
 });
 
-// ── Checkout Checklist ─────────────────────────────────
-(function initChecklist() {
-  const items  = document.querySelectorAll('.check-item');
-  const bar    = document.getElementById('checklist-bar');
-  const count  = document.getElementById('checklist-count');
-
-  function update() {
-    const total = items.length;
-    const done  = document.querySelectorAll('.check-btn.checked').length;
-    if (bar)   bar.style.width = total ? (done / total * 100) + '%' : '0%';
-    if (count) count.textContent = done + ' of ' + total + ' complete';
-  }
-
-  items.forEach(item => {
-    const btn = item.querySelector('.check-btn');
-    if (!btn) return;
-    btn.addEventListener('click', () => {
-      btn.classList.toggle('checked');
-      item.classList.toggle('done', btn.classList.contains('checked'));
-      update();
-    });
+// ── Jump to Top ────────────────────────────────────────
+(function initJumpTop() {
+  const btn = document.getElementById('jump-top');
+  if (!btn) return;
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-
-  update();
 })();
 
 // ── Local Guide Filter ─────────────────────────────────
@@ -101,16 +87,23 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
   const btns  = document.querySelectorAll('.filter-btn');
   const cards = document.querySelectorAll('.place-card');
 
+  function applyFilter(f) {
+    cards.forEach(c => {
+      c.style.display = (!f || c.dataset.category === f) ? '' : 'none';
+    });
+  }
+
   btns.forEach(btn => {
     btn.addEventListener('click', () => {
       btns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const f = btn.dataset.filter;
-      cards.forEach(c => {
-        c.style.display = (!f || c.dataset.category === f) ? '' : 'none';
-      });
+      applyFilter(btn.dataset.filter);
     });
   });
+
+  // Apply initial active filter
+  const activeBtn = document.querySelector('.filter-btn.active');
+  if (activeBtn) applyFilter(activeBtn.dataset.filter);
 })();
 
 // ── Active Tab on Scroll ───────────────────────────────

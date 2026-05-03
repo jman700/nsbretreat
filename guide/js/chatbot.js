@@ -2,69 +2,69 @@
 
 const KB = [
   { q: ['wifi','internet','password','network','connection'],
-    a: 'The WiFi network and password are on the Quick Info card at the top — tap it to copy!' },
-  { q: ['door','code','lock','access','entry','keypad','pin'],
-    a: 'The door code is on the Quick Info card at the top. Tap to copy!' },
+    a: 'The WiFi network and password are on the <a href="#quick">Quick Info</a> cards at the top — tap to copy!' },
   { q: ['checkout','check out','check-out','leave','leaving','departure'],
-    a: 'Check-out is at 10:00 AM. See the Checkout Checklist section for what to do before you go.' },
+    a: 'Check-out is at 10:00 AM. See the <a href="#checkout">Checkout section</a> for everything to do before you go.' },
   { q: ['checkin','check in','check-in','arrive','arrival','when can'],
-    a: 'Check-in is at 4:00 PM. The door code is on the Quick Info card.' },
+    a: 'Check-in is at 4:00 PM. The door code is on the <a href="#quick">Quick Info</a> card.' },
   { q: ['pool','swim','swimming'],
     a: 'The private pool is in the backyard. Enjoy! Please shower before entering.' },
   { q: ['hot tub','jacuzzi','spa','jets','tub'],
-    a: 'See the Hot Tub section for step-by-step startup instructions. It can take 1–2 hours to heat from cold — start it early!' },
+    a: 'The hot tub is iPad-controlled and takes 20–45 minutes to heat. See the <a href="#hottub">Hot Tub section</a> for step-by-step instructions.' },
   { q: ['beach','ocean','surf','wave','sand','water'],
-    a: 'The beach is about 5 minutes away by bike or car. Beach gear is in the garage — chairs, umbrella, towels, cart, and toys.' },
+    a: 'The beach is about a 3-minute walk. Beach gear is in the garage. Check <a href="#beach">Beach Tips</a> for everything you need to know.' },
   { q: ['bike','bicycle','cruiser','cycle','ride'],
-    a: 'Beach cruiser bikes are in the garage. The lock code is 81518. See Getting Around for more details!' },
+    a: 'Beach cruiser bikes are in the garage. Lock code: 81518. See <a href="#around">Getting Around</a> for more details.' },
   { q: ['parking','park','car','vehicle','garage','drive'],
     a: 'Parking is in the driveway and garage. For the beach, biking or walking is recommended in peak season.' },
   { q: ['margaritaville','frozen','cocktail','blender','drinks'],
     a: 'The Margaritaville maker is in the kitchen! Add ice to the top reservoir, your mixer to the blending jar, and press blend. Enjoy!' },
   { q: ['coffee','espresso','nespresso','brew','cappuccino','latte'],
-    a: 'There\'s a super-automatic espresso machine and a Nespresso machine in the kitchen. See The House → Espresso & Coffee for instructions.' },
+    a: 'There\'s a super-automatic espresso machine and a Nespresso machine in the kitchen. See <a href="#house">The House → Espresso &amp; Coffee</a> for instructions.' },
   { q: ['trash','garbage','bin','waste','rubbish'],
     a: 'Trash bins are in the pull-out drawer to the left of the pantry. Extra bags are under the kitchen sink.' },
   { q: ['laundry','washer','dryer','wash','clothes','towel'],
-    a: 'Washer and dryer are in the laundry room. Detergent is provided. Wash pool towels separately from white linens.' },
+    a: 'Washer and dryer are in the laundry room. Detergent is provided. Wash pool towels separately from white linens. See <a href="#house">The House → Laundry</a>.' },
   { q: ['tv','television','netflix','hulu','streaming','channel','remote'],
     a: 'Every room has a Smart TV with Netflix, Hulu, YouTube TV, and more. Sign in with your own account and please sign out before checkout.' },
   { q: ['game','arcade','air hockey','gaming','room upstairs'],
-    a: 'The game room is upstairs with retro arcade games and a professional air hockey table. If anything has power issues, check the plug at the back.' },
+    a: 'The game room is upstairs with retro arcade games and an air hockey table. If anything has power issues, check the plug at the back. See <a href="#house">The House → Game Room</a>.' },
   { q: ['massage','chair','relax','zero gravity'],
-    a: 'The zero-gravity massage chair is in the living area. Use the remote to pick a program. Recline with the footrest lever on the side. Enjoy!' },
+    a: 'The zero-gravity massage chair is in the living area. Use the remote to pick a program. Recline with the footrest lever. See <a href="#house">The House → Massage Chair</a>.' },
   { q: ['contact','host','antonio','yani','help','problem','issue','emergency'],
-    a: 'For any urgent issues, contact your host Antonio. His contact info was included in your Airbnb booking confirmation.' },
+    a: 'For any urgent issues, contact your host Antonio. His contact info is in your Airbnb booking confirmation.' },
   { q: ['golf','putting','green','putt'],
-    a: 'There\'s a putting green in the backyard! Putters are available — enjoy!' },
+    a: 'There\'s a putting green in the backyard! Putters are available — enjoy.' },
   { q: ['restaurant','eat','food','dinner','lunch','breakfast','dining'],
-    a: 'Check the Local Guide section! We recommend The Breakers (beachfront burgers), The Garlic (Italian with garden seating), Outriggers (waterfront tiki bar), and The Spott (upscale — reserve ahead!).' },
-  { q: ['bar','drink','cocktail','beer','wine','happy hour'],
-    a: 'Check the Local Guide and filter by "Drink"! Outriggers Tiki Bar is a favorite for sunset tropical cocktails.' },
-  { q: ['coffee shop','cafe','latte','espresso bar'],
-    a: 'Filter the Local Guide to "Coffee" for our favorite nearby spots!' },
+    a: 'Check the <a href="#local">Local Guide</a> — filter by "Eat"! We love The Breakers (beachfront burgers), The Garlic (Italian), Outriggers (tiki bar), and The Spott (upscale).' },
+  { q: ['bar','drink','cocktail','beer','wine','happy hour','brewery'],
+    a: 'Filter the <a href="#local">Local Guide</a> to "Drink"! Flagler Tavern, Outriggers Tiki Bar, and New Smyrna Brewing Co. are all great picks.' },
+  { q: ['coffee shop','cafe','latte'],
+    a: 'Filter the <a href="#local">Local Guide</a> to "Coffee" for our favorite nearby spots — Java Joint and Brew-Ha Ha are favorites.' },
   { q: ['flagler','shopping','shops','store','avenue','downtown beach'],
-    a: 'Flagler Avenue is the heart of NSB — local shops, restaurants, festivals, and direct beach access. A must-visit!' },
+    a: 'Flagler Avenue is the heart of NSB. See it in the <a href="#local">Local Guide</a> under "See" — shops, restaurants, festivals, and direct beach access.' },
   { q: ['dunes','park','nature','hike','trail','boardwalk','wildlife'],
-    a: 'Smyrna Dunes Park is 184 acres of boardwalk trails, wildlife, and stunning Ponce Inlet views. Dog-friendly too!' },
+    a: 'Smyrna Dunes Park is 184 acres of boardwalk trails, wildlife, and Ponce Inlet views. Find it in the <a href="#local">Local Guide</a> under "Do".' },
   { q: ['canal','historic','gallery','art','causeway','bridge'],
-    a: 'Canal Street Historic District is across the causeway — art galleries, local eateries, and charming historic architecture.' },
-  { q: ['golf cart','cart','rental','rent salty'],
-    a: 'Golf cart rentals: Salty Rentals is walking distance from the house. Call 386-410-5558.' },
+    a: 'Canal Street Historic District is across the causeway — art galleries, local eateries, and charming architecture. In the <a href="#local">Local Guide</a> under "See".' },
+  { q: ['golf cart','cart','rental','salty'],
+    a: 'Golf cart rentals: Salty Rentals is walking distance from the house. Call 386-410-5558. See <a href="#around">Getting Around</a>.' },
+  { q: ['surf','surfing','lesson','paddle','kayak'],
+    a: 'NSB is one of Florida\'s best surf spots. Surf lessons and kayak rentals are in the <a href="#local">Local Guide</a> under "Do".' },
   { q: ['turtle','sea turtle','nest','nesting','egg'],
-    a: 'NSB is a sea turtle nesting area. Please don\'t disturb any nests and avoid bright lights near the beach after dark.' },
+    a: 'NSB is a sea turtle nesting area. Don\'t disturb nests or use bright lights near the beach after dark. More tips in <a href="#beach">Beach Tips</a>.' },
   { q: ['dog','pet','animal','bring','allowed'],
-    a: 'Dogs are allowed on the beach! Please clean up after your pet. No glass containers on the beach.' },
-  { q: ['ac','air condition','heat','cool','thermostat','temperature','cold','hot'],
-    a: 'Use the thermostat to set your preferred temperature. Keep all windows and doors closed — the AC shuts off if left open.' },
-  { q: ['toilet','flush','plumb','clog','water','sink','drain'],
-    a: 'Please only flush toilet paper — no wipes or feminine products even if labeled flushable. For plumbing issues, contact Antonio.' },
+    a: 'Dogs are allowed on the beach! Clean up after your pet. No glass containers on the beach. See <a href="#beach">Beach Tips</a>.' },
+  { q: ['ac','air condition','heat','cool','thermostat','temperature','cold'],
+    a: 'Use the thermostat to set your preferred temperature. Keep all windows and doors closed — the AC shuts off if left open. See <a href="#house">The House → Heating &amp; Cooling</a>.' },
+  { q: ['toilet','flush','plumb','clog','sink','drain'],
+    a: 'Please only flush toilet paper — no wipes or feminine products even if labeled flushable. For plumbing issues, contact Antonio. See <a href="#house">The House → Water &amp; Plumbing</a>.' },
   { q: ['clean','cleaning','mop','broom','vacuum','sweep'],
-    a: 'Cleaning tools (brooms, mops, vacuum) are in the laundry room or garage. Supplies and dishwasher detergent are under the kitchen sink.' },
-  { q: ['key','spare','lock','locked out'],
-    a: 'There is a keypad door lock — no physical key needed. The code is on the Quick Info card at the top.' },
+    a: 'Cleaning tools (brooms, mops, vacuum) are in the laundry room or garage. Supplies are under the kitchen sink. See <a href="#house">The House → Cleaning Supplies</a>.' },
+  { q: ['key','lock','locked out','door','entry','access','code'],
+    a: 'There is a keypad door lock — no physical key needed. The code is on the <a href="#quick">Quick Info</a> cards at the top.' },
   { q: ['uber','lyft','taxi','ride'],
-    a: 'Uber and Lyft are available in NSB. For a local experience, consider golf cart rentals at Salty Rentals (386-410-5558).' },
+    a: 'Uber and Lyft are available in NSB. For a local experience, consider golf cart rentals at Salty Rentals (386-410-5558). See <a href="#around">Getting Around</a>.' },
 ];
 
 function chatMatch(input) {
@@ -87,21 +87,63 @@ function chatMatch(input) {
   return 'I\'m not sure about that one — but your host Antonio is just a message away! His contact info is in your Airbnb booking confirmation.';
 }
 
-(function initChat() {
-  const input = document.getElementById('chat-input');
-  const send  = document.getElementById('chat-send');
-  const msgs  = document.getElementById('chat-messages');
-  if (!input || !send || !msgs) return;
+// ── Chat Widget State ─────────────────────────────────────────────────────
+(function initChatWidget() {
+  const fab          = document.getElementById('chat-fab');
+  const overlay      = document.getElementById('chat-overlay');
+  const backdrop     = document.getElementById('chat-overlay-backdrop');
+  const minimizeBtn  = document.getElementById('chat-minimize');
+  const closeBtn     = document.getElementById('chat-close');
+  const input        = document.getElementById('chat-input');
+  const sendBtn      = document.getElementById('chat-send');
+  const msgs         = document.getElementById('chat-messages');
 
-  function addBubble(text, cls) {
+  if (!fab || !overlay) return;
+
+  function openChat() {
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    fab.classList.add('hidden');
+    if (input) input.focus();
+  }
+
+  function minimizeChat() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    fab.classList.remove('hidden');
+  }
+
+  function closeChat() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    fab.classList.remove('hidden');
+    // Chat remains accessible via FAB — same as minimize for simplicity
+  }
+
+  fab.addEventListener('click', openChat);
+  if (minimizeBtn) minimizeBtn.addEventListener('click', minimizeChat);
+  if (closeBtn)    closeBtn.addEventListener('click', closeChat);
+
+  // Click outside panel minimizes
+  if (backdrop) {
+    backdrop.addEventListener('click', minimizeChat);
+  }
+
+  // Escape key minimizes
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) minimizeChat();
+  });
+
+  function addBubble(html, cls) {
     const div = document.createElement('div');
     div.className = 'chat-bubble ' + cls;
-    div.textContent = text;
+    div.innerHTML = html;
     msgs.appendChild(div);
     msgs.scrollTop = msgs.scrollHeight;
   }
 
   function handleSend() {
+    if (!input) return;
     const text = input.value.trim();
     if (!text) return;
     addBubble(text, 'chat-user');
@@ -109,6 +151,6 @@ function chatMatch(input) {
     setTimeout(() => addBubble(chatMatch(text), 'chat-bot'), 350);
   }
 
-  send.addEventListener('click', handleSend);
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
+  if (sendBtn) sendBtn.addEventListener('click', handleSend);
+  if (input)   input.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
 })();

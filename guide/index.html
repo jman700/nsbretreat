@@ -15,14 +15,13 @@
       <a href="../" class="manual-nav-logo">← NSB Retreat</a>
       <div class="manual-tabs" id="manual-tabs">
         <a href="#quick" class="tab-link active">Quick Info</a>
-        <a href="#ask" class="tab-link">Ask</a>
         <a href="#house" class="tab-link">The House</a>
         <a href="#around" class="tab-link">Getting Around</a>
         <a href="#hottub" class="tab-link">Hot Tub</a>
         <a href="#local" class="tab-link">Local Guide</a>
         <a href="#beach" class="tab-link">Beach</a>
         <a href="#checkout" class="tab-link">Checkout</a>
-        <a href="#guestbook" class="tab-link">Guest Book</a>
+        <a href="#reviews" class="tab-link">Reviews</a>
       </div>
     </div>
   </nav>
@@ -43,28 +42,19 @@
           <span class="quick-hint">Tap to copy</span>
         </div>
         <div class="quick-card">
+          <span class="quick-label">Check-in</span>
+          <span class="quick-value">4:00 PM</span>
+          <span class="quick-hint">Key code on door</span>
+        </div>
+        <div class="quick-card">
           <span class="quick-label">Check-out</span>
-          <span class="quick-value" id="qv-checkout">—</span>
-          <span class="quick-hint">Check-in: 4:00 PM</span>
+          <span class="quick-value" id="qv-checkout">10:00 AM</span>
+          <span class="quick-hint">See checkout section</span>
         </div>
       </div>
       <div class="toast" id="copy-toast">Copied!</div>
     </section>
 
-    <section class="manual-section" id="ask">
-      <h2 class="manual-section-title">Ask a Question</h2>
-      <div class="chat-wrap">
-        <div class="chat-messages" id="chat-messages">
-          <div class="chat-bubble chat-bot">
-            Hi! Ask me anything about the house, local area, or your stay. 👋
-          </div>
-        </div>
-        <div class="chat-input-row">
-          <input type="text" id="chat-input" placeholder="e.g. What's the WiFi password?" autocomplete="off">
-          <button id="chat-send">Send</button>
-        </div>
-      </div>
-    </section>
 
     <section class="manual-section" id="house">
       <h2 class="manual-section-title">The House</h2>
@@ -159,7 +149,9 @@
       <h2 class="manual-section-title">Getting Around</h2>
       <div class="around-cards">
         <div class="around-card">
-          <div class="around-icon">🚲</div>
+          <div class="around-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5L8.5 9H5m6.5 8.5L15 6l2.5 5.5H11"/></svg>
+          </div>
           <h3>Bicycle</h3>
           <p>Beach cruisers are in the garage. Lock code:</p>
           <div class="around-code" data-copy-val="81518">
@@ -168,13 +160,17 @@
           </div>
         </div>
         <div class="around-card">
-          <div class="around-icon">🛺</div>
+          <div class="around-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l4 4v6"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M13 17h-4m8 0h2"/></svg>
+          </div>
           <h3>Golf Cart Rental</h3>
           <p>Salty Rentals is walking distance from the home.</p>
           <a href="tel:3864105558" class="around-cta btn btn-outline">Call 386-410-5558</a>
         </div>
         <div class="around-card">
-          <div class="around-icon">🚗</div>
+          <div class="around-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-7h14l2 7v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/><path d="M5 12h14"/></svg>
+          </div>
           <h3>Car</h3>
           <p>Save the car for the grocery store or exploring Downtown NSB across the bridge.</p>
         </div>
@@ -183,36 +179,36 @@
 
     <section class="manual-section" id="hottub">
       <h2 class="manual-section-title">Hot Tub</h2>
-      <p style="color:var(--charcoal-light); margin-bottom:1.5rem; font-size:0.95rem">The hot tub may need 1-2 hours to reach temperature. Start it early!</p>
+      <p style="color:var(--charcoal-light); margin-bottom:1.5rem; font-size:0.95rem">The hot tub is controlled entirely via the <strong>iPad</strong> mounted near the back door. It typically takes <strong>20–45 minutes</strong> to reach temperature when heating from cool.</p>
       <ol class="steps-list">
         <li>
           <span class="step-num">1</span>
           <div class="step-body">
-            <strong>Locate the hot tub control panel</strong> on the side of the tub.
+            <strong>Open the iPad</strong> mounted near the back door to access the hot tub controls.
           </div>
         </li>
         <li>
           <span class="step-num">2</span>
           <div class="step-body">
-            <strong>Press the Jets button</strong> to activate the jets. The pump will start.
+            <strong>Power on</strong> the hot tub using the iPad control panel. The system will begin circulating and heating.
           </div>
         </li>
         <li>
           <span class="step-num">3</span>
           <div class="step-body">
-            <strong>Set your temperature</strong> using the up/down arrows. We recommend 100–104°F.
+            <strong>Set the temperature</strong> via the iPad. We recommend <strong>102°F</strong> for a relaxing soak.
           </div>
         </li>
         <li>
           <span class="step-num">4</span>
           <div class="step-body">
-            <strong>Replace the cover</strong> and allow 1-2 hours to heat if starting from cold.
+            <strong>Allow 20–45 minutes</strong> for the tub to reach your desired temperature.
           </div>
         </li>
         <li>
           <span class="step-num">5</span>
           <div class="step-body">
-            <strong>When finished,</strong> press Jets to turn off and replace the cover to retain heat.
+            <strong>When finished,</strong> power off the hot tub via the iPad.
           </div>
         </li>
       </ol>
@@ -227,6 +223,7 @@
         <button class="filter-btn" data-filter="see">See</button>
         <button class="filter-btn" data-filter="do">Do</button>
         <button class="filter-btn" data-filter="coffee">Coffee</button>
+        <button class="filter-btn" data-filter="">All</button>
       </div>
       <div class="local-guide-cards" id="local-guide-cards">
 
@@ -300,102 +297,218 @@
           </div>
         </div>
 
+        <!-- Drink -->
+        <div class="place-card" data-category="drink">
+          <img src="../assets/photos/local-flagler-tavern.jpg" alt="Flagler Tavern" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Bar · Lively</span>
+            <h3>Flagler Tavern</h3>
+            <p>A favorite local bar right on Flagler Ave — great beers, cocktails, and a festive beach-town vibe.</p>
+            <a href="https://maps.google.com/?q=Flagler+Tavern+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="drink">
+          <img src="../assets/photos/local-outriggers.jpg" alt="Outriggers Tiki Bar" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Tiki Bar · Waterfront</span>
+            <h3>Outriggers Tiki Bar</h3>
+            <p>Waterfront tiki bar with tropical cocktails, stunning marina sunsets, and a laid-back island vibe.</p>
+            <a href="https://maps.google.com/?q=Outriggers+Tiki+Bar+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="drink">
+          <img src="../assets/photos/local-nsb-brewing.jpg" alt="New Smyrna Brewing Co" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Craft Brewery · Casual</span>
+            <h3>New Smyrna Brewing Co.</h3>
+            <p>Local craft brewery with rotating taps, casual food, and a cool indoor/outdoor taproom atmosphere.</p>
+            <a href="https://maps.google.com/?q=New+Smyrna+Brewing+Company" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <!-- Do -->
+        <div class="place-card" data-category="do">
+          <img src="../assets/photos/local-surfing.jpg" alt="Surf Lessons" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Water Sport · All Levels</span>
+            <h3>Surf Lessons</h3>
+            <p>NSB is one of Florida's best surf spots. Local schools offer beginner-friendly lessons right on the beach.</p>
+            <a href="https://maps.google.com/?q=surf+lessons+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Find a School</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="do">
+          <img src="../assets/photos/dunes.jpg" alt="Smyrna Dunes Park" loading="lazy">
+          <div class="place-card-body">
+            <span class="place-tag">Nature · Active</span>
+            <h3>Smyrna Dunes Park</h3>
+            <p>Walk or bike the 1.5-mile boardwalk through dunes, maritime hammock, and around Ponce Inlet. Dog-friendly.</p>
+            <a href="https://maps.google.com/?q=Smyrna+Dunes+Park" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="do">
+          <img src="../assets/photos/local-kayak.jpg" alt="Kayaking &amp; Paddleboard" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Water Sport · Rental</span>
+            <h3>Kayaking &amp; Paddleboarding</h3>
+            <p>Rent kayaks or SUPs from several local outfitters and explore the Indian River Lagoon or inshore waterways.</p>
+            <a href="https://maps.google.com/?q=kayak+rental+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Find Rentals</a>
+          </div>
+        </div>
+
+        <!-- Coffee -->
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-java.jpg" alt="Java Joint" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Café · Cozy</span>
+            <h3>Java Joint</h3>
+            <p>A beloved NSB institution — espresso, homemade pastries, and a relaxed local vibe steps from the beach.</p>
+            <a href="https://maps.google.com/?q=Java+Joint+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-coffee.jpg" alt="Brew-Ha Ha Coffee" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Coffee Shop · Chill</span>
+            <h3>Brew-Ha Ha Coffee</h3>
+            <p>Popular local coffee spot with specialty drinks, good wifi, and a warm community atmosphere.</p>
+            <a href="https://maps.google.com/?q=Brew+Ha+Ha+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-nsb-coffee.jpg" alt="NSB Coffee Company" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Café · Artisan</span>
+            <h3>NSB Coffee Co.</h3>
+            <p>Locally roasted beans, craft espresso drinks, and a cool industrial-chic space in the Canal Street area.</p>
+            <a href="https://maps.google.com/?q=NSB+Coffee+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
       </div>
     </section>
 
     <section class="manual-section" id="beach">
       <h2 class="manual-section-title">Beach Tips</h2>
       <ul class="tips-list">
-        <li>🏖️ Beach gear is in the garage — chairs, umbrella, towels, cart, toys, and sporting equipment</li>
-        <li>🚲 Bikes are in the garage — lock code is <strong>81518</strong></li>
-        <li>🐢 NSB is a sea turtle nesting area — do not disturb nests or use bright lights near the beach at night</li>
-        <li>🐕 Dogs are allowed on the beach — please clean up after your pet</li>
-        <li>🍺 No glass containers on the beach</li>
-        <li>🚗 Beach parking can be limited in peak season — biking or walking is recommended</li>
-        <li>🌊 Always check surf and weather conditions before entering the water</li>
-        <li>☀️ Florida sun is intense — reapply sunscreen every 90 minutes</li>
+        <li>
+          <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V12m0 0C12 7 7 4 2 6m10 6c0-5 5-8 10-6"/><path d="M2 12s2-4 10-4 10 4 10 4"/></svg></span>
+          <span>Beach gear is in the garage — chairs, umbrella, towels, cart, toys, and sporting equipment</span>
+        </li>
+        <li>
+          <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5L8.5 9H5m6.5 8.5L15 6l2.5 5.5H11"/></svg></span>
+          <span>Bikes are in the garage — lock code is <strong>81518</strong></span>
+        </li>
+        <li>
+          <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a4 4 0 0 1 4 4c0 2.5-4 8-4 8S8 8.5 8 6a4 4 0 0 1 4-4z"/><circle cx="12" cy="6" r="1.5"/></svg></span>
+          <span>NSB is a sea turtle nesting area — do not disturb nests or use bright lights near the beach at night</span>
+        </li>
+        <li>
+          <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M8 14v.5A3.5 3.5 0 0 0 11.5 18h1a3.5 3.5 0 0 0 3.5-3.5V14"/><path d="M8 14H6.5a1.5 1.5 0 0 0 0 3H8"/><path d="M16 14h1.5a1.5 1.5 0 0 1 0 3H16"/></svg></span>
+          <span>Dogs are allowed on the beach — please clean up after your pet</span>
+        </li>
+        <li>
+          <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg></span>
+          <span>No glass containers on the beach</span>
+        </li>
+        <li>
+          <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-7h14l2 7v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/></svg></span>
+          <span>Beach parking can be limited in peak season — biking or walking is recommended</span>
+        </li>
+        <li>
+          <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span>
+          <span>Always check surf and weather conditions before entering the water</span>
+        </li>
+        <li>
+          <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+          <span>Florida sun is intense — reapply sunscreen every 90 minutes</span>
+        </li>
       </ul>
     </section>
 
     <section class="manual-section" id="checkout">
-      <h2 class="manual-section-title">Checkout Checklist</h2>
-      <p style="color:var(--charcoal-light); font-size:0.9rem; margin-bottom:1.25rem">Check-out is at <strong>10:00 AM</strong>. Please complete these before leaving.</p>
-      <div class="checklist-progress">
-        <div class="checklist-bar" id="checklist-bar"></div>
-      </div>
-      <p class="checklist-count" id="checklist-count">0 of 8 complete</p>
-      <ul class="checklist" id="checklist">
-        <li class="check-item" data-index="0">
-          <button class="check-btn" aria-label="Mark complete"></button>
-          <span>Start a load of white linens/towels in the washer</span>
-        </li>
-        <li class="check-item" data-index="1">
-          <button class="check-btn" aria-label="Mark complete"></button>
-          <span>Wash pool towels separately from white linens</span>
-        </li>
-        <li class="check-item" data-index="2">
-          <button class="check-btn" aria-label="Mark complete"></button>
-          <span>Run the dishwasher</span>
-        </li>
-        <li class="check-item" data-index="3">
-          <button class="check-btn" aria-label="Mark complete"></button>
-          <span>Take out all trash and replace bags</span>
-        </li>
-        <li class="check-item" data-index="4">
-          <button class="check-btn" aria-label="Mark complete"></button>
-          <span>Remove all personal belongings</span>
-        </li>
-        <li class="check-item" data-index="5">
-          <button class="check-btn" aria-label="Mark complete"></button>
-          <span>Return beach gear and bikes to the garage</span>
-        </li>
-        <li class="check-item" data-index="6">
-          <button class="check-btn" aria-label="Mark complete"></button>
-          <span>Close and lock all windows and doors</span>
-        </li>
-        <li class="check-item" data-index="7">
-          <button class="check-btn" aria-label="Mark complete"></button>
-          <span>Sign out of Smart TVs (Netflix, Hulu, etc.)</span>
-        </li>
+      <h2 class="manual-section-title">Checkout</h2>
+      <p style="color:var(--charcoal-light); font-size:0.9rem; margin-bottom:1.5rem">Check-out is at <strong>10:00 AM</strong>. Before you leave, please take care of the following:</p>
+      <ul class="checkout-list">
+        <li>Start a load of white linens/towels in the washer</li>
+        <li>Wash pool towels separately from white linens</li>
+        <li>Run the dishwasher</li>
+        <li>Take out all trash and replace bags</li>
+        <li>Remove all personal belongings</li>
+        <li>Return beach gear and bikes to the garage</li>
+        <li>Close and lock all windows and doors</li>
+        <li>Sign out of Smart TVs (Netflix, Hulu, etc.)</li>
       </ul>
+      <p style="margin-top:1.25rem; font-size:0.875rem; color:var(--charcoal-light)">Thank you for being a great guest! We hope you had a wonderful stay.</p>
     </section>
 
-    <section class="manual-section" id="guestbook">
-      <h2 class="manual-section-title">Guest Book</h2>
-      <p style="color:var(--charcoal-light); font-size:0.9rem; margin-bottom:1.5rem">Enjoyed your stay? Leave a note for future guests!</p>
-
-      <form class="gb-form" id="gb-form">
-        <div class="gb-form-row">
-          <input type="text" id="gb-name" placeholder="Your name" required maxlength="60">
-          <input type="text" id="gb-city" placeholder="Home city" maxlength="60">
-        </div>
-        <textarea id="gb-message" placeholder="Share your experience..." required maxlength="400" rows="3"></textarea>
-        <div class="gb-rating">
-          <span>Rating:</span>
-          <div class="stars" id="gb-stars">
-            <button type="button" data-val="1">★</button>
-            <button type="button" data-val="2">★</button>
-            <button type="button" data-val="3">★</button>
-            <button type="button" data-val="4">★</button>
-            <button type="button" data-val="5">★</button>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-dark gb-submit">Leave a Note</button>
-        <p class="gb-status" id="gb-status"></p>
-      </form>
-
-      <div class="gb-entries" id="gb-entries">
-        <p style="color:var(--charcoal-light); font-size:0.9rem">Loading entries...</p>
+    <section class="manual-section" id="reviews">
+      <h2 class="manual-section-title">Thank You</h2>
+      <div class="review-thank-you">
+        <p>It has been our absolute pleasure hosting you at The New Smyrna Beach Retreat. We hope you made lasting memories, soaked up the sun, and felt right at home from the moment you arrived.</p>
+        <p>If you enjoyed your stay, we would be so grateful if you could take a moment to leave us a review. Reviews mean the world to us and help future guests feel confident in choosing our home for their own special escape.</p>
+        <p class="review-sign">With warmth,</p>
+        <span class="review-signature">Antonio &amp; Yani</span>
+      </div>
+      <div class="review-actions">
+        <a href="https://www.airbnb.com/rooms/925287223019649070" target="_blank" rel="noopener" class="btn btn-dark">Leave an Airbnb Review</a>
+        <a href="https://www.vrbo.com" target="_blank" rel="noopener" class="btn btn-nude">Leave a VRBO Review</a>
       </div>
     </section>
 
   </main>
 
+  <!-- Jump to Top -->
+  <button class="jump-top" id="jump-top" aria-label="Back to top" title="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <!-- Floating Chat Widget -->
+  <div class="chat-widget" id="chat-widget">
+    <button class="chat-fab" id="chat-fab" aria-label="Ask a question">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Ask</span>
+    </button>
+  </div>
+
+  <!-- Chat Modal (overlay) -->
+  <div class="chat-overlay" id="chat-overlay" aria-hidden="true" role="dialog" aria-label="Ask a question">
+    <div class="chat-overlay-backdrop" id="chat-overlay-backdrop"></div>
+    <div class="chat-modal-panel">
+      <div class="chat-modal-header">
+        <div class="chat-modal-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Ask a Question
+        </div>
+        <div class="chat-modal-controls">
+          <button class="chat-modal-btn" id="chat-minimize" aria-label="Minimize chat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+          </button>
+          <button class="chat-modal-btn" id="chat-close" aria-label="Close chat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-bubble chat-bot">
+          Hi! Ask me anything about the house, local area, or your stay. I'm happy to help.
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="e.g. What's the WiFi password?" autocomplete="off">
+        <button id="chat-send">Send</button>
+      </div>
+    </div>
+  </div>
+
   <script src="../js/config.js"></script>
   <script src="js/manual.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/chatbot.js"></script>
-  <script src="js/guestbook.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@600&family=Inter:wght@300;400;500&display=swap');
 
 :root {
   --blush: #f9ece8;
@@ -495,9 +495,18 @@ section { padding: var(--section-pad-y) 0; }
 }
 .footer-name { font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: 0.25rem; }
 .footer-address { font-size: 0.85rem; opacity: 0.6; }
-.footer-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem; }
-.footer-guest-link { font-size: 0.8rem; color: rgba(255,255,255,0.6); text-decoration: none; }
-.footer-guest-link:hover { color: var(--white); }
+.footer-actions { display: flex; flex-direction: row; align-items: center; gap: 0.75rem; flex-wrap: wrap; justify-content: flex-end; }
+
+/* Signature */
+.signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  line-height: 1.2;
+  display: block;
+  margin-top: 0.25rem;
+}
 
 /* ── Availability Calendar ── */
 .availability { background: var(--white); }
