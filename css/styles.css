@@ -297,21 +297,82 @@ section { padding: var(--section-pad-y) 0; }
 
 /* ── Gallery ── */
 .gallery { background: var(--white); }
-.gallery-grid {
-  columns: 3 240px;
-  gap: 0.5rem;
-  padding: 0 1.5rem;
-  margin-top: 2rem;
+.gallery-header {
+  text-align: center;
+  padding-bottom: 0;
 }
-.gallery-grid img {
-  width: 100%;
-  margin-bottom: 0.5rem;
-  border-radius: var(--radius-sm);
+.gallery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+.gallery-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--tan);
+  background: var(--white);
   cursor: pointer;
-  transition: opacity var(--transition);
+  font-size: 1.1rem;
+  color: var(--charcoal);
+  transition: background var(--transition), border-color var(--transition);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.gallery-grid img:hover { opacity: 0.85; }
-@media (max-width: 480px) { .gallery-grid { columns: 2; } }
+.gallery-btn:hover { background: var(--sand); border-color: var(--charcoal); }
+.gallery-dots { display: flex; gap: 6px; align-items: center; }
+.gallery-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--tan);
+  transition: background var(--transition), transform var(--transition);
+  cursor: pointer;
+}
+.gallery-dot.active { background: var(--charcoal); transform: scale(1.4); }
+.gallery-track-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.gallery-track {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 1.5rem 1rem;
+  scroll-behavior: smooth;
+}
+.gallery-track::-webkit-scrollbar { display: none; }
+.gallery-track img {
+  flex: 0 0 auto;
+  width: clamp(260px, 38vw, 480px);
+  height: 340px;
+  object-fit: cover;
+  object-position: center;
+  scroll-snap-align: start;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+}
+.gallery-track img:hover { opacity: 0.9; transform: scale(0.99); }
+.gallery-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--charcoal-lighter);
+  margin-top: 0.5rem;
+}
+@media (max-width: 600px) {
+  .gallery-track img {
+    width: clamp(240px, 80vw, 340px);
+    height: 260px;
+  }
+  .gallery-hint { display: none; }
+}
 
 /* Lightbox */
 .lightbox {

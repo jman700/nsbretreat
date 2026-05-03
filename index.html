@@ -98,12 +98,19 @@
   </section>
 
   <section class="gallery" id="gallery">
-    <div class="container">
+    <div class="container gallery-header">
       <p class="section-label" style="text-align:center">Photo Gallery</p>
       <h2 class="section-title" style="text-align:center">See Every Corner</h2>
     </div>
-    <div class="gallery-grid" id="gallery-grid">
+    <div class="gallery-controls">
+      <button class="gallery-btn" id="gallery-prev" aria-label="Previous photos">&#8592;</button>
+      <div class="gallery-dots" id="gallery-dots"></div>
+      <button class="gallery-btn" id="gallery-next" aria-label="Next photos">&#8594;</button>
     </div>
+    <div class="gallery-track-wrap">
+      <div class="gallery-track" id="gallery-grid"></div>
+    </div>
+    <p class="gallery-hint">Swipe or use arrows to browse &nbsp;·&nbsp; Click to enlarge</p>
   </section>
 
   <section class="amenities" id="amenities">

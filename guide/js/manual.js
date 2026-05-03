@@ -6,7 +6,6 @@
   const map = {
     'qv-wifi-name':  info.wifi_name,
     'qv-wifi-pass':  info.wifi_password,
-    'qv-door':       info.door_code,
     'qv-checkout':   info.checkout_time || '10:00 AM',
   };
   Object.entries(map).forEach(([id, val]) => {

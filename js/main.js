@@ -15,7 +15,6 @@ if (navToggle && navLinks) {
     navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     navToggle.setAttribute('aria-expanded', open);
   });
-  // Close nav when a link is clicked
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
@@ -25,12 +24,13 @@ if (navToggle && navLinks) {
   });
 }
 
-// Wire Airbnb URL from config to all [data-airbnb-link] elements
+// Wire Airbnb URL from config
 const airbnbUrl = typeof CONFIG !== 'undefined' ? CONFIG.airbnb_url : '#';
-document.querySelectorAll('[data-airbnb-link]').forEach(el => {
-  el.href = airbnbUrl;
-});
+document.querySelectorAll('[data-airbnb-link]').forEach(el => { el.href = airbnbUrl; });
 
+// ── Gallery ───────────────────────────���──────────────────────────��────────
+// Add interior/bedroom/kitchen/living room photos here as they become available.
+// Files should be placed in assets/photos/ and added to this list.
 const GALLERY_PHOTOS = [
   'assets/photos/hero.jpg',
   'assets/photos/pool.jpg',
@@ -56,18 +56,73 @@ function closeLightbox() {
 }
 
 (function initGallery() {
-  const grid = document.getElementById('gallery-grid');
-  if (!grid) return;
+  const track = document.getElementById('gallery-grid');
+  const dotsEl = document.getElementById('gallery-dots');
+  const prevBtn = document.getElementById('gallery-prev');
+  const nextBtn = document.getElementById('gallery-next');
+  if (!track) return;
+
+  // Build images
   GALLERY_PHOTOS.forEach((src, i) => {
     const img = document.createElement('img');
     img.src = src;
     img.alt = `Property photo ${i + 1}`;
-    img.loading = 'lazy';
+    img.loading = i === 0 ? 'eager' : 'lazy';
     img.addEventListener('click', () => openLightbox(i));
-    grid.appendChild(img);
+    track.appendChild(img);
   });
+
+  // Build dots
+  if (dotsEl) {
+    GALLERY_PHOTOS.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Photo ${i + 1}`);
+      dot.addEventListener('click', () => scrollToPhoto(i));
+      dotsEl.appendChild(dot);
+    });
+  }
+
+  function getImgWidth() {
+    const img = track.querySelector('img');
+    if (!img) return 0;
+    return img.offsetWidth + parseInt(getComputedStyle(track).gap || 12);
+  }
+
+  function scrollToPhoto(index) {
+    const imgW = getImgWidth();
+    track.scrollTo({ left: index * imgW, behavior: 'smooth' });
+  }
+
+  function updateDots() {
+    if (!dotsEl) return;
+    const imgW = getImgWidth();
+    if (!imgW) return;
+    const idx = Math.round(track.scrollLeft / imgW);
+    dotsEl.querySelectorAll('.gallery-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      const imgW = getImgWidth();
+      const idx = Math.round(track.scrollLeft / imgW);
+      scrollToPhoto(Math.max(0, idx - 1));
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const imgW = getImgWidth();
+      const idx = Math.round(track.scrollLeft / imgW);
+      scrollToPhoto(Math.min(GALLERY_PHOTOS.length - 1, idx + 1));
+    });
+  }
+
+  track.addEventListener('scroll', updateDots, { passive: true });
 })();
 
+// ── Lightbox ──────────────────────────────���───────────────────────────────
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
 document.getElementById('lightbox').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeLightbox();
