@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/ical", "destination": "/api/ical.js" }
+    { "source": "/api/ical",      "destination": "/api/ical.js" },
+    { "source": "/api/ical-vrbo", "destination": "/api/ical-vrbo.js" }
   ]
 }

@@ -2,23 +2,35 @@ let bookedRanges = [];
 let displayMonth = new Date();
 displayMonth.setDate(1);
 
-async function loadCalendar() {
-  const proxyUrl = typeof CONFIG !== 'undefined' ? CONFIG.ical_proxy_url : null;
-  if (proxyUrl && proxyUrl !== 'https://YOUR_WORKER.workers.dev/ical') {
-    try {
-      const res = await fetch(proxyUrl);
-      const text = await res.text();
-      const jcal = ICAL.parse(text);
-      const comp = new ICAL.Component(jcal);
-      const events = comp.getAllSubcomponents('vevent');
-      bookedRanges = events.map(e => {
-        const ev = new ICAL.Event(e);
-        return { start: ev.startDate.toJSDate(), end: ev.endDate.toJSDate() };
-      });
-    } catch (err) {
-      console.warn('Calendar load failed:', err);
-    }
+async function fetchRanges(proxyUrl) {
+  try {
+    const res = await fetch(proxyUrl);
+    if (!res.ok) return [];
+    const text = await res.text();
+    const jcal = ICAL.parse(text);
+    const comp = new ICAL.Component(jcal);
+    const events = comp.getAllSubcomponents('vevent');
+    return events.map(e => {
+      const ev = new ICAL.Event(e);
+      return { start: ev.startDate.toJSDate(), end: ev.endDate.toJSDate() };
+    });
+  } catch (err) {
+    console.warn('Calendar fetch failed for', proxyUrl, err);
+    return [];
   }
+}
+
+async function loadCalendar() {
+  if (typeof CONFIG === 'undefined') { renderCalendar(); return; }
+
+  const urls = [
+    CONFIG.ical_proxy_url,
+    CONFIG.ical_proxy_url_vrbo,
+  ].filter(u => u && u !== 'https://YOUR_WORKER.workers.dev/ical');
+
+  const results = await Promise.allSettled(urls.map(fetchRanges));
+  bookedRanges = results.flatMap(r => r.status === 'fulfilled' ? r.value : []);
+
   renderCalendar();
 }
 
