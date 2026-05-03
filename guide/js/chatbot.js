@@ -158,7 +158,18 @@ function chatMatch(input) {
   }
 
   if (sendBtn) sendBtn.addEventListener('click', handleSend);
-  if (input)   input.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
+  if (input) {
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
+
+    // Prevent iOS auto-zoom on input focus by pinning maximum-scale=1 while typing
+    const vp = document.querySelector('meta[name="viewport"]');
+    input.addEventListener('focus', () => {
+      if (vp) vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover';
+    });
+    input.addEventListener('blur', () => {
+      if (vp) vp.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
+    });
+  }
 
   // Minimize chat when user clicks an internal section link inside a bot message
   if (msgs) {
