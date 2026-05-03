@@ -148,20 +148,33 @@ section { padding: var(--section-pad-y) 0; }
   transition: var(--transition);
 }
 @media (max-width: 768px) {
-  .nav-toggle { display: flex; }
+  .nav-toggle { display: none; }
+  .nav-logo { display: none; }
+  .nav-inner { padding: 0; justify-content: flex-start; }
   .nav-links {
-    display: none;
-    position: absolute;
-    top: var(--nav-h); left: 0; right: 0;
-    flex-direction: column;
-    background: var(--blush);
-    padding: 1.5rem;
-    gap: 1.25rem;
-    border-bottom: 1px solid var(--tan);
-    box-shadow: var(--shadow);
+    display: flex !important;
+    position: static;
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: 0;
+    padding: 0 0.5rem;
+    background: none;
+    border-bottom: none;
+    box-shadow: none;
+    height: var(--nav-h);
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
   }
-  .nav-links.open { display: flex; }
-  .nav-links .btn { align-self: flex-start; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links li { flex-shrink: 0; }
+  .nav-links a { padding: 0 0.75rem; font-size: 0.72rem; white-space: nowrap; }
+  .nav-links .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+    margin-left: 0.25rem;
+  }
 }
 
 /* ── Hero ── */

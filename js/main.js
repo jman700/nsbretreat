@@ -32,18 +32,17 @@ document.querySelectorAll('[data-airbnb-link]').forEach(el => {
 });
 
 const GALLERY_PHOTOS = [
-  'assets/photos/gallery-01.jpg',
-  'assets/photos/gallery-02.jpg',
-  'assets/photos/gallery-03.jpg',
-  'assets/photos/gallery-04.jpg',
-  'assets/photos/gallery-05.jpg',
-  'assets/photos/gallery-06.jpg',
-  'assets/photos/gallery-07.jpg',
-  'assets/photos/gallery-08.jpg',
-  'assets/photos/gallery-09.jpg',
-  'assets/photos/gallery-10.jpg',
-  'assets/photos/gallery-11.jpg',
-  'assets/photos/gallery-12.jpg',
+  'assets/photos/pool.jpg',
+  'assets/photos/hottub.jpg',
+  'assets/photos/gameroom.jpg',
+  'assets/photos/massage.jpg',
+  'assets/photos/bikes.jpg',
+  'assets/photos/margaritaville.jpg',
+  'assets/photos/hero.jpg',
+  'assets/photos/hosts.jpg',
+  'assets/photos/flagler.jpg',
+  'assets/photos/dunes.jpg',
+  'assets/photos/canal.jpg',
 ];
 
 let currentPhoto = 0;
