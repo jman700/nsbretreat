@@ -9,7 +9,10 @@
 }
 
 /* ── Guide Nav — uses .site-nav / .nav-inner / .nav-logo from styles.css ── */
-/* Only guide-specific additions needed here */
+/* Sand/nude background so nav pops against the blush page body */
+.manual-body .site-nav {
+  background: rgba(232, 221, 208, 0.97); /* --sand */
+}
 
 .guide-tabs {
   display: flex;
