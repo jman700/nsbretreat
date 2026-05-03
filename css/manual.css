@@ -4,6 +4,8 @@
 .manual-body {
   background: var(--blush);
   min-height: 100vh;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* ── Manual Nav ── */
@@ -486,15 +488,17 @@
 .chat-modal-panel {
   position: relative;
   z-index: 1;
-  width: min(600px, 96vw);
-  height: min(80vh, 700px);
-  margin: 1rem 1.5rem 1.5rem;
+  width: min(600px, 92vw);
+  height: min(75vh, 650px);
+  max-height: calc(100svh - 2rem);
+  margin: auto 1.5rem 1.5rem;
   background: var(--white);
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  touch-action: none; /* prevent page scroll while inside modal */
 }
 .chat-modal-header {
   display: flex;
@@ -532,11 +536,14 @@
 .chat-messages {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   background: var(--blush);
+  overscroll-behavior: contain;
 }
 .chat-bubble {
   max-width: 80%;
@@ -566,12 +573,14 @@
   padding: 0.875rem 1rem;
   border: none;
   font-family: var(--font-sans);
-  font-size: 0.875rem;
+  font-size: 16px; /* must be ≥16px to prevent iOS auto-zoom */
   background: var(--white);
   color: var(--charcoal);
   outline: none;
+  min-width: 0;
 }
 .chat-input-row button {
+  flex-shrink: 0;
   padding: 0.875rem 1.25rem;
   background: var(--charcoal);
   color: var(--white);

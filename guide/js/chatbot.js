@@ -30,7 +30,7 @@ const KB = [
   { q: ['game','arcade','air hockey','gaming','room upstairs'],
     a: 'The game room is upstairs with retro arcade games and an air hockey table. If anything has power issues, check the plug at the back. See <a href="#house">The House → Game Room</a>.' },
   { q: ['massage','chair','relax','zero gravity'],
-    a: 'The zero-gravity massage chair is in the living area. Use the remote to pick a program. Recline with the footrest lever. See <a href="#house">The House → Massage Chair</a>.' },
+    a: 'The zero-gravity massage chair is in the <strong>first floor master bedroom</strong>. Use the remote to pick a program. Recline with the footrest lever. See <a href="#house">The House → Massage Chair</a>.' },
   { q: ['contact','host','antonio','yani','help','problem','issue','emergency'],
     a: 'For any urgent issues, contact your host Antonio. His contact info is in your Airbnb booking confirmation.' },
   { q: ['golf','putting','green','putt'],
@@ -104,20 +104,26 @@ function chatMatch(input) {
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     fab.classList.add('hidden');
-    if (input) input.focus();
+    document.body.style.overflow = 'hidden'; // lock background scroll
+    // Do NOT auto-focus input — prevents iOS from zooming page on open
   }
 
   function minimizeChat() {
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     fab.classList.remove('hidden');
+    document.body.style.overflow = ''; // restore scroll
+    // Blur any focused input to dismiss keyboard + reset iOS zoom
+    if (document.activeElement) document.activeElement.blur();
+    // Force viewport reset on iOS (cancel any zoom state)
+    const vp = document.querySelector('meta[name="viewport"]');
+    if (vp) {
+      vp.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
+    }
   }
 
   function closeChat() {
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden', 'true');
-    fab.classList.remove('hidden');
-    // Chat remains accessible via FAB — same as minimize for simplicity
+    minimizeChat(); // same behavior — FAB stays accessible
   }
 
   fab.addEventListener('click', openChat);
@@ -153,4 +159,20 @@ function chatMatch(input) {
 
   if (sendBtn) sendBtn.addEventListener('click', handleSend);
   if (input)   input.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
+
+  // Minimize chat when user clicks an internal section link inside a bot message
+  if (msgs) {
+    msgs.addEventListener('click', e => {
+      const link = e.target.closest('a[href^="#"]');
+      if (!link) return;
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      minimizeChat();
+      if (target) {
+        requestAnimationFrame(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+    });
+  }
 })();

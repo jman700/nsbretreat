@@ -13,10 +13,12 @@
     if (el && val) el.textContent = val;
   });
 
-  const ph = document.getElementById('hottub-phone');
-  if (ph && info.host_phone) {
-    ph.href = 'tel:' + info.host_phone.replace(/\D/g, '');
+  const ph       = document.getElementById('hottub-phone');
+  const phLine   = document.getElementById('hottub-contact');
+  if (ph && phLine && info.host_phone) {
+    ph.href      = 'tel:' + info.host_phone.replace(/\D/g, '');
     ph.textContent = info.host_phone;
+    phLine.style.display = '';
   }
 })();
 
