@@ -122,22 +122,12 @@
 .section-collapse-btn.open { transform: rotate(180deg); }
 .manual-section.collapsed .section-body { display: none; }
 
-/* ── Mobile: 2-row nav (controls above tabs) ── */
+/* ── Mobile: single-row nav (controls inline with tabs) ── */
 @media (max-width: 768px) {
-  .manual-body .site-nav { height: auto; }
-  .manual-body .nav-inner {
-    flex-direction: column;
-    align-items: stretch;
-    height: auto;
-  }
-  /* Row 1: controls right-aligned */
-  .guide-controls {
-    justify-content: flex-end;
-    padding: 0.35rem 0.6rem 0;
-  }
-  /* Row 2: scrollable tabs */
-  .guide-tabs { flex: none; width: 100%; }
-  .guide-tab { padding: 0 0.6rem; font-size: 0.68rem; height: 40px; }
+  .guide-controls { padding: 0 0.5rem 0 0; gap: 0.3rem; }
+  .guide-tab { padding: 0 0.6rem; font-size: 0.68rem; }
+  .guide-icon-btn { padding: 0.25rem 0.5rem; height: 26px; font-size: 0.68rem; }
+  .guide-lang-btn { font-size: 0.68rem !important; padding: 0.25rem 0.5rem !important; height: 26px !important; }
   .guide-tabs .nav-logo {
     font-family: var(--font-sans) !important;
     font-size: 0.68rem !important;
@@ -145,11 +135,8 @@
     letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
     color: var(--charcoal) !important;
-    height: 40px;
     padding: 0 0.6rem 0 0.75rem;
   }
-  /* Adjust main content so it clears 2-row nav (~76px) */
-  .manual-main { padding-top: calc(80px + 2rem); }
 }
 
 /* ── Main Content ── */
@@ -1070,6 +1057,12 @@
   margin-bottom: 0.875rem;
 }
 .bc-error a { color: var(--accent); }
+.bc-links {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
 .bc-flag-link {
   display: inline-block;
   font-size: 0.78rem;

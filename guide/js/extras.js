@@ -34,74 +34,7 @@
   });
 })();
 
-// ── PWA / Add to Home Screen — icon button in nav controls ───────────────────
-(function initATH() {
-  var btn = document.getElementById('ath-icon-btn');
-  if (!btn) return;
-
-  // Hide if already installed as standalone
-  if (window.matchMedia('(display-mode: standalone)').matches) return;
-
-  var isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) && !window.MSStream;
-  var isAndroid = /Android/.test(navigator.userAgent);
-  var deferredPrompt = null;
-  var tooltip = null;
-
-  // Android/Chrome — capture install prompt
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    btn.style.display = '';
-  });
-
-  // iOS — show the button
-  if (isIOS) {
-    btn.style.display = '';
-  }
-
-  function closeTooltip() {
-    if (tooltip && tooltip.parentNode) {
-      tooltip.parentNode.removeChild(tooltip);
-      tooltip = null;
-    }
-  }
-
-  btn.addEventListener('click', function(e) {
-    e.stopPropagation();
-
-    // Android with deferred prompt — trigger native install
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function() {
-        deferredPrompt = null;
-        btn.style.display = 'none';
-      });
-      return;
-    }
-
-    // iOS / fallback — show tooltip
-    if (tooltip) { closeTooltip(); return; }
-
-    var shareIcon = '<svg viewBox="0 0 50 50" width="14" height="14" style="vertical-align:-2px;fill:currentColor;display:inline-block" aria-hidden="true"><path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"/><path d="M24 7h2v21h-2z"/><path d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"/></svg>';
-
-    tooltip = document.createElement('div');
-    tooltip.className = 'ath-tooltip';
-    tooltip.innerHTML = isIOS
-      ? 'Tap ' + shareIcon + ' then <strong>Add to Home Screen</strong>'
-      : 'Open in Chrome and tap menu → <strong>Add to Home Screen</strong>';
-    document.body.appendChild(tooltip);
-
-    // Position below the button
-    var r = btn.getBoundingClientRect();
-    tooltip.style.right = (window.innerWidth - r.right) + 'px';
-    tooltip.style.top = (r.bottom + 8 + window.scrollY) + 'px';
-
-    setTimeout(function() { tooltip && tooltip.classList.add('ath-tt-visible'); }, 10);
-    setTimeout(closeTooltip, 5000);
-  });
-
-  document.addEventListener('click', function() { closeTooltip(); });
-})();
+// ATH (Add to Home Screen) — removed; no longer displayed in UI
 
 // ── Share Guide Button ────────────────────────────────────────────────────────
 (function initShare() {
