@@ -1,0 +1,10 @@
+{
+  "name": "NSB Retreat — House Guide",
+  "short_name": "NSB Guide",
+  "description": "Your guide to The New Smyrna Beach Retreat at 815 Carol Ave, New Smyrna Beach FL",
+  "start_url": "/guide/",
+  "display": "standalone",
+  "background_color": "#f9ece8",
+  "theme_color": "#b8967e",
+  "orientation": "portrait-primary"
+}

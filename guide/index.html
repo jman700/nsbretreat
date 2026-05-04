@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>House Manual — NSB Retreat</title>
   <meta name="description" content="Your guide to The New Smyrna Beach Retreat at 815 Carol Ave.">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#b8967e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="NSB Guide">
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/manual.css">
 </head>
@@ -15,6 +20,7 @@
       <a href="../" class="nav-logo">NSB Retreat</a>
       <div class="guide-tabs" id="manual-tabs">
         <a href="#quick" class="guide-tab active" data-i18n="tab_quick">Quick Info</a>
+        <a href="#emergency" class="guide-tab" data-i18n="tab_emergency">Emergency</a>
         <a href="#house" class="guide-tab" data-i18n="tab_house">The House</a>
         <a href="#around" class="guide-tab" data-i18n="tab_around">Getting Around</a>
         <a href="#hottub" class="guide-tab" data-i18n="tab_hottub">Hot Tub</a>
@@ -25,6 +31,7 @@
         <a href="#recommendations" class="guide-tab" data-i18n="tab_feedback">Feedback</a>
         <a href="#reviews" class="guide-tab" data-i18n="tab_reviews">Reviews</a>
       </div>
+      <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
       <div class="guide-lang-wrap">
         <button class="guide-lang-btn" id="guide-lang-btn" aria-expanded="false" aria-haspopup="true" aria-label="Select language">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -38,7 +45,13 @@
   <main class="manual-main">
 
     <section class="manual-section" id="quick">
-      <h2 class="manual-section-title" data-i18n="quick_title">Quick Info</h2>
+      <div class="section-title-row">
+        <h2 class="manual-section-title" data-i18n="quick_title">Quick Info</h2>
+        <button class="share-btn" id="share-guide-btn" aria-label="Share guide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="15" height="15"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span data-i18n="share_btn">Share Guide</span>
+        </button>
+      </div>
       <div class="quick-grid">
         <a class="quick-card quick-card-link" href="tel:4075066654" id="host-phone-card">
           <span class="quick-label" data-i18n="quick_host_label">Antonio (Host)</span>
@@ -76,9 +89,95 @@
       <div class="toast" id="copy-toast">Copied!</div>
     </section>
 
+    <section class="manual-section" id="emergency">
+      <h2 class="manual-section-title" data-i18n="emergency_title">Emergency &amp; Safety</h2>
+      <p class="emergency-intro" data-i18n="emergency_intro">Save these contacts before you need them.</p>
+      <div class="emergency-grid">
+
+        <!-- 911 -->
+        <a class="emg-card emg-card-red emg-card-link" href="tel:911">
+          <span class="emg-number">911</span>
+          <span class="emg-label">Fire / Police / Medical</span>
+          <span class="emg-hint">Tap to call</span>
+        </a>
+
+        <!-- Poison Control -->
+        <a class="emg-card emg-card-link" href="tel:8002221222">
+          <span class="emg-number">(800) 222-1222</span>
+          <span class="emg-label">Poison Control</span>
+          <span class="emg-hint">Available 24/7</span>
+        </a>
+
+        <!-- AdventHealth ER -->
+        <a class="emg-card emg-card-link" href="https://maps.google.com/?q=AdventHealth+New+Smyrna+Beach+Emergency+Room" target="_blank" rel="noopener">
+          <span class="emg-number emg-number-sm">AdventHealth NSB ER</span>
+          <span class="emg-label">~3.5 miles · 401 Palmetto St</span>
+          <span class="emg-hint">Tap for directions</span>
+        </a>
+
+        <!-- Urgent Care -->
+        <a class="emg-card emg-card-link" href="https://maps.google.com/?q=Primecare+Medical+New+Smyrna+Beach" target="_blank" rel="noopener">
+          <span class="emg-number emg-number-sm">Urgent Care NSB</span>
+          <span class="emg-label">~3 miles · Primecare Medical</span>
+          <span class="emg-hint">Tap for directions</span>
+        </a>
+
+        <!-- Circuit Breaker -->
+        <div class="emg-card emg-card-util">
+          <span class="emg-number emg-number-sm">Circuit Breaker</span>
+          <span class="emg-label">Laundry room — left wall as you enter</span>
+        </div>
+
+        <!-- Water Main -->
+        <div class="emg-card emg-card-util">
+          <span class="emg-number emg-number-sm">Water Main Shutoff</span>
+          <span class="emg-label">Left side exterior of home, near garage</span>
+        </div>
+
+        <!-- Host full-width -->
+        <a class="emg-card emg-card-link emg-card-full" href="tel:4075066654">
+          <span class="emg-number">(407) 506-6654</span>
+          <span class="emg-label">Antonio (Host)</span>
+          <span class="emg-hint">Call or text — available for urgent issues</span>
+        </a>
+
+      </div>
+    </section>
 
     <section class="manual-section" id="house">
       <h2 class="manual-section-title" data-i18n="house_title">The House</h2>
+
+      <!-- House Rules -->
+      <div class="rules-card" aria-label="House Rules">
+        <span class="rules-title" data-i18n="rules_title">House Rules</span>
+        <div class="rules-pills-row">
+          <span class="rules-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Quiet hours: 10 PM – 9 AM
+          </span>
+          <span class="rules-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Max occupancy: 16 guests
+          </span>
+          <span class="rules-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            No street parking
+          </span>
+          <span class="rules-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><path d="M8 22H5a2 2 0 0 1-2-2V10l7-8 7 8v10a2 2 0 0 1-2 2h-3"/><path d="M10 22V16h4v6"/></svg>
+            No glass near pool
+          </span>
+          <span class="rules-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><path d="M2 12h2M20 12h2M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            No indoor smoking
+          </span>
+          <span class="rules-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5M8 14v.5A3.5 3.5 0 0 0 11.5 18h1a3.5 3.5 0 0 0 3.5-3.5V14M8 14H6.5a1.5 1.5 0 0 0 0 3H8M16 14h1.5a1.5 1.5 0 0 1 0 3H16"/></svg>
+            Pets: $395 fee required
+          </span>
+        </div>
+      </div>
+
       <div class="accordion" id="house-accordion">
 
         <div class="acc-item">
@@ -269,6 +368,27 @@
         </div>
 
       </div>
+
+      <!-- Where Is It? -->
+      <div class="whereis-section" id="whereis-section">
+        <h3 class="whereis-title" data-i18n="whereis_title">Where Is It?</h3>
+        <p class="whereis-subtitle" data-i18n="whereis_subtitle">Tap any item to find it instantly</p>
+        <div class="wi-grid">
+          <button class="wi-chip" data-location="Hall closets on each floor + under bathroom sinks">Toilet Paper</button>
+          <button class="wi-chip" data-location="Kitchen counter and pantry">Paper Towels</button>
+          <button class="wi-chip" data-location="Under the kitchen sink">Trash Bags</button>
+          <button class="wi-chip" data-location="Kitchen — cabinet above the coffee station">First Aid Kit</button>
+          <button class="wi-chip" data-location="Second-floor double-door closet near the game room">Extra Towels</button>
+          <button class="wi-chip" data-location="Second-floor double-door closet near the game room">Beach Towels</button>
+          <button class="wi-chip" data-location="Under the kitchen sink">Dish Soap</button>
+          <button class="wi-chip" data-location="Under the kitchen sink">Dishwasher Pods</button>
+          <button class="wi-chip" data-location="Laundry room">Laundry Detergent</button>
+          <button class="wi-chip" data-location="Pantry and on the kitchen counter">Coffee &amp; Pods</button>
+          <button class="wi-chip" data-location="Pantry">Foil &amp; Ziploc Bags</button>
+          <button class="wi-chip" data-location="Bedroom closets">Extra Pillows/Blankets</button>
+        </div>
+      </div>
+
     </section>
 
     <section class="manual-section" id="around">
@@ -378,8 +498,25 @@
         <button class="filter-btn" data-filter="see" data-i18n="local_filter_see">See</button>
         <button class="filter-btn" data-filter="do" data-i18n="local_filter_do">Do</button>
         <button class="filter-btn" data-filter="coffee" data-i18n="local_filter_coffee">Coffee</button>
+        <button class="filter-btn" data-filter="essentials" data-i18n="local_filter_essentials">Essentials</button>
         <button class="filter-btn" data-filter="" data-i18n="local_filter_all">All</button>
       </div>
+
+      <!-- Food Delivery Row -->
+      <div class="delivery-row">
+        <p class="delivery-label" data-i18n="delivery_label">Order Delivery to 815 Carol Ave</p>
+        <div class="delivery-btns">
+          <a class="delivery-btn delivery-doordash" href="https://www.doordash.com/en-US/food-delivery/new-smyrna-beach-fl/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="18" height="18"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+            DoorDash
+          </a>
+          <a class="delivery-btn delivery-ubereats" href="https://www.ubereats.com/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="18" height="18"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+            Uber Eats
+          </a>
+        </div>
+      </div>
+
       <div class="local-guide-cards" id="local-guide-cards">
 
         <div class="place-card" data-category="eat">
@@ -545,11 +682,57 @@
           </div>
         </div>
 
+        <!-- Essentials -->
+        <div class="place-card" data-category="essentials">
+          <div class="place-card-body">
+            <span class="place-tag">Grocery · 1.2 mi</span>
+            <h3>Publix Super Market</h3>
+            <p>Full grocery, fresh seafood, bakery, and pharmacy.</p>
+            <a href="https://maps.google.com/?q=Publix+New+Smyrna+Beach+FL" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="essentials">
+          <div class="place-card-body">
+            <span class="place-tag">Pharmacy · 0.8 mi</span>
+            <h3>Walgreens</h3>
+            <p>Pharmacy, OTC meds, snacks, and late hours.</p>
+            <a href="https://maps.google.com/?q=Walgreens+New+Smyrna+Beach+FL" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="essentials">
+          <div class="place-card-body">
+            <span class="place-tag">Pharmacy · 1.5 mi</span>
+            <h3>CVS Pharmacy</h3>
+            <p>Pharmacy and health essentials.</p>
+            <a href="https://maps.google.com/?q=CVS+New+Smyrna+Beach+FL" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="essentials">
+          <div class="place-card-body">
+            <span class="place-tag">Grocery · 5 mi</span>
+            <h3>Walmart Supercenter</h3>
+            <p>Groceries, household goods, beach gear, and more.</p>
+            <a href="https://maps.google.com/?q=Walmart+New+Smyrna+Beach+FL" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
       </div>
     </section>
 
     <section class="manual-section" id="beach">
       <h2 class="manual-section-title" data-i18n="beach_title">Beach Tips</h2>
+
+      <!-- Beach Conditions Widget -->
+      <div class="beach-cond-widget-wrap">
+        <h3 class="beach-cond-heading" data-i18n="beach_cond_title">Current Beach Conditions</h3>
+        <div class="beach-cond-widget" id="beach-cond-widget">
+          <!-- populated by beach-conditions.js -->
+        </div>
+      </div>
+
       <ul class="tips-list">
         <li>
           <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V12m0 0C12 7 7 4 2 6m10 6c0-5 5-8 10-6"/><path d="M2 12s2-4 10-4 10 4 10 4"/></svg></span>
@@ -704,6 +887,8 @@
   <script src="js/manual.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="js/chatbot.js"></script>
+  <script src="js/beach-conditions.js"></script>
+  <script src="js/extras.js"></script>
   <script src="../js/analytics.js"></script>
   <script>
     // Init i18n for guide

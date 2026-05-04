@@ -151,6 +151,37 @@ const GUIDE_TRANSLATIONS = {
     chat_placeholder: "e.g. What's the WiFi password?",
     chat_send: 'Send',
     chat_greeting: "Hi! Ask me anything about the house, local area, or your stay. I'm happy to help.",
+
+    /* Emergency */
+    tab_emergency: 'Emergency',
+    emergency_title: 'Emergency & Safety',
+    emergency_intro: 'Save these contacts before you need them.',
+
+    /* House Rules */
+    rules_title: 'House Rules',
+
+    /* Where Is It */
+    whereis_title: 'Where Is It?',
+    whereis_subtitle: 'Tap any item to find it instantly',
+
+    /* Beach Conditions */
+    beach_cond_title: 'Current Beach Conditions',
+    beach_flag_link: 'Check beach flag status →',
+
+    /* Local Essentials */
+    local_filter_essentials: 'Essentials',
+
+    /* Delivery */
+    delivery_label: 'Order Delivery to 815 Carol Ave',
+
+    /* Share */
+    share_btn: 'Share Guide',
+    share_copied: 'Link copied!',
+
+    /* ATH */
+    ath_ios: 'Tap [share] then "Add to Home Screen" for quick access',
+    ath_install: 'Install App',
+    ath_dismiss: 'Not now',
   },
 
   es: {
@@ -291,6 +322,22 @@ const GUIDE_TRANSLATIONS = {
     chat_placeholder: 'ej. ¿Cuál es la contraseña del WiFi?',
     chat_send: 'Enviar',
     chat_greeting: '¡Hola! Pregúntame cualquier cosa sobre la casa, el área local o tu estadía. Con gusto te ayudo.',
+
+    tab_emergency: 'Emergencias',
+    emergency_title: 'Emergencias y Seguridad',
+    emergency_intro: 'Guarda estos contactos antes de necesitarlos.',
+    rules_title: 'Reglas de la Casa',
+    whereis_title: '¿Dónde Está?',
+    whereis_subtitle: 'Toca cualquier artículo para encontrarlo',
+    beach_cond_title: 'Condiciones Actuales de la Playa',
+    beach_flag_link: 'Ver estado de bandera →',
+    local_filter_essentials: 'Esenciales',
+    delivery_label: 'Pedir Delivery a 815 Carol Ave',
+    share_btn: 'Compartir Guía',
+    share_copied: '¡Enlace copiado!',
+    ath_ios: 'Toca [compartir] y luego "Agregar a inicio"',
+    ath_install: 'Instalar App',
+    ath_dismiss: 'Ahora no',
   },
 
   pt: {
@@ -431,6 +478,22 @@ const GUIDE_TRANSLATIONS = {
     chat_placeholder: 'ex. Qual é a senha do WiFi?',
     chat_send: 'Enviar',
     chat_greeting: 'Olá! Pergunte qualquer coisa sobre a casa, a região ou sua estadia. Estou aqui para ajudar.',
+
+    tab_emergency: 'Emergências',
+    emergency_title: 'Emergências e Segurança',
+    emergency_intro: 'Salve esses contatos antes de precisar.',
+    rules_title: 'Regras da Casa',
+    whereis_title: 'Onde Está?',
+    whereis_subtitle: 'Toque em qualquer item para encontrá-lo',
+    beach_cond_title: 'Condições Atuais da Praia',
+    beach_flag_link: 'Ver bandeira da praia →',
+    local_filter_essentials: 'Essenciais',
+    delivery_label: 'Pedir Entrega na 815 Carol Ave',
+    share_btn: 'Compartilhar Guia',
+    share_copied: 'Link copiado!',
+    ath_ios: 'Toque em [compartilhar] e "Adicionar à tela inicial"',
+    ath_install: 'Instalar App',
+    ath_dismiss: 'Agora não',
   },
 
   fr: {
@@ -571,6 +634,22 @@ const GUIDE_TRANSLATIONS = {
     chat_placeholder: 'ex. Quel est le mot de passe WiFi ?',
     chat_send: 'Envoyer',
     chat_greeting: 'Bonjour ! Posez-moi toute question sur la maison, les environs ou votre séjour.',
+
+    tab_emergency: 'Urgences',
+    emergency_title: 'Urgences et Sécurité',
+    emergency_intro: "Enregistrez ces contacts avant d'en avoir besoin.",
+    rules_title: 'Règles de la Maison',
+    whereis_title: 'Où Est-ce?',
+    whereis_subtitle: 'Touchez un article pour le trouver',
+    beach_cond_title: 'Conditions Actuelles de la Plage',
+    beach_flag_link: 'Voir le drapeau de plage →',
+    local_filter_essentials: 'Essentiels',
+    delivery_label: 'Commander livraison au 815 Carol Ave',
+    share_btn: 'Partager le Guide',
+    share_copied: 'Lien copié!',
+    ath_ios: 'Touchez [partager] puis "Sur l\'écran d\'accueil"',
+    ath_install: "Installer l'App",
+    ath_dismiss: 'Pas maintenant',
   },
 
   de: {
@@ -711,6 +790,22 @@ const GUIDE_TRANSLATIONS = {
     chat_placeholder: 'z.B. Was ist das WLAN-Passwort?',
     chat_send: 'Senden',
     chat_greeting: 'Hallo! Stellen Sie mir gern jede Frage über das Haus, die Umgebung oder Ihren Aufenthalt.',
+
+    tab_emergency: 'Notfall',
+    emergency_title: 'Notfall & Sicherheit',
+    emergency_intro: 'Speichern Sie diese Kontakte, bevor Sie sie brauchen.',
+    rules_title: 'Hausregeln',
+    whereis_title: 'Wo ist es?',
+    whereis_subtitle: 'Artikel antippen um es zu finden',
+    beach_cond_title: 'Aktuelle Strandbedingungen',
+    beach_flag_link: 'Strandflagge prüfen →',
+    local_filter_essentials: 'Grundbedarf',
+    delivery_label: 'Lieferung zur 815 Carol Ave',
+    share_btn: 'Anleitung teilen',
+    share_copied: 'Link kopiert!',
+    ath_ios: 'Tippe [teilen] dann "Zum Home-Bildschirm"',
+    ath_install: 'App installieren',
+    ath_dismiss: 'Nicht jetzt',
   },
 
   it: {
@@ -851,5 +946,21 @@ const GUIDE_TRANSLATIONS = {
     chat_placeholder: 'es. Qual è la password WiFi?',
     chat_send: 'Invia',
     chat_greeting: 'Ciao! Chiedimi qualsiasi cosa sulla casa, la zona o il tuo soggiorno.',
+
+    tab_emergency: 'Emergenze',
+    emergency_title: 'Emergenze e Sicurezza',
+    emergency_intro: 'Salva questi contatti prima di averne bisogno.',
+    rules_title: 'Regole della Casa',
+    whereis_title: "Dov'è?",
+    whereis_subtitle: 'Tocca un articolo per trovarlo',
+    beach_cond_title: 'Condizioni Attuali della Spiaggia',
+    beach_flag_link: 'Controlla la bandiera →',
+    local_filter_essentials: 'Essenziali',
+    delivery_label: 'Ordina consegna a 815 Carol Ave',
+    share_btn: 'Condividi Guida',
+    share_copied: 'Link copiato!',
+    ath_ios: 'Tocca [condividi] poi "Aggiungi a Home"',
+    ath_install: 'Installa App',
+    ath_dismiss: 'Non ora',
   },
 };

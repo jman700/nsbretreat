@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide Design Mockup — NSB Retreat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --blush:   #f9ece8;
+      --sand:    #e8ddd0;
+      --tan:     #d4c4b0;
+      --accent:  #b8967e;
+      --charcoal:#2d2926;
+      --charcoal-light: #6b6460;
+      --white:   #fff;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Inter', sans-serif;
+      --radius:    14px;
+      --radius-sm: 8px;
+      --radius-full: 999px;
+      --shadow: 0 2px 12px rgba(45,41,38,0.08);
+      --shadow-md: 0 4px 20px rgba(45,41,38,0.12);
+      --transition: 0.18s ease;
+      --nav-h: 64px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--charcoal);
+      /* ── KEY CHANGE: sand background instead of blush ── */
+      background: var(--sand);
+      min-height: 100vh;
+    }
+
+    /* ── Mock Nav ── */
+    .nav {
+      background: rgba(232,221,208,0.97);
+      backdrop-filter: blur(12px);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      gap: 0;
+      border-bottom: 1px solid rgba(212,196,176,0.5);
+      position: sticky; top: 0;
+    }
+    .nav-logo {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      padding: 0 0.75rem 0 0;
+      flex-shrink: 0;
+    }
+    .nav-tabs { display: flex; overflow-x: auto; scrollbar-width: none; }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .nav-tab {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 0 0.875rem;
+      height: var(--nav-h);
+      display: flex; align-items: center;
+      transition: color var(--transition);
+    }
+    .nav-tab:hover, .nav-tab.active { color: var(--accent); }
+
+    /* ── Layout ── */
+    .main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* ── Section card ── */
+    .section {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    /* ── Section title — KEY CHANGE: accent color rule ── */
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      /* Accent underline instead of plain tan border */
+      border-bottom: 2px solid var(--accent);
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+    .section-title-icon {
+      width: 22px; height: 22px;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-bottom: -2px;
+    }
+
+    /* ── Quick Info grid ── */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.875rem;
+    }
+    /* Normal card */
+    .quick-card {
+      background: var(--blush);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      user-select: none;
+      text-decoration: none;
+      color: inherit;
+      border: 1.5px solid transparent;
+    }
+    .quick-card:hover {
+      background: #f0e4df;
+      border-color: var(--accent);
+      box-shadow: 0 2px 10px rgba(184,150,126,0.15);
+    }
+    .quick-card:active { transform: scale(0.97); }
+
+    /* Address card — slightly distinct style */
+    .quick-card-address {
+      background: var(--charcoal);
+      color: var(--white);
+      border: none;
+    }
+    .quick-card-address .quick-label { color: rgba(255,255,255,0.55); }
+    .quick-card-address .quick-value { color: var(--white); font-size: 1.05rem; }
+    .quick-card-address .quick-hint { color: var(--accent); }
+    .quick-card-address:hover {
+      background: #3d3733;
+      border-color: transparent;
+      box-shadow: 0 4px 16px rgba(45,41,38,0.25);
+    }
+
+    .quick-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--charcoal-light);
+    }
+    .quick-value {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--charcoal);
+      word-break: break-word;
+    }
+    .quick-hint {
+      font-size: 0.68rem;
+      color: var(--accent);
+      margin-top: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .quick-hint svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+    /* ── Accordion ── */
+    .accordion { display: flex; flex-direction: column; gap: 0.5rem; }
+    .acc-item {
+      border: 1.5px solid var(--tan);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .acc-item.open { border-color: var(--accent); }
+    .acc-trigger {
+      width: 100%;
+      text-align: left;
+      background: var(--blush);
+      border: none;
+      padding: 1rem 1.25rem;
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--charcoal);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transition: background var(--transition);
+    }
+    .acc-trigger::after {
+      content: '+';
+      font-family: var(--font-sans);
+      font-size: 1.25rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      line-height: 1;
+      transition: transform var(--transition);
+    }
+    .acc-trigger:hover { background: #f0e4df; }
+    .acc-body {
+      padding: 1rem 1.25rem;
+      background: var(--white);
+      font-size: 0.9rem;
+      color: var(--charcoal-light);
+      line-height: 1.7;
+    }
+
+    /* ── Getting Around section — new dark header band ── */
+    .section-dark {
+      background: var(--charcoal);
+      color: var(--white);
+    }
+    .section-dark .section-title {
+      color: var(--white);
+      border-bottom-color: var(--accent);
+    }
+    .around-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1rem;
+    }
+    .around-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      text-align: center;
+      display: flex; flex-direction: column; gap: 0.5rem; align-items: center;
+      transition: background var(--transition);
+    }
+    .around-card:hover { background: rgba(255,255,255,0.12); }
+    .around-card h3 { font-family: var(--font-serif); font-size: 1.1rem; color: var(--white); }
+    .around-card p { font-size: 0.875rem; color: rgba(255,255,255,0.6); }
+    .around-icon { font-size: 1.75rem; }
+
+    /* ── Compare label ── */
+    .compare-wrap {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .compare-col {
+      flex: 1;
+      min-width: 280px;
+    }
+    .compare-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--charcoal-light);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--tan);
+    }
+    .compare-before {
+      background: var(--blush); /* same as cards = no depth */
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .compare-before .old-section {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+    }
+    .old-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--tan);
+      margin-bottom: 1rem;
+      color: var(--charcoal);
+    }
+    .old-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.625rem; }
+    .old-card {
+      background: var(--blush); /* same as outer = flat! */
+      border-radius: 6px;
+      padding: 0.875rem;
+    }
+
+    /* page header */
+    .page-header {
+      background: var(--charcoal);
+      color: var(--white);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      margin-bottom: 0;
+    }
+    .page-header h1 {
+      font-family: var(--font-serif);
+      font-size: 2.25rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .page-header p { font-size: 0.875rem; color: rgba(255,255,255,0.6); }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-full);
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .change-note {
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-top: 1.5rem;
+      padding: 0.75rem 1rem;
+      background: rgba(184,150,126,0.1);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      line-height: 1.5;
+    }
+    .divider {
+      border: none;
+      border-top: 1.5px solid var(--tan);
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <h1>House Manual — Design Mockup</h1>
+    <p>Proposed changes to Quick Info &amp; overall color scheme</p>
+  </div>
+
+  <div class="nav">
+    <a class="nav-logo" href="#">NSB Retreat</a>
+    <div class="nav-tabs">
+      <a class="nav-tab active" href="#">Quick Info</a>
+      <a class="nav-tab" href="#">The House</a>
+      <a class="nav-tab" href="#">Getting Around</a>
+      <a class="nav-tab" href="#">Hot Tub</a>
+      <a class="nav-tab" href="#">Local Guide</a>
+      <a class="nav-tab" href="#">Beach</a>
+      <a class="nav-tab" href="#">Checkout</a>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- ══ BEFORE / AFTER COMPARISON ══ -->
+    <div style="background:var(--white);border-radius:var(--radius);padding:1.75rem 2rem;box-shadow:var(--shadow);">
+      <h2 style="font-family:var(--font-serif);font-size:1.5rem;margin-bottom:0.375rem">Before vs. After — Color Hierarchy</h2>
+      <p style="font-size:0.85rem;color:var(--charcoal-light);margin-bottom:1.5rem">The core issue: page bg and inner cards were the same color — no visual depth.</p>
+
+      <div class="compare-wrap">
+        <!-- BEFORE -->
+        <div class="compare-col">
+          <div class="compare-label">❌ Before — all blush, no depth</div>
+          <div class="compare-before">
+            <div class="old-section">
+              <div class="old-title">Quick Info</div>
+              <div class="old-grid">
+                <div class="old-card"><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:.1em;color:#6b6460;margin-bottom:.25rem">WiFi Password</div><div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem">seashells815!</div></div>
+                <div class="old-card"><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:.1em;color:#6b6460;margin-bottom:.25rem">Check-in</div><div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem">4:00 PM</div></div>
+                <div class="old-card" style="grid-column:span 2"><div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:.1em;color:#6b6460;margin-bottom:.25rem">Antonio (Host)</div><div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem">(407) 506-6654</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AFTER -->
+        <div class="compare-col">
+          <div class="compare-label">✅ After — sand → white → blush hierarchy</div>
+          <!-- This IS the new design (page bg = sand, section = white, cards = blush) -->
+          <div style="background:var(--sand);border-radius:var(--radius);padding:1rem;">
+            <div class="section" style="margin:0">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;padding-bottom:.5rem;border-bottom:2px solid var(--accent);margin-bottom:1rem">Quick Info</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.625rem">
+                <div class="quick-card"><div class="quick-label">WiFi Password</div><div class="quick-value" style="font-size:1.1rem">seashells815!</div><div class="quick-hint">Tap to copy</div></div>
+                <div class="quick-card"><div class="quick-label">Check-in</div><div class="quick-value" style="font-size:1.1rem">4:00 PM</div><div class="quick-hint">Code in booking app</div></div>
+                <div class="quick-card quick-card-link"><div class="quick-label">Antonio (Host)</div><div class="quick-value" style="font-size:1.1rem">(407) 506-6654</div><div class="quick-hint">Tap to call</div></div>
+                <div class="quick-card quick-card-address"><div class="quick-label">Address</div><div class="quick-value" style="font-size:1rem">815 Carol Ave</div><div class="quick-hint">↗ Tap for directions</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="change-note">
+        <strong>Color layers:</strong> Page background = sand (#e8ddd0) → Section panels = white → Inner cards = blush (#f9ece8). Three distinct levels create depth without changing the warm, welcoming palette.
+      </div>
+    </div>
+
+    <!-- ══ FULL QUICK INFO SECTION (NEW) ══ -->
+    <div class="section">
+      <h2 class="section-title">
+        <svg class="section-title-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Quick Info <span class="badge">Updated</span>
+      </h2>
+      <div class="quick-grid">
+        <div class="quick-card">
+          <span class="quick-label">WiFi Network</span>
+          <span class="quick-value">NSB Retreat</span>
+        </div>
+        <div class="quick-card">
+          <span class="quick-label">WiFi Password</span>
+          <span class="quick-value">seashells815!</span>
+          <span class="quick-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Tap to copy
+          </span>
+        </div>
+        <div class="quick-card">
+          <span class="quick-label">Check-in</span>
+          <span class="quick-value">4:00 PM</span>
+          <span class="quick-hint">Code in your booking app</span>
+        </div>
+        <div class="quick-card">
+          <span class="quick-label">Check-out</span>
+          <span class="quick-value">10:00 AM</span>
+          <span class="quick-hint">See checkout section</span>
+        </div>
+        <a class="quick-card quick-card-link" href="tel:4075066654">
+          <span class="quick-label">Antonio (Host)</span>
+          <span class="quick-value">(407) 506-6654</span>
+          <span class="quick-hint">Tap to call or text</span>
+        </a>
+        <a class="quick-card quick-card-address" href="https://maps.google.com/?q=815+Carol+Ave,+New+Smyrna+Beach,+FL+32169" target="_blank">
+          <span class="quick-label">Address</span>
+          <span class="quick-value">815 Carol Ave</span>
+          <span class="quick-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+            Tap for directions
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ══ ACCORDION SECTION (NEW) ══ -->
+    <div class="section">
+      <h2 class="section-title">
+        <svg class="section-title-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        The House
+      </h2>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-trigger">Parking</button>
+          <div class="acc-body">Park in the <strong>right garage spot, driveway, or front yard grass</strong>. Street parking is prohibited.</div>
+        </div>
+        <div class="acc-item open">
+          <button class="acc-trigger" style="background:#f0e4df">Door Lock &amp; Entry</button>
+          <div class="acc-body">Your key is the <strong>black smart lock</strong>. Press the house icon, enter your code, and the door will unlock. Your door code will be sent via the <strong>Airbnb or VRBO booking app</strong> before arrival.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Heating &amp; Cooling</button>
+          <div class="acc-body">Adjust the thermostat to your preferred temperature. Keep all windows and doors closed while AC is running.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ DARK SECTION EXAMPLE ══ -->
+    <div class="section section-dark">
+      <h2 class="section-title">
+        <svg class="section-title-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Getting Around
+      </h2>
+      <div class="around-grid">
+        <div class="around-card">
+          <div class="around-icon">🏖️</div>
+          <h3>Beach Access</h3>
+          <p>3 min walk down Carol Ave</p>
+        </div>
+        <div class="around-card">
+          <div class="around-icon">🛒</div>
+          <h3>Publix</h3>
+          <p>2 min drive — groceries & pharmacy</p>
+        </div>
+        <div class="around-card">
+          <div class="around-icon">🍽️</div>
+          <h3>Restaurants</h3>
+          <p>Canal Street — 5 min drive</p>
+        </div>
+      </div>
+      <div class="change-note" style="border-left-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);margin-top:1.5rem">
+        <strong style="color:var(--white)">Optional enhancement:</strong> Sections like "Getting Around" and "Hot Tub" could use a dark charcoal background (like the main site's reviews strip) to visually break up the page and add visual interest. This is optional — happy to skip it if you prefer all-white sections.
+      </div>
+    </div>
+
+    <div style="background:var(--white);border-radius:var(--radius);padding:1.5rem 2rem;box-shadow:var(--shadow);">
+      <h3 style="font-family:var(--font-serif);font-size:1.25rem;margin-bottom:0.75rem">Summary of Changes</h3>
+      <ul style="font-size:0.875rem;color:var(--charcoal-light);line-height:1.9;padding-left:1.25rem">
+        <li><strong style="color:var(--charcoal)">Page background:</strong> blush → sand (creates contrast against white section cards)</li>
+        <li><strong style="color:var(--charcoal)">Section titles:</strong> thin tan border → accent-colored 2px underline + optional icon</li>
+        <li><strong style="color:var(--charcoal)">Quick cards:</strong> accent border on hover (subtle but polished)</li>
+        <li><strong style="color:var(--charcoal)">Antonio card:</strong> back to normal single-column size (same as all other cards)</li>
+        <li><strong style="color:var(--charcoal)">New address card:</strong> dark charcoal style with maps link for instant directions</li>
+        <li><strong style="color:var(--charcoal)">Check-in hint:</strong> "Key code on door" → "Code in your booking app"</li>
+        <li><strong style="color:var(--charcoal)">Optional:</strong> Dark charcoal background for certain sections (Getting Around, Hot Tub) for visual breaks</li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>
