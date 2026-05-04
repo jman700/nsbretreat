@@ -14,15 +14,23 @@
     <div class="nav-inner container">
       <a href="../" class="nav-logo">NSB Retreat</a>
       <div class="guide-tabs" id="manual-tabs">
-        <a href="#quick" class="guide-tab active">Quick Info</a>
-        <a href="#house" class="guide-tab">The House</a>
-        <a href="#around" class="guide-tab">Getting Around</a>
-        <a href="#hottub" class="guide-tab">Hot Tub</a>
-        <a href="#local" class="guide-tab">Local Guide</a>
-        <a href="#beach" class="guide-tab">Beach</a>
-        <a href="#checkout" class="guide-tab">Checkout</a>
-        <a href="#recommendations" class="guide-tab">Feedback</a>
-        <a href="#reviews" class="guide-tab">Reviews</a>
+        <a href="#quick" class="guide-tab active" data-i18n="tab_quick">Quick Info</a>
+        <a href="#house" class="guide-tab" data-i18n="tab_house">The House</a>
+        <a href="#around" class="guide-tab" data-i18n="tab_around">Getting Around</a>
+        <a href="#hottub" class="guide-tab" data-i18n="tab_hottub">Hot Tub</a>
+        <a href="#local" class="guide-tab" data-i18n="tab_local">Local Guide</a>
+        <a href="#beach" class="guide-tab" data-i18n="tab_beach">Beach</a>
+        <a href="#checkout" class="guide-tab" data-i18n="tab_checkout">Checkout</a>
+        <a href="#faq" class="guide-tab" data-i18n="tab_faq">FAQ</a>
+        <a href="#recommendations" class="guide-tab" data-i18n="tab_feedback">Feedback</a>
+        <a href="#reviews" class="guide-tab" data-i18n="tab_reviews">Reviews</a>
+      </div>
+      <div class="guide-lang-wrap">
+        <button class="guide-lang-btn" id="guide-lang-btn" aria-expanded="false" aria-haspopup="true" aria-label="Select language">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span class="lang-current-code">EN</span>
+          <svg class="lang-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="10" height="10"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
       </div>
     </div>
   </nav>
@@ -30,15 +38,15 @@
   <main class="manual-main">
 
     <section class="manual-section" id="quick">
-      <h2 class="manual-section-title">Quick Info</h2>
+      <h2 class="manual-section-title" data-i18n="quick_title">Quick Info</h2>
       <div class="quick-grid">
         <a class="quick-card quick-card-link" href="tel:4075066654" id="host-phone-card">
-          <span class="quick-label">Antonio (Host)</span>
+          <span class="quick-label" data-i18n="quick_host_label">Antonio (Host)</span>
           <span class="quick-value">(407) 506-6654</span>
-          <span class="quick-hint">Tap to call or text</span>
+          <span class="quick-hint" data-i18n="quick_host_hint">Tap to call or text</span>
         </a>
         <a class="quick-card quick-card-link quick-card-address" href="https://maps.google.com/?q=815+Carol+Ave,+New+Smyrna+Beach,+FL+32169" target="_blank" rel="noopener">
-          <span class="quick-label">Address</span>
+          <span class="quick-label" data-i18n="quick_address_label">Address</span>
           <span class="quick-value">815 Carol Ave</span>
           <span class="quick-hint">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
@@ -46,23 +54,23 @@
           </span>
         </a>
         <div class="quick-card">
-          <span class="quick-label">WiFi Network</span>
+          <span class="quick-label" data-i18n="quick_wifi_name_label">WiFi Network</span>
           <span class="quick-value" id="qv-wifi-name">—</span>
         </div>
         <div class="quick-card" data-copy-key="wifi_password">
-          <span class="quick-label">WiFi Password</span>
+          <span class="quick-label" data-i18n="quick_wifi_pass_label">WiFi Password</span>
           <span class="quick-value" id="qv-wifi-pass">—</span>
-          <span class="quick-hint">Tap to copy</span>
+          <span class="quick-hint" data-i18n="quick_wifi_pass_hint">Tap to copy</span>
         </div>
         <div class="quick-card">
-          <span class="quick-label">Check-in</span>
-          <span class="quick-value">4:00 PM</span>
-          <span class="quick-hint">Code in your booking app</span>
+          <span class="quick-label" data-i18n="quick_checkin_label">Check-in</span>
+          <span class="quick-value" data-i18n="quick_checkin_value">4:00 PM</span>
+          <span class="quick-hint" data-i18n="quick_checkin_hint">Code in your booking app</span>
         </div>
         <div class="quick-card">
-          <span class="quick-label">Check-out</span>
+          <span class="quick-label" data-i18n="quick_checkout_label">Check-out</span>
           <span class="quick-value" id="qv-checkout">10:00 AM</span>
-          <span class="quick-hint">See checkout section</span>
+          <span class="quick-hint" data-i18n="quick_checkout_hint">See checkout section</span>
         </div>
       </div>
       <div class="toast" id="copy-toast">Copied!</div>
@@ -70,11 +78,11 @@
 
 
     <section class="manual-section" id="house">
-      <h2 class="manual-section-title">The House</h2>
+      <h2 class="manual-section-title" data-i18n="house_title">The House</h2>
       <div class="accordion" id="house-accordion">
 
         <div class="acc-item">
-          <button class="acc-trigger">Parking</button>
+          <button class="acc-trigger" data-i18n="house_parking">Parking</button>
           <div class="acc-body">
             <p>Park in the <strong>right garage spot, driveway, or front yard grass</strong>. Please watch for the water meter and plumbing sticking out of the ground near the grass area.</p>
             <p style="margin-top:0.75rem"><strong>Street parking is prohibited</strong> and may result in fines or towing.</p>
@@ -83,7 +91,7 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Door Lock &amp; Entry</button>
+          <button class="acc-trigger" data-i18n="house_door">Door Lock &amp; Entry</button>
           <div class="acc-body">
             <p>Your key is the <strong>black smart lock</strong> on the front door — no physical key needed.</p>
             <ul style="margin-top:0.75rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:0.5rem">
@@ -95,21 +103,21 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Upon Arrival</button>
+          <button class="acc-trigger" data-i18n="house_arrival">Upon Arrival</button>
           <div class="acc-body">
             <p>Please <strong>inspect the home</strong> when you arrive and notify us immediately if anything needs attention. If you notice any damage, document it with photos and send them via text or through the booking app.</p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Heating &amp; Cooling</button>
+          <button class="acc-trigger" data-i18n="house_hvac">Heating &amp; Cooling</button>
           <div class="acc-body">
             <p>Adjust the thermostat to your preferred temperature. <strong>Keep all windows and doors closed</strong> — if left open for more than a few minutes, the AC system will shut off until they are closed again.</p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Kitchen — Espresso &amp; Coffee</button>
+          <button class="acc-trigger" data-i18n="house_espresso">Kitchen — Espresso &amp; Coffee</button>
           <div class="acc-body">
             <p>We provide <strong>Folgers ground coffee</strong> — no need to bring your own. Available brewing options on the counter and in the pantry:</p>
             <ul style="margin-top:0.75rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:0.5rem">
@@ -124,14 +132,14 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Kitchen — Margaritaville Maker</button>
+          <button class="acc-trigger" data-i18n="house_margarita">Kitchen — Margaritaville Maker</button>
           <div class="acc-body">
             <p>Add ice to the ice reservoir at the top. Add your mixer to the blending jar below. Press the blend button for perfect frozen drinks. Enjoy responsibly!</p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Kitchen — Appliances &amp; Cookware</button>
+          <button class="acc-trigger" data-i18n="house_appliances">Kitchen — Appliances &amp; Cookware</button>
           <div class="acc-body">
             <p>The kitchen is fully equipped with: refrigerator with ice maker, stove/oven, microwave, dishwasher. Dishwasher detergent is under the kitchen sink. Trash bins are in the pull-out drawer to the left of the pantry. Trash bags are under the sink.</p>
             <p style="margin-top:0.75rem"><strong>Spices &amp; pantry:</strong> We provide a variety of spices and basic cooking items — check what's available before purchasing extras.</p>
@@ -140,7 +148,7 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Kitchen — Grill</button>
+          <button class="acc-trigger" data-i18n="house_grill">Kitchen — Grill</button>
           <div class="acc-body">
             <p>The grill runs on the <strong>home's natural gas line</strong> — no propane tank to deal with. Follow these steps:</p>
             <ol style="margin-top:0.75rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:0.6rem">
@@ -154,35 +162,35 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Laundry</button>
+          <button class="acc-trigger" data-i18n="house_laundry">Laundry</button>
           <div class="acc-body">
             <p>There are <strong>two full sets of washers and dryers</strong> in the laundry room. Detergent is provided. Please keep load sizes reasonable. <strong>Wash pool towels and colored items separately from white linens.</strong></p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Smart TVs &amp; Streaming</button>
+          <button class="acc-trigger" data-i18n="house_tvs">Smart TVs &amp; Streaming</button>
           <div class="acc-body">
             <p>Every bedroom and living space has a Smart TV. Netflix, Hulu, YouTube TV and more are available to download. Sign in with your own account. <strong>Please sign out before you leave.</strong></p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Game Room — Arcade &amp; Air Hockey</button>
+          <button class="acc-trigger" data-i18n="house_gameroom">Game Room — Arcade &amp; Air Hockey</button>
           <div class="acc-body">
             <p>The game room is upstairs. It features <strong>retro arcade games</strong> and a <strong>professional air hockey table</strong>. Games should be ready to play — if any have power issues, check that they are plugged in at the back of the unit.</p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Massage Chair</button>
+          <button class="acc-trigger" data-i18n="house_massage">Massage Chair</button>
           <div class="acc-body">
             <p>The zero-gravity massage chair is in the <strong>first floor master bedroom</strong>. Everything — including reclining — is controlled by the <strong>remote attached to the chair</strong>. Select a program and let it work its magic. It's one of our favorite things in the house — enjoy it!</p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Outdoor Spaces</button>
+          <button class="acc-trigger" data-i18n="house_outdoor">Outdoor Spaces</button>
           <div class="acc-body">
             <p><strong>Pool &amp; Hot Tub:</strong> In the backyard. See the <a href="#hottub">Hot Tub section</a> for startup instructions.</p>
             <p style="margin-top:0.75rem"><strong>Covered Pergola &amp; Outdoor Kitchen:</strong> A beautiful covered pergola with a fully equipped outdoor kitchen, built-in grill, and bar seating for up to 9 guests.</p>
@@ -195,7 +203,7 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Garage Goodies</button>
+          <button class="acc-trigger" data-i18n="house_garage">Garage Goodies</button>
           <div class="acc-body">
             <p>The garage is stocked for your enjoyment:</p>
             <ul style="margin-top:0.75rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:0.4rem">
@@ -210,7 +218,7 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Beach &amp; Pool Towels</button>
+          <button class="acc-trigger" data-i18n="house_towels">Beach &amp; Pool Towels</button>
           <div class="acc-body">
             <p>Beach and pool towels are located in the <strong>second-floor double-door closet near the game room</strong>.</p>
             <p style="margin-top:0.75rem">Please wash pool towels separately from white linens — see the <a href="#checkout">Checkout section</a> for laundry notes.</p>
@@ -218,7 +226,7 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Kids Amenities</button>
+          <button class="acc-trigger" data-i18n="house_kids">Kids Amenities</button>
           <div class="acc-body">
             <p>We provide several child-friendly items to make your stay easier:</p>
             <ul style="margin-top:0.75rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:0.4rem">
@@ -235,7 +243,7 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Not Available to Guests</button>
+          <button class="acc-trigger" data-i18n="house_notavail">Not Available to Guests</button>
           <div class="acc-body">
             <p>The following items are <strong>not available for guest use</strong>:</p>
             <ul style="margin-top:0.75rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:0.4rem">
@@ -247,14 +255,14 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Cleaning Supplies</button>
+          <button class="acc-trigger" data-i18n="house_cleaning">Cleaning Supplies</button>
           <div class="acc-body">
             <p>Basic cleaning tools (brooms, mops, vacuum) are in the laundry room or garage. Cleaning supplies and dishwasher detergent are under the kitchen sink.</p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Water &amp; Plumbing</button>
+          <button class="acc-trigger" data-i18n="house_water">Water &amp; Plumbing</button>
           <div class="acc-body">
             <p>Please only flush toilet paper. <strong>Do not flush wipes, feminine products, or anything labeled "flushable"</strong> — this causes clogs. If you experience a plumbing issue or leak, contact Antonio immediately.</p>
           </div>
@@ -264,54 +272,54 @@
     </section>
 
     <section class="manual-section" id="around">
-      <h2 class="manual-section-title">Getting Around</h2>
+      <h2 class="manual-section-title" data-i18n="around_title">Getting Around</h2>
       <div class="around-cards">
         <div class="around-card">
           <div class="around-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5L8.5 9H5m6.5 8.5L15 6l2.5 5.5H11"/></svg>
           </div>
-          <h3>Bicycle</h3>
-          <p>Beach cruisers are in the garage. Lock code:</p>
+          <h3 data-i18n="around_bike_title">Bicycle</h3>
+          <p data-i18n="around_bike_desc">Beach cruisers are in the garage. Lock code:</p>
           <div class="around-code" data-copy-val="81518">
             <span class="code-val">81518</span>
-            <span class="code-hint">Tap to copy</span>
+            <span class="code-hint" data-i18n="around_bike_hint">Tap to copy</span>
           </div>
         </div>
         <div class="around-card">
           <div class="around-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l4 4v6"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M13 17h-4m8 0h2"/></svg>
           </div>
-          <h3>Golf Cart Rental</h3>
-          <p>Salty Rentals is walking distance from the home.</p>
-          <a href="tel:3864105558" class="around-cta btn btn-outline">Call 386-410-5558</a>
+          <h3 data-i18n="around_cart_title">Golf Cart Rental</h3>
+          <p data-i18n="around_cart_desc">Salty Rentals is walking distance from the home.</p>
+          <a href="tel:3864105558" class="around-cta btn btn-outline" data-i18n="around_cart_cta">Call 386-410-5558</a>
         </div>
         <div class="around-card">
           <div class="around-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17H3v-5l2-7h14l2 7v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/><path d="M5 12h14"/></svg>
           </div>
-          <h3>Car</h3>
-          <p>Save the car for the grocery store or exploring Downtown NSB across the bridge.</p>
+          <h3 data-i18n="around_car_title">Car</h3>
+          <p data-i18n="around_car_desc">Save the car for the grocery store or exploring Downtown NSB across the bridge.</p>
         </div>
 
         <div class="around-card">
           <div class="around-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
           </div>
-          <h3>Detwiler Park</h3>
-          <p>Right at the end of our street — free tennis, pickleball, basketball, and a playground with night lighting. We provide paddles, rackets, and sporting balls in the garage.</p>
-          <a href="https://maps.google.com/?q=Detwiler+Park+New+Smyrna+Beach" target="_blank" class="around-cta btn btn-outline">Directions</a>
+          <h3 data-i18n="around_park_title">Detwiler Park</h3>
+          <p data-i18n="around_park_desc">Right at the end of our street — free tennis, pickleball, basketball, and a playground with night lighting. We provide paddles, rackets, and sporting balls in the garage.</p>
+          <a href="https://maps.google.com/?q=Detwiler+Park+New+Smyrna+Beach" target="_blank" class="around-cta btn btn-outline" data-i18n="around_park_cta">Directions</a>
         </div>
       </div>
     </section>
 
     <section class="manual-section" id="hottub">
-      <h2 class="manual-section-title">Hot Tub</h2>
-      <p style="color:var(--charcoal-light); margin-bottom:1.5rem; font-size:0.95rem">The hot tub, bubbles, and pool/spa lights are all controlled from the <strong>tablet mounted on the wall in the kitchen</strong>. Each function runs on a <strong>3-hour timer</strong> — reactivate it if you need longer. Want it pre-heated before you arrive? Just message us and we'll set it up.</p>
+      <h2 class="manual-section-title" data-i18n="hottub_title">Hot Tub</h2>
+      <p style="color:var(--charcoal-light); margin-bottom:1.5rem; font-size:0.95rem" data-i18n-html="hottub_intro">The hot tub, bubbles, and pool/spa lights are all controlled from the <strong>tablet mounted on the wall in the kitchen</strong>. Each function runs on a <strong>3-hour timer</strong> — reactivate it if you need longer. Want it pre-heated before you arrive? Just message us and we'll set it up.</p>
 
       <div class="accordion">
 
         <div class="acc-item">
-          <button class="acc-trigger">Heating the Hot Tub</button>
+          <button class="acc-trigger" data-i18n="hottub_heating">Heating the Hot Tub</button>
           <div class="acc-body">
             <ol class="steps-list">
               <li><span class="step-num">1</span><div class="step-body">Touch the tablet screen to wake it, then <strong>slide your finger upward from the bottom</strong> to unlock.</div></li>
@@ -324,28 +332,28 @@
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Bubbles</button>
+          <button class="acc-trigger" data-i18n="hottub_bubbles">Bubbles</button>
           <div class="acc-body">
             <p>On the tablet: select the <strong>"Equipment"</strong> tab, then toggle on <strong>"Air Blower."</strong></p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Pool &amp; Spa Lights</button>
+          <button class="acc-trigger" data-i18n="hottub_lights">Pool &amp; Spa Lights</button>
           <div class="acc-body">
             <p>On the tablet: select the <strong>"Equipment"</strong> tab, then toggle on <strong>"Pool Light."</strong></p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Turning Off</button>
+          <button class="acc-trigger" data-i18n="hottub_off">Turning Off</button>
           <div class="acc-body">
             <p>When finished, please turn off heating to avoid unnecessary gas usage: select the <strong>"OneTouch Scenes"</strong> tab and toggle off <strong>"Spa Mode."</strong></p>
           </div>
         </div>
 
         <div class="acc-item">
-          <button class="acc-trigger">Pool Sliding Door Alarm (Child Safety)</button>
+          <button class="acc-trigger" data-i18n="hottub_alarm">Pool Sliding Door Alarm (Child Safety)</button>
           <div class="acc-body">
             <p>The sliding glass doors to the pool have a legally required audible alarm — a <strong>grey rectangular box</strong> to the left of the door. Please confirm it is turned on when you arrive.</p>
             <ul style="margin-top:0.75rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:0.5rem">
@@ -359,18 +367,18 @@
 
       </div>
 
-      <p style="margin-top:1.25rem; font-size:0.85rem; color:var(--charcoal-light)">Questions? Call or text Antonio: <a href="tel:4075066654" style="color:var(--accent)">(407) 506-6654</a></p>
+      <p style="margin-top:1.25rem; font-size:0.85rem; color:var(--charcoal-light)"><span data-i18n="hottub_contact">Questions? Call or text Antonio:</span> <a href="tel:4075066654" style="color:var(--accent)">(407) 506-6654</a></p>
     </section>
 
     <section class="manual-section" id="local">
-      <h2 class="manual-section-title">Local Guide</h2>
+      <h2 class="manual-section-title" data-i18n="local_title">Local Guide</h2>
       <div class="local-filter-tabs">
-        <button class="filter-btn active" data-filter="eat">Eat</button>
-        <button class="filter-btn" data-filter="drink">Drink</button>
-        <button class="filter-btn" data-filter="see">See</button>
-        <button class="filter-btn" data-filter="do">Do</button>
-        <button class="filter-btn" data-filter="coffee">Coffee</button>
-        <button class="filter-btn" data-filter="">All</button>
+        <button class="filter-btn active" data-filter="eat" data-i18n="local_filter_eat">Eat</button>
+        <button class="filter-btn" data-filter="drink" data-i18n="local_filter_drink">Drink</button>
+        <button class="filter-btn" data-filter="see" data-i18n="local_filter_see">See</button>
+        <button class="filter-btn" data-filter="do" data-i18n="local_filter_do">Do</button>
+        <button class="filter-btn" data-filter="coffee" data-i18n="local_filter_coffee">Coffee</button>
+        <button class="filter-btn" data-filter="" data-i18n="local_filter_all">All</button>
       </div>
       <div class="local-guide-cards" id="local-guide-cards">
 
@@ -541,7 +549,7 @@
     </section>
 
     <section class="manual-section" id="beach">
-      <h2 class="manual-section-title">Beach Tips</h2>
+      <h2 class="manual-section-title" data-i18n="beach_title">Beach Tips</h2>
       <ul class="tips-list">
         <li>
           <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V12m0 0C12 7 7 4 2 6m10 6c0-5 5-8 10-6"/><path d="M2 12s2-4 10-4 10 4 10 4"/></svg></span>
@@ -579,55 +587,55 @@
     </section>
 
     <section class="manual-section" id="checkout">
-      <h2 class="manual-section-title">Checkout</h2>
-      <p style="color:var(--charcoal-light); font-size:0.9rem; margin-bottom:1.5rem">Check-out is at <strong>10:00 AM</strong>. Before you leave, please take care of the following:</p>
+      <h2 class="manual-section-title" data-i18n="checkout_title">Checkout</h2>
+      <p style="color:var(--charcoal-light); font-size:0.9rem; margin-bottom:1.5rem" data-i18n-html="checkout_intro">Check-out is at <strong>10:00 AM</strong>. Before you leave, please take care of the following:</p>
       <ul class="checkout-list">
-        <li>Start a load of white linens/towels in the washer</li>
-        <li>Wash pool towels separately from white linens</li>
-        <li>Run the dishwasher</li>
-        <li>Take out all trash and replace bags</li>
-        <li>Remove all personal belongings</li>
-        <li>Return beach gear and bikes to the garage</li>
-        <li>Close and lock all windows and doors</li>
-        <li>Sign out of Smart TVs (Netflix, Hulu, etc.)</li>
+        <li data-i18n="checkout_linens">Start a load of white linens/towels in the washer</li>
+        <li data-i18n="checkout_towels">Wash pool towels separately from white linens</li>
+        <li data-i18n="checkout_dishwasher">Run the dishwasher</li>
+        <li data-i18n="checkout_trash">Take out all trash and replace bags</li>
+        <li data-i18n="checkout_belongings">Remove all personal belongings</li>
+        <li data-i18n="checkout_gear">Return beach gear and bikes to the garage</li>
+        <li data-i18n="checkout_windows">Close and lock all windows and doors</li>
+        <li data-i18n="checkout_tvs">Sign out of Smart TVs (Netflix, Hulu, etc.)</li>
       </ul>
-      <p style="margin-top:1.25rem; font-size:0.875rem; color:var(--charcoal-light)">Thank you for being a great guest! We hope you had a wonderful stay.</p>
+      <p style="margin-top:1.25rem; font-size:0.875rem; color:var(--charcoal-light)" data-i18n="checkout_thanks">Thank you for being a great guest! We hope you had a wonderful stay.</p>
     </section>
 
     <section class="manual-section" id="reviews">
-      <h2 class="manual-section-title">Thank You</h2>
+      <h2 class="manual-section-title" data-i18n="reviews_title">Thank You</h2>
       <div class="review-thank-you">
-        <p>It has been our absolute pleasure hosting you at The New Smyrna Beach Retreat. We hope you made lasting memories, soaked up the sun, and felt right at home from the moment you arrived.</p>
-        <p>If you enjoyed your stay, we would be so grateful if you could take a moment to leave us a review. Reviews mean the world to us and help future guests feel confident in choosing our home for their own special escape.</p>
-        <p class="review-sign">With warmth,</p>
+        <p data-i18n="reviews_p1">It has been our absolute pleasure hosting you at The New Smyrna Beach Retreat. We hope you made lasting memories, soaked up the sun, and felt right at home from the moment you arrived.</p>
+        <p data-i18n="reviews_p2">If you enjoyed your stay, we would be so grateful if you could take a moment to leave us a review. Reviews mean the world to us and help future guests feel confident in choosing our home for their own special escape.</p>
+        <p class="review-sign" data-i18n="reviews_sign">With warmth,</p>
         <span class="review-signature">Antonio &amp; Yani</span>
       </div>
       <div class="review-actions">
-        <a href="https://www.airbnb.com/rooms/925287223019649070" target="_blank" rel="noopener" class="btn btn-dark">Leave an Airbnb Review</a>
-        <a href="https://www.vrbo.com/3982075?dateless=true" target="_blank" rel="noopener" class="btn btn-nude">Leave a VRBO Review</a>
+        <a href="https://www.airbnb.com/rooms/925287223019649070" target="_blank" rel="noopener" class="btn btn-dark" data-i18n="reviews_airbnb">Leave an Airbnb Review</a>
+        <a href="https://www.vrbo.com/3982075?dateless=true" target="_blank" rel="noopener" class="btn btn-nude" data-i18n="reviews_vrbo">Leave a VRBO Review</a>
       </div>
     </section>
 
     <section class="manual-section" id="recommendations">
-      <h2 class="manual-section-title">Share Your Feedback</h2>
-      <p style="color:var(--charcoal-light); font-size:0.9rem">Have a suggestion or something we could improve? We read every note and genuinely appreciate the input.</p>
+      <h2 class="manual-section-title" data-i18n="feedback_title">Share Your Feedback</h2>
+      <p style="color:var(--charcoal-light); font-size:0.9rem" data-i18n="feedback_desc">Have a suggestion or something we could improve? We read every note and genuinely appreciate the input.</p>
 
       <form class="rec-form" id="rec-form" novalidate>
 
         <div class="rec-field">
-          <label class="rec-label" for="rec-guest-name">Your Name</label>
-          <input class="rec-input" type="text" id="rec-guest-name" placeholder="e.g. Sarah &amp; Mike" autocomplete="name">
+          <label class="rec-label" for="rec-guest-name" data-i18n="feedback_name_label">Your Name</label>
+          <input class="rec-input" type="text" id="rec-guest-name" placeholder="e.g. Sarah &amp; Mike" autocomplete="name" data-i18n-placeholder="feedback_name_placeholder">
         </div>
 
         <div class="rec-field">
-          <label class="rec-label" for="rec-comment">Your Comment or Suggestion</label>
-          <textarea class="rec-textarea" id="rec-comment" rows="5" placeholder="e.g. The beds were great! One suggestion — it'd be nice to have a beach umbrella in the garage."></textarea>
+          <label class="rec-label" for="rec-comment" data-i18n="feedback_msg_label">Your Comment or Suggestion</label>
+          <textarea class="rec-textarea" id="rec-comment" rows="5" placeholder="e.g. The beds were great! One suggestion — it'd be nice to have a beach umbrella in the garage." data-i18n-placeholder="feedback_msg_placeholder"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-dark" id="rec-submit" style="align-self:flex-start">Send Feedback</button>
+        <button type="submit" class="btn btn-dark" id="rec-submit" style="align-self:flex-start" data-i18n="feedback_submit">Send Feedback</button>
 
-        <div class="rec-msg success" id="rec-success">Thanks for the note! We really appreciate you taking the time to share.</div>
-        <div class="rec-msg error" id="rec-error">Something went wrong. Please try again.</div>
+        <div class="rec-msg success" id="rec-success" data-i18n="feedback_success">Thanks for the note! We really appreciate you taking the time to share.</div>
+        <div class="rec-msg error" id="rec-error" data-i18n="feedback_error">Something went wrong. Please try again.</div>
 
       </form>
     </section>
@@ -643,7 +651,7 @@
   <div class="chat-widget" id="chat-widget">
     <button class="chat-fab" id="chat-fab" aria-label="Ask a question">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>Ask</span>
+      <span data-i18n="chat_ask">Ask</span>
     </button>
   </div>
 
@@ -654,7 +662,7 @@
       <div class="chat-modal-header">
         <div class="chat-modal-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Ask a Question
+          <span data-i18n="chat_title">Ask a Question</span>
         </div>
         <div class="chat-modal-controls">
           <button class="chat-modal-btn" id="chat-minimize" aria-label="Minimize chat">
@@ -666,25 +674,75 @@
         </div>
       </div>
       <div class="chat-messages" id="chat-messages">
-        <div class="chat-bubble chat-bot">
+        <div class="chat-bubble chat-bot" data-i18n="chat_greeting">
           Hi! Ask me anything about the house, local area, or your stay. I'm happy to help.
         </div>
       </div>
       <div class="chat-input-row">
-        <input type="text" id="chat-input" placeholder="e.g. What's the WiFi password?" autocomplete="off">
-        <button id="chat-send">Send</button>
+        <input type="text" id="chat-input" placeholder="e.g. What's the WiFi password?" autocomplete="off" data-i18n-placeholder="chat_placeholder">
+        <button id="chat-send" data-i18n="chat_send">Send</button>
       </div>
     </div>
+  </div>
+
+  <!-- Language Dropdown -->
+  <div class="lang-drop" id="guide-lang-drop" aria-hidden="true" role="menu">
+    <button class="lang-option" data-lang-option="en" role="menuitem">English</button>
+    <button class="lang-option" data-lang-option="es" role="menuitem">Español</button>
+    <button class="lang-option" data-lang-option="pt" role="menuitem">Português</button>
+    <button class="lang-option" data-lang-option="fr" role="menuitem">Français</button>
+    <button class="lang-option" data-lang-option="de" role="menuitem">Deutsch</button>
+    <button class="lang-option" data-lang-option="it" role="menuitem">Italiano</button>
   </div>
 
   <!-- Vercel Analytics (enable in Vercel dashboard → Analytics tab) -->
   <script defer src="/_vercel/insights/script.js"></script>
 
   <script src="../js/config.js"></script>
+  <script src="js/translations-guide.js"></script>
+  <script src="../js/i18n.js"></script>
   <script src="js/manual.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="js/chatbot.js"></script>
   <script src="../js/analytics.js"></script>
+  <script>
+    // Init i18n for guide
+    I18N.init('GUIDE_TRANSLATIONS');
+
+    // Guide language switcher
+    (function() {
+      var btn  = document.getElementById('guide-lang-btn');
+      var drop = document.getElementById('guide-lang-drop');
+      if (!btn || !drop) return;
+
+      function openDrop() {
+        var rect = btn.getBoundingClientRect();
+        drop.style.top  = (rect.bottom + 6) + 'px';
+        var left = Math.min(rect.right - 160, window.innerWidth - 168);
+        drop.style.left = Math.max(8, left) + 'px';
+        drop.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        drop.setAttribute('aria-hidden', 'false');
+      }
+      function closeDrop() {
+        drop.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        drop.setAttribute('aria-hidden', 'true');
+      }
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        drop.classList.contains('open') ? closeDrop() : openDrop();
+      });
+      drop.querySelectorAll('[data-lang-option]').forEach(function(opt) {
+        opt.addEventListener('click', function() {
+          I18N.setLang(opt.dataset.langOption);
+          closeDrop();
+        });
+      });
+      document.addEventListener('click', closeDrop);
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDrop(); });
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
     (function () {

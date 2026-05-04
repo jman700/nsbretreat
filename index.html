@@ -27,30 +27,59 @@
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="nav-links">
-        <li><a href="#property">The House</a></li>
-        <li><a href="#gallery">Gallery</a></li>
-        <li><a href="#amenities">Amenities</a></li>
-        <li><a href="#availability">Availability</a></li>
-        <li><a href="#hosts">Hosts</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="guide/">House Guide</a></li>
+        <li><a href="#property" data-i18n="nav_house">The House</a></li>
+        <li><a href="#gallery" data-i18n="nav_gallery">Gallery</a></li>
+        <li><a href="#amenities" data-i18n="nav_amenities">Amenities</a></li>
+        <li><a href="#availability" data-i18n="nav_availability">Availability</a></li>
+        <li><a href="#hosts" data-i18n="nav_hosts">Hosts</a></li>
+        <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
+        <li><a href="guide/" data-i18n="nav_guide">House Guide</a></li>
         <li class="nav-has-drop">
-          <button class="nav-contact-btn" id="nav-contact-btn" aria-expanded="false" aria-haspopup="true">Contact</button>
+          <button class="nav-contact-btn" id="nav-contact-btn" aria-expanded="false" aria-haspopup="true" data-i18n="nav_contact">Contact</button>
         </li>
-        <li><a href="#" id="nav-book-btn" data-airbnb-link class="btn btn-nude">Book on Airbnb</a></li>
+        <li class="nav-lang-item">
+          <button class="lang-switcher" id="lang-btn" aria-expanded="false" aria-haspopup="true" aria-label="Select language">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="15" height="15"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="lang-current-code">EN</span>
+            <svg class="lang-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="11" height="11"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </li>
+        <li><a href="#" id="nav-book-btn" data-airbnb-link class="btn btn-nude" data-i18n="nav_book">Book on Airbnb</a></li>
       </ul>
     </div>
   </nav>
+
+  <!-- Language Dropdown -->
+  <div class="lang-drop" id="lang-drop" aria-hidden="true" role="menu">
+    <button class="lang-option" data-lang-option="en" role="menuitem">
+      <span class="lang-flag">🌐</span> <span class="lang-name">English</span>
+    </button>
+    <button class="lang-option" data-lang-option="es" role="menuitem">
+      <span class="lang-name">Español</span>
+    </button>
+    <button class="lang-option" data-lang-option="pt" role="menuitem">
+      <span class="lang-name">Português</span>
+    </button>
+    <button class="lang-option" data-lang-option="fr" role="menuitem">
+      <span class="lang-name">Français</span>
+    </button>
+    <button class="lang-option" data-lang-option="de" role="menuitem">
+      <span class="lang-name">Deutsch</span>
+    </button>
+    <button class="lang-option" data-lang-option="it" role="menuitem">
+      <span class="lang-name">Italiano</span>
+    </button>
+  </div>
 
   <section class="hero" id="hero">
     <div class="hero-bg">
       <img src="assets/photos/hero.jpg" alt="The New Smyrna Beach Retreat exterior" class="hero-img">
     </div>
     <div class="hero-content">
-      <p class="hero-eyebrow">New Smyrna Beach, Florida</p>
-      <h1 class="hero-title">The New Smyrna<br>Beach Retreat</h1>
-      <p class="hero-sub">815 Carol Ave &nbsp;·&nbsp; 5 Bedrooms &nbsp;·&nbsp; Sleeps 16 &nbsp;·&nbsp; 2,600 sq ft</p>
-      <a href="#" data-airbnb-link class="btn btn-dark hero-btn">Book on Airbnb</a>
+      <p class="hero-eyebrow" data-i18n="hero_eyebrow">New Smyrna Beach, Florida</p>
+      <h1 class="hero-title" data-i18n-html="hero_title">The New Smyrna<br>Beach Retreat</h1>
+      <p class="hero-sub" data-i18n="hero_sub">815 Carol Ave &nbsp;·&nbsp; 5 Bedrooms &nbsp;·&nbsp; Sleeps 16 &nbsp;·&nbsp; 2,600 sq ft</p>
+      <a href="#" data-airbnb-link class="btn btn-dark hero-btn" data-i18n="hero_btn">Book on Airbnb</a>
     </div>
   </section>
 
@@ -59,60 +88,60 @@
       <div class="stat-strip">
         <div class="stat">
           <span class="stat-num">5</span>
-          <span class="stat-label">Bedrooms</span>
+          <span class="stat-label" data-i18n="stat_bedrooms">Bedrooms</span>
         </div>
         <div class="stat">
           <span class="stat-num">4</span>
-          <span class="stat-label">Bathrooms</span>
+          <span class="stat-label" data-i18n="stat_bathrooms">Bathrooms</span>
         </div>
         <div class="stat">
           <span class="stat-num">16</span>
-          <span class="stat-label">Guests</span>
+          <span class="stat-label" data-i18n="stat_guests">Guests</span>
         </div>
         <div class="stat">
           <span class="stat-num">3<span class="stat-unit">min</span></span>
-          <span class="stat-label">Walk to Beach</span>
+          <span class="stat-label" data-i18n="stat_beach">Walk to Beach</span>
         </div>
         <div class="stat">
           <span class="stat-num">2,600</span>
-          <span class="stat-label">Sq Ft</span>
+          <span class="stat-label" data-i18n="stat_sqft">Sq Ft</span>
         </div>
         <div class="stat">
           <span class="stat-num">7<span class="stat-unit">min</span></span>
-          <span class="stat-label">Walk to Flagler</span>
+          <span class="stat-label" data-i18n="stat_flagler">Walk to Flagler</span>
         </div>
       </div>
 
       <div class="property-intro">
-        <p class="section-label">The Property</p>
-        <h2 class="section-title">A Coastal Haven in<br>New Smyrna Beach</h2>
-        <p class="property-desc">Welcome to our beachside retreat — where the rhythm of the waves sets the tone for a serene and rejuvenating stay. Designed to blend modern comforts with coastal living, the open-concept layout is perfect for families and groups looking to make memories together.</p>
+        <p class="section-label" data-i18n="prop_label">The Property</p>
+        <h2 class="section-title" data-i18n-html="prop_title_html">A Coastal Haven in<br>New Smyrna Beach</h2>
+        <p class="property-desc" data-i18n="prop_desc">Welcome to our beachside retreat — where the rhythm of the waves sets the tone for a serene and rejuvenating stay. Designed to blend modern comforts with coastal living, the open-concept layout is perfect for families and groups looking to make memories together.</p>
       </div>
 
       <div class="highlights-scroll">
         <div class="highlight-card">
           <img src="assets/photos/pool.jpg" alt="Pool">
-          <span>Private Pool</span>
+          <span data-i18n="highlight_pool">Private Pool</span>
         </div>
         <div class="highlight-card">
           <img src="assets/photos/gameroom.jpg" alt="Game Room">
-          <span>Game Room</span>
+          <span data-i18n="highlight_gameroom">Game Room</span>
         </div>
         <div class="highlight-card">
           <img src="assets/photos/hottub.jpg" alt="Hot Tub">
-          <span>Hot Tub</span>
+          <span data-i18n="highlight_hottub">Hot Tub</span>
         </div>
         <div class="highlight-card">
           <img src="assets/photos/massage.jpg" alt="Massage Chair">
-          <span>Massage Chair</span>
+          <span data-i18n="highlight_massage">Massage Chair</span>
         </div>
         <div class="highlight-card">
           <img src="assets/photos/bikes.jpg" alt="Beach Bikes">
-          <span>Beach Bikes</span>
+          <span data-i18n="highlight_bikes">Beach Bikes</span>
         </div>
         <div class="highlight-card">
           <img src="assets/photos/margaritaville.jpg" alt="Margaritaville Maker">
-          <span>Margaritaville</span>
+          <span data-i18n="highlight_margaritaville">Margaritaville</span>
         </div>
       </div>
     </div>
@@ -120,79 +149,79 @@
 
   <section class="gallery" id="gallery">
     <div class="container gallery-header">
-      <p class="section-label" style="text-align:center">Photo Gallery</p>
-      <h2 class="section-title" style="text-align:center">See Every Corner</h2>
+      <p class="section-label" style="text-align:center" data-i18n="gallery_label">Photo Gallery</p>
+      <h2 class="section-title" style="text-align:center" data-i18n="gallery_title">See Every Corner</h2>
     </div>
     <div class="gallery-controls">
-      <button class="gallery-btn" id="gallery-prev" aria-label="Previous photos">&#8592;</button>
+      <button class="gallery-btn" id="gallery-prev" data-i18n-aria="aria_prev_photos" aria-label="Previous photos">&#8592;</button>
       <div class="gallery-dots" id="gallery-dots"></div>
-      <button class="gallery-btn" id="gallery-next" aria-label="Next photos">&#8594;</button>
+      <button class="gallery-btn" id="gallery-next" data-i18n-aria="aria_next_photos" aria-label="Next photos">&#8594;</button>
     </div>
     <div class="gallery-track-wrap">
       <div class="gallery-track" id="gallery-grid"></div>
     </div>
-    <p class="gallery-hint">Swipe or use arrows to browse &nbsp;·&nbsp; Click to enlarge</p>
+    <p class="gallery-hint" data-i18n="gallery_hint">Swipe or use arrows to browse &nbsp;·&nbsp; Click to enlarge</p>
   </section>
 
   <section class="amenities" id="amenities">
     <div class="container">
-      <p class="section-label" style="text-align:center">What's Included</p>
-      <h2 class="section-title" style="text-align:center">Amenities</h2>
+      <p class="section-label" style="text-align:center" data-i18n="amenities_label">What's Included</p>
+      <h2 class="section-title" style="text-align:center" data-i18n="amenities_title">Amenities</h2>
       <div class="amenities-groups">
 
         <div class="amenity-group">
-          <h3 class="amenity-group-title">Indoors</h3>
+          <h3 class="amenity-group-title" data-i18n="amenities_indoors">Indoors</h3>
           <ul class="amenity-list">
-            <li>Air hockey table</li>
-            <li>Retro arcade games</li>
-            <li>Margaritaville frozen drink maker</li>
-            <li>Zero-gravity massage chair</li>
-            <li>Smart TVs in every room</li>
-            <li>Super-automatic espresso machine</li>
-            <li>Nespresso machine</li>
-            <li>Fully equipped kitchen</li>
-            <li>High-speed WiFi</li>
-            <li>Washer &amp; dryer</li>
+            <li data-i18n="amenity_air_hockey">Air hockey table</li>
+            <li data-i18n="amenity_arcade">Retro arcade games</li>
+            <li data-i18n="amenity_margarita">Margaritaville frozen drink maker</li>
+            <li data-i18n="amenity_massage">Zero-gravity massage chair</li>
+            <li data-i18n="amenity_tvs">Smart TVs in every room</li>
+            <li data-i18n="amenity_espresso">Super-automatic espresso machine</li>
+            <li data-i18n="amenity_nespresso">Nespresso machine</li>
+            <li data-i18n="amenity_kitchen_full">Fully equipped kitchen</li>
+            <li data-i18n="amenity_wifi">High-speed WiFi</li>
+            <li data-i18n="amenity_washer">Washer &amp; dryer</li>
           </ul>
         </div>
 
         <div class="amenity-group">
-          <h3 class="amenity-group-title">Outdoors</h3>
+          <h3 class="amenity-group-title" data-i18n="amenities_outdoors">Outdoors</h3>
           <ul class="amenity-list">
-            <li>Private pool</li>
-            <li>Hot tub</li>
-            <li>Covered pergola</li>
-            <li>Outdoor kitchen</li>
-            <li>Outdoor bar with sink &amp; mini fridge</li>
-            <li>Bar seating for 9</li>
-            <li>Built-in grill (natural gas)</li>
-            <li>Putting green</li>
-            <li>Hammock</li>
-            <li>Front porch</li>
-            <li>Driveway + garage parking</li>
+            <li data-i18n="amenity_pool">Private pool</li>
+            <li data-i18n="amenity_hottub">Hot tub</li>
+            <li data-i18n="amenity_pergola">Covered pergola</li>
+            <li data-i18n="amenity_outdoor_kitchen">Outdoor kitchen</li>
+            <li data-i18n="amenity_outdoor_bar">Outdoor bar with sink &amp; mini fridge</li>
+            <li data-i18n="amenity_bar_seating">Bar seating for 9</li>
+            <li data-i18n="amenity_grill">Built-in grill (natural gas)</li>
+            <li data-i18n="amenity_putting">Putting green</li>
+            <li data-i18n="amenity_hammock">Hammock</li>
+            <li data-i18n="amenity_porch">Front porch</li>
+            <li data-i18n="amenity_parking">Driveway + garage parking</li>
           </ul>
         </div>
 
         <div class="amenity-group">
-          <h3 class="amenity-group-title">Beach Gear</h3>
+          <h3 class="amenity-group-title" data-i18n="amenities_beach">Beach Gear</h3>
           <ul class="amenity-list">
-            <li>Beach cruiser bicycles</li>
-            <li>Beach chairs &amp; umbrella</li>
-            <li>Beach towels &amp; cart</li>
-            <li>Beach toys &amp; games</li>
-            <li>Sporting equipment</li>
+            <li data-i18n="amenity_bikes">Beach cruiser bicycles</li>
+            <li data-i18n="amenity_beach_chairs">Beach chairs &amp; umbrella</li>
+            <li data-i18n="amenity_beach_towels">Beach towels &amp; cart</li>
+            <li data-i18n="amenity_beach_toys">Beach toys &amp; games</li>
+            <li data-i18n="amenity_sporting">Sporting equipment</li>
           </ul>
         </div>
 
         <div class="amenity-group">
-          <h3 class="amenity-group-title">Kitchen</h3>
+          <h3 class="amenity-group-title" data-i18n="amenities_kitchen">Kitchen</h3>
           <ul class="amenity-list">
-            <li>Refrigerator, stove &amp; oven</li>
-            <li>Microwave &amp; dishwasher</li>
-            <li>Margaritaville maker</li>
-            <li>Espresso &amp; Nespresso machines</li>
-            <li>Pots, pans, baking sheets</li>
-            <li>Complimentary coffee</li>
+            <li data-i18n="amenity_fridge">Refrigerator, stove &amp; oven</li>
+            <li data-i18n="amenity_micro">Microwave &amp; dishwasher</li>
+            <li data-i18n="amenity_margarita_k">Margaritaville maker</li>
+            <li data-i18n="amenity_espresso_k">Espresso &amp; Nespresso machines</li>
+            <li data-i18n="amenity_pots">Pots, pans, baking sheets</li>
+            <li data-i18n="amenity_coffee">Complimentary coffee</li>
           </ul>
         </div>
 
@@ -202,8 +231,8 @@
 
   <section class="availability" id="availability">
     <div class="container">
-      <p class="section-label" style="text-align:center">Check Dates</p>
-      <h2 class="section-title" style="text-align:center">Availability</h2>
+      <p class="section-label" style="text-align:center" data-i18n="avail_label">Check Dates</p>
+      <h2 class="section-title" style="text-align:center" data-i18n="avail_title">Availability</h2>
       <div class="calendar-wrap">
         <div class="calendar-nav">
           <button id="cal-prev" aria-label="Previous month">&#8592;</button>
@@ -212,45 +241,45 @@
         </div>
         <div class="calendar-grid" id="calendar-grid"></div>
         <div class="calendar-legend">
-          <span class="legend-available">Available</span>
-          <span class="legend-booked">Booked</span>
+          <span class="legend-available" data-i18n="legend_available">Available</span>
+          <span class="legend-booked" data-i18n="legend_booked">Booked</span>
         </div>
       </div>
       <div style="text-align:center; margin-top:2rem">
-        <a href="#" data-airbnb-link class="btn btn-nude">Book on Airbnb</a>
+        <a href="#" data-airbnb-link class="btn btn-nude" data-i18n="avail_book">Book on Airbnb</a>
       </div>
     </div>
   </section>
 
   <section class="local-teaser" id="local">
     <div class="container">
-      <p class="section-label" style="text-align:center">Explore NSB</p>
-      <h2 class="section-title" style="text-align:center">The Neighborhood</h2>
+      <p class="section-label" style="text-align:center" data-i18n="local_label">Explore NSB</p>
+      <h2 class="section-title" style="text-align:center" data-i18n="local_title">The Neighborhood</h2>
       <div class="local-cards">
         <div class="local-card">
           <img src="assets/photos/flagler.jpg" alt="Flagler Avenue">
           <div class="local-card-body">
-            <h3>Flagler Avenue</h3>
-            <p>The heart of NSB — local shops, restaurants, and beach access steps away.</p>
+            <h3 data-i18n="local_flagler_title">Flagler Avenue</h3>
+            <p data-i18n="local_flagler_desc">The heart of NSB — local shops, restaurants, and beach access steps away.</p>
           </div>
         </div>
         <div class="local-card">
           <img src="assets/photos/dunes.jpg" alt="Smyrna Dunes Park">
           <div class="local-card-body">
-            <h3>Smyrna Dunes Park</h3>
-            <p>184-acre park with boardwalk trails, wildlife, and stunning Ponce Inlet views.</p>
+            <h3 data-i18n="local_dunes_title">Smyrna Dunes Park</h3>
+            <p data-i18n="local_dunes_desc">184-acre park with boardwalk trails, wildlife, and stunning Ponce Inlet views.</p>
           </div>
         </div>
         <div class="local-card">
           <img src="assets/photos/canal.jpg" alt="Canal Street">
           <div class="local-card-body">
-            <h3>Canal Street District</h3>
-            <p>Across the causeway — art galleries, local eateries, and historic architecture.</p>
+            <h3 data-i18n="local_canal_title">Canal Street District</h3>
+            <p data-i18n="local_canal_desc">Across the causeway — art galleries, local eateries, and historic architecture.</p>
           </div>
         </div>
       </div>
       <div style="text-align:center; margin-top:2rem">
-        <a href="guide/" class="btn btn-outline">House Guide →</a>
+        <a href="guide/" class="btn btn-outline" data-i18n="local_guide_btn">House Guide →</a>
       </div>
     </div>
   </section>
@@ -262,12 +291,12 @@
           <img src="assets/photos/hosts.jpg" alt="Antonio and Yani">
         </div>
         <div class="hosts-text">
-          <p class="section-label">Your Hosts</p>
+          <p class="section-label" data-i18n="hosts_label">Your Hosts</p>
           <h2 class="section-title">Antonio &amp; Yani</h2>
-          <p>We are two brothers and Florida locals born and raised in Orlando, FL but who now call New Smyrna Beach our second home. Hosting is something we truly enjoy and we hope you feel the love that was put into this home. We welcome you with open arms and hope you enjoy your stay with us!</p>
-          <p style="margin-top:1rem; color:var(--charcoal-light); font-size:0.9rem;">Cheers,</p>
+          <p data-i18n="hosts_bio">We are two brothers and Florida locals born and raised in Orlando, FL but who now call New Smyrna Beach our second home. Hosting is something we truly enjoy and we hope you feel the love that was put into this home. We welcome you with open arms and hope you enjoy your stay with us!</p>
+          <p style="margin-top:1rem; color:var(--charcoal-light); font-size:0.9rem;" data-i18n="hosts_cheers">Cheers,</p>
           <span class="signature">Antonio &amp; Yani</span>
-          <p style="margin-top:1.25rem; font-size:0.9rem; color:var(--charcoal-light)">Questions? <a href="tel:4075066654" style="color:var(--accent); text-decoration:none;">(407) 506-6654</a></p>
+          <p style="margin-top:1.25rem; font-size:0.9rem; color:var(--charcoal-light)"><span data-i18n="hosts_questions">Questions?</span> <a href="tel:4075066654" style="color:var(--accent); text-decoration:none;">(407) 506-6654</a></p>
         </div>
       </div>
     </div>
@@ -279,10 +308,10 @@
       <div class="reviews-strip-hd">
         <div class="reviews-badge">
           <span class="reviews-stars-row">★★★★★</span>
-          <span class="reviews-badge-text">5.0 &nbsp;·&nbsp; 51 Reviews &nbsp;·&nbsp; Guest Favorite</span>
+          <span class="reviews-badge-text" data-i18n="reviews_badge">5.0 &nbsp;·&nbsp; 51 Reviews &nbsp;·&nbsp; Guest Favorite</span>
         </div>
-        <h2 class="reviews-strip-title">What Our Guests Are Saying</h2>
-        <p class="reviews-strip-sub">Top 1% of homes on Airbnb</p>
+        <h2 class="reviews-strip-title" data-i18n="reviews_title">What Our Guests Are Saying</h2>
+        <p class="reviews-strip-sub" data-i18n="reviews_sub">Top 1% of homes on Airbnb</p>
       </div>
       <div class="reviews-carousel-wrap">
         <div class="reviews-track" id="reviews-track">
@@ -357,64 +386,64 @@
           </button>
         </div>
       </div>
-      <a href="https://www.airbnb.com/rooms/925287223019649070#reviews" target="_blank" rel="noopener" class="reviews-view-all">Read all 51 reviews on Airbnb ↗</a>
+      <a href="https://www.airbnb.com/rooms/925287223019649070#reviews" target="_blank" rel="noopener" class="reviews-view-all" data-i18n="reviews_all">Read all 51 reviews on Airbnb ↗</a>
     </div>
   </section>
 
   <section class="faq-section" id="faq">
     <div class="container">
-      <p class="section-label" style="text-align:center">Got Questions?</p>
-      <h2 class="section-title" style="text-align:center">FAQ</h2>
+      <p class="section-label" style="text-align:center" data-i18n="faq_label">Got Questions?</p>
+      <h2 class="section-title" style="text-align:center" data-i18n="faq_title">FAQ</h2>
       <div class="faq-list">
 
         <details class="faq-item">
-          <summary class="faq-q">Are pets allowed?</summary>
-          <p class="faq-a">Pets are welcome with a <strong>$395 pet fee</strong>. Guests are responsible for any damages caused by their pet during the stay.</p>
+          <summary class="faq-q" data-i18n="faq_pets_q">Are pets allowed?</summary>
+          <p class="faq-a" data-i18n-html="faq_pets_a">Pets are welcome with a <strong>$395 pet fee</strong>. Guests are responsible for any damages caused by their pet during the stay.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">What are the check-in and check-out times?</summary>
-          <p class="faq-a"><strong>Check-in:</strong> 4:00 PM — your door code is sent through your booking app. <strong>Check-out:</strong> 10:00 AM.</p>
+          <summary class="faq-q" data-i18n="faq_checkin_q">What are the check-in and check-out times?</summary>
+          <p class="faq-a" data-i18n-html="faq_checkin_a"><strong>Check-in:</strong> 4:00 PM — your door code is sent through your booking app. <strong>Check-out:</strong> 10:00 AM.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">Is early check-in or late checkout available?</summary>
-          <p class="faq-a">Occasionally available depending on the schedule. Message Antonio through your booking app and we'll do our best to accommodate you.</p>
+          <summary class="faq-q" data-i18n="faq_early_q">Is early check-in or late checkout available?</summary>
+          <p class="faq-a" data-i18n="faq_early_a">Occasionally available depending on the schedule. Message Antonio through your booking app and we'll do our best to accommodate you.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">How many guests does the home sleep?</summary>
-          <p class="faq-a">The home comfortably sleeps <strong>16 guests</strong> across 5 bedrooms.</p>
+          <summary class="faq-q" data-i18n="faq_guests_q">How many guests does the home sleep?</summary>
+          <p class="faq-a" data-i18n-html="faq_guests_a">The home comfortably sleeps <strong>16 guests</strong> across 5 bedrooms.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">Is parking available?</summary>
-          <p class="faq-a">Yes — right garage spot, driveway, and front yard grass. <strong>Street parking is prohibited</strong> and may result in fines or towing.</p>
+          <summary class="faq-q" data-i18n="faq_parking_q">Is parking available?</summary>
+          <p class="faq-a" data-i18n-html="faq_parking_a">Yes — right garage spot, driveway, and front yard grass. <strong>Street parking is prohibited</strong> and may result in fines or towing.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">Is the pool heated?</summary>
-          <p class="faq-a">Pool heating is available for <strong>$40 per day</strong> of your stay. The hot tub is always available and controlled from a tablet in the kitchen. Want things pre-heated for your arrival? Just message us.</p>
+          <summary class="faq-q" data-i18n="faq_pool_q">Is the pool heated?</summary>
+          <p class="faq-a" data-i18n-html="faq_pool_a">Pool heating is available for <strong>$40 per day</strong> of your stay. The hot tub is always available and controlled from a tablet in the kitchen. Want things pre-heated for your arrival? Just message us.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">What is the cancellation policy?</summary>
-          <p class="faq-a">Our cancellation policy is set by us and reflected in your booking on Airbnb or VRBO. Please refer to your booking confirmation for the specific terms.</p>
+          <summary class="faq-q" data-i18n="faq_cancel_q">What is the cancellation policy?</summary>
+          <p class="faq-a" data-i18n="faq_cancel_a">Our cancellation policy is set by us and reflected in your booking on Airbnb or VRBO. Please refer to your booking confirmation for the specific terms.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">Are events or parties allowed?</summary>
-          <p class="faq-a">Small gatherings of registered guests are welcome. Large parties or gatherings exceeding the stated guest capacity are not permitted.</p>
+          <summary class="faq-q" data-i18n="faq_parties_q">Are events or parties allowed?</summary>
+          <p class="faq-a" data-i18n="faq_parties_a">Small gatherings of registered guests are welcome. Large parties or gatherings exceeding the stated guest capacity are not permitted.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">Is there a noise curfew?</summary>
-          <p class="faq-a">Please keep outdoor music and noise at a considerate level after <strong>10:00 PM</strong>. This is a residential neighborhood.</p>
+          <summary class="faq-q" data-i18n="faq_noise_q">Is there a noise curfew?</summary>
+          <p class="faq-a" data-i18n-html="faq_noise_a">Please keep outdoor music and noise at a considerate level after <strong>10:00 PM</strong>. This is a residential neighborhood.</p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-q">What if something is damaged or broken?</summary>
-          <p class="faq-a">Please notify Antonio as soon as possible — call or text <a href="tel:4075066654" style="color:var(--accent)">(407) 506-6654</a> or message through your booking app. Honest communication is always appreciated.</p>
+          <summary class="faq-q" data-i18n="faq_damage_q">What if something is damaged or broken?</summary>
+          <p class="faq-a" data-i18n-html="faq_damage_a">Please notify Antonio as soon as possible — call or text <a href="tel:4075066654" style="color:var(--accent)">(407) 506-6654</a> or message through your booking app. Honest communication is always appreciated.</p>
         </details>
 
       </div>
@@ -433,8 +462,8 @@
           </a>
         </div>
         <div class="footer-actions">
-          <a href="#" data-airbnb-link class="btn btn-nude">Book on Airbnb</a>
-          <a href="guide/" class="btn btn-nude">House Guide</a>
+          <a href="#" data-airbnb-link class="btn btn-nude" data-i18n="footer_book">Book on Airbnb</a>
+          <a href="guide/" class="btn btn-nude" data-i18n="footer_guide">House Guide</a>
         </div>
       </div>
     </div>
@@ -445,15 +474,15 @@
     <a href="tel:4075066654" class="nav-drop-item" role="menuitem">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.45 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
       <div class="nav-drop-text">
-        <span class="nav-drop-label">Call or Text</span>
+        <span class="nav-drop-label" data-i18n="contact_call_label">Call or Text</span>
         <span class="nav-drop-sub">(407) 506-6654</span>
       </div>
     </a>
     <a href="#" data-airbnb-link class="nav-drop-item" role="menuitem" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <div class="nav-drop-text">
-        <span class="nav-drop-label">Message on Airbnb</span>
-        <span class="nav-drop-sub">Opens Airbnb →</span>
+        <span class="nav-drop-label" data-i18n="contact_airbnb_label">Message on Airbnb</span>
+        <span class="nav-drop-sub" data-i18n="contact_airbnb_sub">Opens Airbnb →</span>
       </div>
     </a>
   </div>
@@ -477,5 +506,49 @@
   <script src="js/main.js"></script>
   <script src="js/calendar.js"></script>
   <script src="js/analytics.js"></script>
+  <script src="js/translations-main.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+    // Init i18n
+    I18N.init();
+
+    // Language switcher
+    (function() {
+      var btn  = document.getElementById('lang-btn');
+      var drop = document.getElementById('lang-drop');
+      if (!btn || !drop) return;
+
+      function openLang() {
+        var rect = btn.getBoundingClientRect();
+        drop.style.top  = (rect.bottom + 6) + 'px';
+        var left = Math.min(rect.right - 160, window.innerWidth - 168);
+        drop.style.left = Math.max(8, left) + 'px';
+        drop.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        drop.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeLang() {
+        drop.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        drop.setAttribute('aria-hidden', 'true');
+      }
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        drop.classList.contains('open') ? closeLang() : openLang();
+      });
+
+      drop.querySelectorAll('[data-lang-option]').forEach(function(opt) {
+        opt.addEventListener('click', function() {
+          I18N.setLang(opt.dataset.langOption);
+          closeLang();
+        });
+      });
+
+      document.addEventListener('click', closeLang);
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLang(); });
+    })();
+  </script>
 </body>
 </html>

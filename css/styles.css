@@ -833,4 +833,59 @@ section { padding: var(--section-pad-y) 0; }
 }
 .jump-top:hover { background: var(--sand); }
 .jump-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+/* ── Language Switcher ── */
+.nav-lang-item { position: relative; }
+.lang-switcher {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-sm); padding: 0.35rem 0.65rem;
+  color: rgba(255,255,255,0.85); font-family: var(--font-sans);
+  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; cursor: pointer; transition: background 0.15s;
+  white-space: nowrap;
+}
+.lang-switcher:hover { background: rgba(255,255,255,0.18); }
+.lang-chevron { transition: transform 0.2s; }
+.lang-switcher[aria-expanded="true"] .lang-chevron { transform: rotate(180deg); }
+
+.lang-drop {
+  position: fixed; z-index: 200;
+  background: var(--white); border: 1.5px solid var(--tan);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
+  min-width: 160px; padding: 0.375rem 0;
+  display: none; flex-direction: column;
+}
+.lang-drop.open { display: flex; }
+
+.lang-option {
+  display: flex; align-items: center; gap: 0.5rem;
+  width: 100%; text-align: left; background: none; border: none;
+  padding: 0.55rem 1rem; font-family: var(--font-sans);
+  font-size: 0.85rem; color: var(--charcoal); cursor: pointer;
+  transition: background 0.12s;
+}
+.lang-option:hover { background: var(--blush); }
+.lang-option.active { color: var(--accent); font-weight: 600; }
+
+/* Guide nav lang switcher (lighter background) */
+.guide-lang-wrap {
+  display: flex; align-items: center; margin-left: auto; flex-shrink: 0;
+}
+.guide-lang-btn {
+  display: flex; align-items: center; gap: 5px;
+  background: none; border: 1px solid var(--tan);
+  border-radius: var(--radius-sm); padding: 0.3rem 0.6rem;
+  color: var(--charcoal-light); font-family: var(--font-sans);
+  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; cursor: pointer; transition: all 0.15s;
+  white-space: nowrap;
+}
+.guide-lang-btn:hover { border-color: var(--charcoal); color: var(--charcoal); }
+.guide-lang-btn[aria-expanded="true"] .lang-chevron { transform: rotate(180deg); }
+
+@media (max-width: 768px) {
+  .lang-switcher { font-size: 0.68rem; padding: 0.3rem 0.55rem; }
+  .guide-lang-btn { font-size: 0.68rem; padding: 0.25rem 0.5rem; }
+}
 .jump-top svg { width: 18px; height: 18px; }
