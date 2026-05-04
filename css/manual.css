@@ -1242,6 +1242,11 @@ html.dark .beach-fee-card { background: #2a211c; border-color: #3a2e28; }
   color: var(--charcoal-light);
   margin-top: 0.25rem;
 }
+.event-location a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.event-location a:hover { text-decoration: underline; }
 
 /* ── Beach Fees ── */
 .beach-fees-grid {

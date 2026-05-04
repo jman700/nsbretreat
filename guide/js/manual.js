@@ -166,6 +166,7 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
 (function initScrollSpy() {
   const sections = Array.from(document.querySelectorAll('.manual-section[id]'));
   const links    = document.querySelectorAll('.guide-tab');
+  const tabs     = document.getElementById('manual-tabs');
 
   function update() {
     let current = sections[0]?.id || '';
@@ -176,6 +177,15 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
       const href = link.getAttribute('href').replace('#', '');
       link.classList.toggle('active', href === current);
     });
+
+    // Center the active tab in the scrollable tabs container
+    if (tabs) {
+      const activeLink = tabs.querySelector('.guide-tab.active');
+      if (activeLink) {
+        const scrollLeft = activeLink.offsetLeft - (tabs.offsetWidth / 2) + (activeLink.offsetWidth / 2);
+        tabs.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+      }
+    }
   }
 
   window.addEventListener('scroll', update, { passive: true });
