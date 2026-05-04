@@ -128,10 +128,30 @@ function chatMatch(input) {
 
   if (!fab || !overlay) return;
 
+  // ── iOS scroll lock ────────────────────────────────────────────────────
+  // overflow:hidden on body doesn't work on iOS Safari — use position:fixed trick.
+  let _savedScrollY = 0;
+  function lockBodyScroll() {
+    _savedScrollY = window.scrollY;
+    document.body.style.position   = 'fixed';
+    document.body.style.top        = '-' + _savedScrollY + 'px';
+    document.body.style.left       = '0';
+    document.body.style.right      = '0';
+    document.body.style.overflowY  = 'scroll';
+  }
+  function unlockBodyScroll() {
+    document.body.style.position  = '';
+    document.body.style.top       = '';
+    document.body.style.left      = '';
+    document.body.style.right     = '';
+    document.body.style.overflowY = '';
+    window.scrollTo(0, _savedScrollY);
+  }
+
   // ── Visual viewport resize (iOS keyboard) ──────────────────────────────
-  // When the keyboard appears iOS shrinks the visual viewport but position:fixed
-  // stays anchored to the layout viewport, leaving an unblurred gap. We track
-  // visualViewport and resize the overlay to always match the visible area.
+  // When keyboard opens, iOS shrinks the visual viewport but position:fixed
+  // stays anchored to the layout viewport — leaving a gap. Sync overlay to
+  // the visual viewport so it always covers exactly the visible screen.
   function syncOverlayToViewport() {
     if (!overlay.classList.contains('open')) return;
     const vv = window.visualViewport;
@@ -149,13 +169,18 @@ function chatMatch(input) {
     window.visualViewport.addEventListener('scroll', syncOverlayToViewport, { passive: true });
   }
 
+  // Fallback touchmove block for older iOS that lacks visualViewport
+  const _blockBgTouch = function(e) {
+    if (!e.target.closest('.chat-modal-panel')) e.preventDefault();
+  };
+
   function openChat() {
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     fab.classList.add('hidden');
-    document.body.style.overflow = 'hidden';
+    lockBodyScroll();
     syncOverlayToViewport();
-    // Lock zoom while chat is open so iOS doesn't zoom on input tap
+    document.addEventListener('touchmove', _blockBgTouch, { passive: false });
     const vp = document.querySelector('meta[name="viewport"]');
     if (vp) vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover';
   }
@@ -164,9 +189,9 @@ function chatMatch(input) {
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     fab.classList.remove('hidden');
-    document.body.style.overflow = '';
+    unlockBodyScroll();
     resetOverlaySize();
-    // Blur any focused input to dismiss keyboard + reset iOS zoom
+    document.removeEventListener('touchmove', _blockBgTouch);
     if (document.activeElement) document.activeElement.blur();
     const vp = document.querySelector('meta[name="viewport"]');
     if (vp) vp.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
