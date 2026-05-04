@@ -139,6 +139,12 @@ section { padding: var(--section-pad-y) 0; }
 }
 .nav-links a:hover { color: var(--accent); }
 
+/* Book on Airbnb nav button — tan background with charcoal border to match lang switcher */
+.nav-links .btn-nude {
+  border: 1px solid var(--charcoal-lighter);
+}
+.nav-links .btn-nude:hover { border-color: var(--charcoal); }
+
 /* Contact button — matches nav link style exactly */
 .nav-contact-btn {
   background: none;
