@@ -178,12 +178,12 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
       link.classList.toggle('active', href === current);
     });
 
-    // Center the active tab in the scrollable tabs container
+    // Center the active tab in the scrollable tabs container (instant — called on every scroll)
     if (tabs) {
       const activeLink = tabs.querySelector('.guide-tab.active');
       if (activeLink) {
         const scrollLeft = activeLink.offsetLeft - (tabs.offsetWidth / 2) + (activeLink.offsetWidth / 2);
-        tabs.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+        tabs.scrollLeft = scrollLeft;
       }
     }
   }
