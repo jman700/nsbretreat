@@ -132,8 +132,10 @@ function chatMatch(input) {
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     fab.classList.add('hidden');
-    document.body.style.overflow = 'hidden'; // lock background scroll
-    // Do NOT auto-focus input — prevents iOS from zooming page on open
+    document.body.style.overflow = 'hidden';
+    // Lock zoom while chat is open so iOS doesn't zoom on input tap
+    const vp = document.querySelector('meta[name="viewport"]');
+    if (vp) vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover';
   }
 
   function minimizeChat() {
@@ -152,18 +154,6 @@ function chatMatch(input) {
 
   function closeChat() {
     minimizeChat(); // same behavior — FAB stays accessible
-  }
-
-  // Prevent iOS Safari from zooming on input focus by locking scale briefly
-  if (input) {
-    input.addEventListener('focus', function() {
-      const vp = document.querySelector('meta[name="viewport"]');
-      if (vp) vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover';
-    });
-    input.addEventListener('blur', function() {
-      const vp = document.querySelector('meta[name="viewport"]');
-      if (vp) vp.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
-    });
   }
 
   fab.addEventListener('click', openChat);
