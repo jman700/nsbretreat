@@ -70,6 +70,35 @@ if (navToggle && navLinks) {
 const airbnbUrl = typeof CONFIG !== 'undefined' ? CONFIG.airbnb_url : '#';
 document.querySelectorAll('[data-airbnb-link]').forEach(el => { el.href = airbnbUrl; });
 
+// ── Scrollspy ────────────────────────────────────────────────────────────
+(function initScrollspy() {
+  const navList = document.getElementById('nav-links');
+  if (!navList) return;
+  const ids = ['property', 'gallery', 'amenities', 'availability', 'hosts', 'faq'];
+  const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+  if (!sections.length) return;
+
+  function setActive(id) {
+    navList.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+    });
+    // On mobile (horizontal scroll nav): bring active link into center view
+    const link = navList.querySelector('a[href="#' + id + '"]');
+    if (link && navList.scrollWidth > navList.clientWidth) {
+      const linkMid = link.offsetLeft + link.offsetWidth / 2;
+      navList.scrollTo({ left: linkMid - navList.clientWidth / 2, behavior: 'smooth' });
+    }
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) setActive(entry.target.id);
+    });
+  }, { rootMargin: '-15% 0px -60% 0px', threshold: 0 });
+
+  sections.forEach(s => obs.observe(s));
+})();
+
 // ── Gallery ───────────────────────────���──────────────────────────��────────
 // Gallery photos — interleaved pool/backyard and interior for balanced flow
 const GALLERY_PHOTOS = [

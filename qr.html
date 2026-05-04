@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code — NSB Retreat House Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f9ece8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 3rem 2.5rem 2.5rem;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 8px 40px rgba(45,41,38,0.10);
+    }
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #b8967e;
+      margin-bottom: 0.4rem;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: #2d2926;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.2rem;
+      line-height: 1.2;
+    }
+    .address {
+      font-size: 0.72rem;
+      color: #9a9390;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+    }
+    #qr-container {
+      display: inline-block;
+      border: 1.5px solid #e8ddd0;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      background: #fff;
+    }
+    #qr-container svg {
+      display: block;
+      width: 220px;
+      height: 220px;
+    }
+    .url-line {
+      font-size: 0.72rem;
+      color: #9a9390;
+      letter-spacing: 0.06em;
+      text-transform: lowercase;
+      margin-bottom: 2rem;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid #e8ddd0;
+      margin-bottom: 1.5rem;
+    }
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.3rem;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border: 1.5px solid #2d2926;
+      transition: opacity 0.15s;
+      text-decoration: none;
+    }
+    .btn:hover { opacity: 0.75; }
+    .btn-dark { background: #2d2926; color: #fff; }
+    .btn-outline { background: #fff; color: #2d2926; }
+    .note {
+      font-size: 0.65rem;
+      color: #b8967e;
+      letter-spacing: 0.04em;
+      margin-top: 1.25rem;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .card { box-shadow: none; border-radius: 0; padding: 2rem; }
+      .actions, .note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <p class="eyebrow">House Guide</p>
+    <h1>NSB Retreat</h1>
+    <p class="address">815 Carol Ave &nbsp;·&nbsp; New Smyrna Beach, FL</p>
+
+    <div id="qr-container">
+      <div id="qr-svg-wrap"></div>
+    </div>
+
+    <p class="url-line">nsbretreat.com/guide</p>
+
+    <hr class="divider">
+
+    <div class="actions">
+      <button class="btn btn-outline" onclick="downloadSVG()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        SVG
+      </button>
+      <button class="btn btn-outline" onclick="downloadPNG()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        PNG
+      </button>
+      <button class="btn btn-dark" onclick="window.print()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" width="14" height="14"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print
+      </button>
+    </div>
+
+    <p class="note">SVG recommended for laser cutting / vinyl</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script>
+    var QR_URL = 'https://nsbretreat.com/guide/';
+    var svgString = '';
+
+    QRCode.toString(QR_URL, {
+      type: 'svg',
+      margin: 0,
+      color: { dark: '#000000', light: '#ffffff' },
+      errorCorrectionLevel: 'H', // highest — supports partial logo overlay if needed
+      width: 220
+    }, function(err, svg) {
+      if (err) { document.getElementById('qr-svg-wrap').textContent = 'Error generating QR code'; return; }
+      svgString = svg;
+      document.getElementById('qr-svg-wrap').innerHTML = svg;
+    });
+
+    function downloadSVG() {
+      if (!svgString) return;
+      var blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'nsb-retreat-qr.svg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    }
+
+    function downloadPNG() {
+      QRCode.toDataURL(QR_URL, {
+        type: 'image/png',
+        margin: 1,
+        color: { dark: '#000000', light: '#ffffff' },
+        errorCorrectionLevel: 'H',
+        width: 1024 // high-res
+      }, function(err, dataUrl) {
+        if (err) return;
+        var a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = 'nsb-retreat-qr.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    }
+  </script>
+</body>
+</html>
