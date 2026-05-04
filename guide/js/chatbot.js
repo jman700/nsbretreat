@@ -154,6 +154,18 @@ function chatMatch(input) {
     minimizeChat(); // same behavior — FAB stays accessible
   }
 
+  // Prevent iOS Safari from zooming on input focus by locking scale briefly
+  if (input) {
+    input.addEventListener('focus', function() {
+      const vp = document.querySelector('meta[name="viewport"]');
+      if (vp) vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover';
+    });
+    input.addEventListener('blur', function() {
+      const vp = document.querySelector('meta[name="viewport"]');
+      if (vp) vp.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
+    });
+  }
+
   fab.addEventListener('click', openChat);
   if (minimizeBtn) minimizeBtn.addEventListener('click', minimizeChat);
   if (closeBtn)    closeBtn.addEventListener('click', closeChat);
