@@ -34,96 +34,73 @@
   });
 })();
 
-// ── PWA / Add to Home Screen ──────────────────────────────────────────────────
+// ── PWA / Add to Home Screen — icon button in nav controls ───────────────────
 (function initATH() {
-  // Don't show if already installed as standalone
+  var btn = document.getElementById('ath-icon-btn');
+  if (!btn) return;
+
+  // Hide if already installed as standalone
   if (window.matchMedia('(display-mode: standalone)').matches) return;
-  // Don't show on desktop
-  if (window.innerWidth >= 768) return;
-  // Don't show if dismissed
-  if (localStorage.getItem('nsb_ath_dismissed') === 'true') return;
 
   var isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) && !window.MSStream;
+  var isAndroid = /Android/.test(navigator.userAgent);
   var deferredPrompt = null;
+  var tooltip = null;
 
   // Android/Chrome — capture install prompt
   window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
     deferredPrompt = e;
-    showBanner(false);
+    btn.style.display = '';
   });
 
-  // iOS — show custom instructions
+  // iOS — show the button
   if (isIOS) {
-    // small delay so page loads first
-    setTimeout(function() { showBanner(true); }, 1500);
+    btn.style.display = '';
   }
 
-  function showBanner(ios) {
-    var existing = document.getElementById('ath-banner');
-    if (existing) return;
+  function closeTooltip() {
+    if (tooltip && tooltip.parentNode) {
+      tooltip.parentNode.removeChild(tooltip);
+      tooltip = null;
+    }
+  }
 
-    var banner = document.createElement('div');
-    banner.id = 'ath-banner';
-    banner.className = 'ath-banner';
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
 
-    var houseIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="22" height="22"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
-    var shareIcon = '<svg viewBox="0 0 50 50" width="16" height="16" style="vertical-align:middle;fill:currentColor" aria-hidden="true"><path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"/><path d="M24 7h2v21h-2z"/><path d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"/></svg>';
-
-    if (ios) {
-      banner.innerHTML =
-        '<div class="ath-inner">' +
-          '<span class="ath-icon">' + houseIcon + '</span>' +
-          '<span class="ath-text">Tap ' + shareIcon + ' then <strong>"Add to Home Screen"</strong> for quick access</span>' +
-          '<button class="ath-dismiss" id="ath-dismiss" aria-label="Dismiss">✕</button>' +
-        '</div>';
-    } else {
-      banner.innerHTML =
-        '<div class="ath-inner">' +
-          '<span class="ath-icon">' + houseIcon + '</span>' +
-          '<span class="ath-text">Add this guide to your home screen</span>' +
-          '<button class="ath-install" id="ath-install" data-i18n="ath_install">Install App</button>' +
-          '<button class="ath-dismiss" id="ath-dismiss" aria-label="Dismiss">✕</button>' +
-        '</div>';
+    // Android with deferred prompt — trigger native install
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function() {
+        deferredPrompt = null;
+        btn.style.display = 'none';
+      });
+      return;
     }
 
-    document.body.appendChild(banner);
+    // iOS / fallback — show tooltip
+    if (tooltip) { closeTooltip(); return; }
 
-    // Animate in
-    requestAnimationFrame(function() {
-      requestAnimationFrame(function() {
-        banner.classList.add('ath-visible');
-      });
-    });
+    var shareIcon = '<svg viewBox="0 0 50 50" width="14" height="14" style="vertical-align:-2px;fill:currentColor;display:inline-block" aria-hidden="true"><path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"/><path d="M24 7h2v21h-2z"/><path d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"/></svg>';
 
-    document.getElementById('ath-dismiss').addEventListener('click', function() {
-      dismissBanner(banner);
-    });
+    tooltip = document.createElement('div');
+    tooltip.className = 'ath-tooltip';
+    tooltip.innerHTML = isIOS
+      ? 'Tap ' + shareIcon + ' then <strong>Add to Home Screen</strong>'
+      : 'Open in Chrome and tap menu → <strong>Add to Home Screen</strong>';
+    document.body.appendChild(tooltip);
 
-    var installBtn = document.getElementById('ath-install');
-    if (installBtn && deferredPrompt) {
-      installBtn.addEventListener('click', function() {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function() {
-          deferredPrompt = null;
-          dismissBanner(banner);
-        });
-      });
-    }
+    // Position below the button
+    var r = btn.getBoundingClientRect();
+    tooltip.style.right = (window.innerWidth - r.right) + 'px';
+    tooltip.style.top = (r.bottom + 8 + window.scrollY) + 'px';
 
-    // Auto-dismiss after 12 seconds
-    setTimeout(function() {
-      if (banner.parentNode) dismissBanner(banner);
-    }, 12000);
-  }
+    setTimeout(function() { tooltip && tooltip.classList.add('ath-tt-visible'); }, 10);
+    setTimeout(closeTooltip, 5000);
+  });
 
-  function dismissBanner(banner) {
-    localStorage.setItem('nsb_ath_dismissed', 'true');
-    banner.classList.remove('ath-visible');
-    setTimeout(function() {
-      if (banner.parentNode) banner.parentNode.removeChild(banner);
-    }, 300);
-  }
+  document.addEventListener('click', function() { closeTooltip(); });
 })();
 
 // ── Share Guide Button ────────────────────────────────────────────────────────

@@ -80,6 +80,52 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
   });
 });
 
+// ── Section Collapse ───────────────────────────────────
+(function initCollapse() {
+  document.querySelectorAll('.manual-section').forEach(function(section) {
+    // Find title element — either .section-title-row or first h2
+    var titleEl = section.querySelector('.section-title-row') || section.querySelector('.manual-section-title');
+    if (!titleEl) return;
+
+    // Wrap all siblings after title in .section-body
+    var body = document.createElement('div');
+    body.className = 'section-body';
+    var next = titleEl.nextElementSibling;
+    while (next) {
+      var after = next.nextElementSibling;
+      body.appendChild(next);
+      next = after;
+    }
+    section.appendChild(body);
+
+    // Add collapse button
+    var btn = document.createElement('button');
+    btn.className = 'section-collapse-btn open';
+    btn.setAttribute('aria-label', 'Toggle section');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+
+    if (titleEl.classList.contains('section-title-row')) {
+      titleEl.appendChild(btn);
+    } else {
+      // Wrap h2 in a section-title-row
+      var row = document.createElement('div');
+      row.className = 'section-title-row';
+      titleEl.parentNode.insertBefore(row, titleEl);
+      row.appendChild(titleEl);
+      row.appendChild(btn);
+      // Re-apply border-bottom to row
+      titleEl.style.borderBottom = 'none';
+      titleEl.style.paddingBottom = '0';
+      titleEl.style.marginBottom = '0';
+    }
+
+    btn.addEventListener('click', function() {
+      var collapsed = section.classList.toggle('collapsed');
+      btn.classList.toggle('open', !collapsed);
+    });
+  });
+})();
+
 // ── Jump to Top ────────────────────────────────────────
 (function initJumpTop() {
   const btn = document.getElementById('jump-top');
