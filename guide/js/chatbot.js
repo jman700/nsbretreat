@@ -128,11 +128,33 @@ function chatMatch(input) {
 
   if (!fab || !overlay) return;
 
+  // ── Visual viewport resize (iOS keyboard) ──────────────────────────────
+  // When the keyboard appears iOS shrinks the visual viewport but position:fixed
+  // stays anchored to the layout viewport, leaving an unblurred gap. We track
+  // visualViewport and resize the overlay to always match the visible area.
+  function syncOverlayToViewport() {
+    if (!overlay.classList.contains('open')) return;
+    const vv = window.visualViewport;
+    if (!vv) return;
+    overlay.style.top    = vv.offsetTop  + 'px';
+    overlay.style.left   = vv.offsetLeft + 'px';
+    overlay.style.width  = vv.width      + 'px';
+    overlay.style.height = vv.height     + 'px';
+  }
+  function resetOverlaySize() {
+    overlay.style.top = overlay.style.left = overlay.style.width = overlay.style.height = '';
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncOverlayToViewport, { passive: true });
+    window.visualViewport.addEventListener('scroll', syncOverlayToViewport, { passive: true });
+  }
+
   function openChat() {
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     fab.classList.add('hidden');
     document.body.style.overflow = 'hidden';
+    syncOverlayToViewport();
     // Lock zoom while chat is open so iOS doesn't zoom on input tap
     const vp = document.querySelector('meta[name="viewport"]');
     if (vp) vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover';
@@ -142,14 +164,12 @@ function chatMatch(input) {
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     fab.classList.remove('hidden');
-    document.body.style.overflow = ''; // restore scroll
+    document.body.style.overflow = '';
+    resetOverlaySize();
     // Blur any focused input to dismiss keyboard + reset iOS zoom
     if (document.activeElement) document.activeElement.blur();
-    // Force viewport reset on iOS (cancel any zoom state)
     const vp = document.querySelector('meta[name="viewport"]');
-    if (vp) {
-      vp.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
-    }
+    if (vp) vp.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
   }
 
   function closeChat() {
