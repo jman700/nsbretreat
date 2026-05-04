@@ -31,7 +31,7 @@
 
   function renderError(container) {
     container.innerHTML =
-      '<p class="bc-error">Unable to load conditions right now. Check <a href="https://www.volusia.org/services/public-protection/beach-safety/beach-warning-flags.stml" target="_blank" rel="noopener">beach flag status</a> or the <a href="https://www.earthcam.com/usa/florida/newsmyrnabeach/" target="_blank" rel="noopener">live beach webcam</a>.</p>';
+      '<p class="bc-error">Unable to load conditions right now. Check <a href="https://www.volusia.org/services/public-protection/beach-safety/beachcams-and-daily-safety-report.stml" target="_blank" rel="noopener">beach flag &amp; cams</a> or the <a href="https://www.youtube.com/watch?v=kB2PZC-ow68" target="_blank" rel="noopener">live NSB beach cam</a>.</p>';
   }
 
   function renderConditions(container, wx, marine) {
@@ -78,8 +78,8 @@
         '</div>' +
       '</div>' +
       '<div class="bc-links">' +
-        '<a class="bc-flag-link" href="https://www.volusia.org/services/public-protection/beach-safety/beach-warning-flags.stml" target="_blank" rel="noopener" data-i18n="beach_flag_link">Check beach flag status →</a>' +
-        '<a class="bc-flag-link" href="https://www.earthcam.com/usa/florida/newsmyrnabeach/" target="_blank" rel="noopener">Live beach webcam →</a>' +
+        '<a class="bc-flag-link" href="https://www.volusia.org/services/public-protection/beach-safety/beachcams-and-daily-safety-report.stml" target="_blank" rel="noopener" data-i18n="beach_flag_link">Beach flag &amp; cams →</a>' +
+        '<a class="bc-flag-link" href="https://www.youtube.com/watch?v=kB2PZC-ow68" target="_blank" rel="noopener">Live NSB beach cam →</a>' +
       '</div>';
 
     // Re-run i18n on new elements if available
