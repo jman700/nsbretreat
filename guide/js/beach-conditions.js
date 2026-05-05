@@ -4,7 +4,7 @@
   if (document.getElementById('bc-forecast-style')) return;
   var s = document.createElement('style');
   s.id = 'bc-forecast-style';
-  s.textContent = '.bc-forecast-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 0 4px;scrollbar-width:none}.bc-forecast-strip::-webkit-scrollbar{display:none}.bc-forecast-day{flex:0 0 auto;min-width:72px;background:var(--card,rgba(255,255,255,0.05));border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}.bc-fc-day{font-size:0.72rem;font-weight:600;letter-spacing:0.04em;color:var(--charcoal-light,#9a918c);text-transform:uppercase}.bc-fc-icon{font-size:1.5rem;line-height:1}.bc-fc-temps{display:flex;gap:4px;align-items:center}.bc-fc-hi{font-size:0.88rem;font-weight:600;color:var(--charcoal,#2d2926)}.bc-fc-lo{font-size:0.78rem;color:var(--charcoal-light,#9a918c)}.bc-fc-rain{font-size:0.72rem;color:#4a8aaa}.bc-fc-wind{font-size:0.72rem;color:var(--charcoal-light,#9a918c)}';
+  s.textContent = '.bc-forecast-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 0 4px;scrollbar-width:none}.bc-forecast-strip::-webkit-scrollbar{display:none}.bc-forecast-day{flex:0 0 auto;min-width:72px;background:var(--card,rgba(255,255,255,0.05));border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}.bc-fc-day{font-size:0.72rem;font-weight:600;letter-spacing:0.04em;color:var(--charcoal-light,#9a918c);text-transform:uppercase}.bc-fc-icon{font-size:1.5rem;line-height:1}.bc-fc-temps{display:flex;gap:4px;align-items:center}.bc-fc-hi{font-size:0.88rem;font-weight:600;color:var(--charcoal,#2d2926)}.bc-fc-lo{font-size:0.78rem;color:var(--charcoal-light,#9a918c)}.bc-fc-rain{font-size:0.72rem;color:#4a8aaa}.bc-fc-wind{font-size:0.72rem;color:var(--charcoal-light,#9a918c)}.dark .bc-forecast-day{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1)}.dark .bc-fc-hi{color:#f0ebe6}.dark .bc-fc-lo{color:#9a918c}.dark .bc-fc-day{color:#7a7370}.dark .bc-fc-wind{color:#7a7370}';
   document.head.appendChild(s);
 })();
 
@@ -12,7 +12,7 @@
   var SUN_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;color:var(--accent,#b8967e)" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
   var MOON_ICON = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;color:var(--charcoal-light,#6b6460)" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
 
-  var WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=29.026&longitude=-80.926&current=temperature_2m,apparent_temperature,wind_speed_10m,wind_direction_10m,uv_index&wind_speed_unit=mph&temperature_unit=fahrenheit&forecast_days=6&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,weather_code,sunrise,sunset&timezone=America%2FNew_York';
+  var WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=29.026&longitude=-80.926&current=temperature_2m,apparent_temperature,wind_speed_10m,wind_direction_10m,uv_index&wind_speed_unit=mph&temperature_unit=fahrenheit&forecast_days=5&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,weather_code,sunrise,sunset&timezone=America%2FNew_York';
   var MARINE_URL  = 'https://marine-api.open-meteo.com/v1/marine?latitude=29.026&longitude=-80.926&current=wave_height,sea_surface_temperature';
 
   function tideURL() {
@@ -110,7 +110,7 @@
     if (code === 0) return '☀️';
     if (code <= 2) return '🌤️';
     if (code <= 3) return '☁️';
-    if (code <= 49) return '🌫️';
+    if (code <= 49) return '🌫️'; // fog/mist; codes 4-44 unassigned in WMO, fog is reasonable fallback
     if (code <= 59) return '🌦️';
     if (code <= 69) return '🌧️';
     if (code <= 79) return '🌨️';
