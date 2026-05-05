@@ -66,6 +66,21 @@ if (navToggle && navLinks) {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrop(); });
 })();
 
+// ── Conditions badge (hero) ───────────────────────────────────────────────
+(function() {
+  var badge = document.getElementById('conditions-badge');
+  var tempEl = document.getElementById('conditions-temp');
+  if (!badge || !tempEl) return;
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=29.026&longitude=-80.926&current=temperature_2m&temperature_unit=fahrenheit&forecast_days=1')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var temp = Math.round(data.current.temperature_2m);
+      tempEl.textContent = temp + '°F';
+      badge.style.display = '';
+    })
+    .catch(function() {});
+})();
+
 // Wire Airbnb URL from config
 const airbnbUrl = typeof CONFIG !== 'undefined' ? CONFIG.airbnb_url : '#';
 document.querySelectorAll('[data-airbnb-link]').forEach(el => { el.href = airbnbUrl; });

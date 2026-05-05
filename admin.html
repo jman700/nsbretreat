@@ -104,6 +104,35 @@
     .dash-empty p { font-size: 0.9rem; margin-top: 0.5rem; }
     .dash-loading { text-align: center; padding: 3rem; color: var(--charcoal-light); font-size: 0.875rem; }
 
+    /* ── Section divider ── */
+    .dash-section { margin-top: 2.5rem; margin-bottom: 1.25rem; }
+    .dash-section-title {
+      font-family: var(--font-serif); font-size: 1.25rem;
+      border-bottom: 1.5px solid var(--tan); padding-bottom: 0.5rem; margin-bottom: 0;
+    }
+
+    /* ── Guestbook entries ── */
+    .gb-list { display: flex; flex-direction: column; gap: 0.875rem; }
+    .gb-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 1.25rem 1.5rem;
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .gb-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .gb-card-meta { display: flex; flex-direction: column; gap: 2px; }
+    .gb-guest { font-weight: 600; font-size: 0.9rem; }
+    .gb-stay { font-size: 0.72rem; color: var(--charcoal-light); }
+    .gb-date { font-size: 0.72rem; color: var(--charcoal-light); white-space: nowrap; flex-shrink: 0; }
+    .gb-message { font-size: 0.9rem; color: var(--charcoal-light); line-height: 1.65; }
+    .btn-delete {
+      background: rgba(220,53,69,0.08); color: #b91c1c;
+      border: 1px solid rgba(220,53,69,0.25); border-radius: var(--radius-sm);
+      padding: 0.3rem 0.75rem; font-family: var(--font-sans); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer;
+      transition: background 0.15s; flex-shrink: 0; align-self: flex-start;
+    }
+    .btn-delete:hover { background: rgba(220,53,69,0.15); }
+
     @media (max-width: 600px) {
       .dashboard { padding: 1.5rem 1rem 4rem; }
     }
@@ -114,7 +143,7 @@
   <header class="admin-header">
     <div class="admin-header-title">
       NSB Retreat
-      <span>Guest Feedback</span>
+      <span>Admin Dashboard</span>
     </div>
     <button class="btn-logout" id="btn-logout" style="display:none">Log Out</button>
   </header>
@@ -141,6 +170,8 @@
 
   <!-- Dashboard -->
   <div class="dashboard" id="dashboard">
+
+    <!-- Guest Feedback -->
     <div class="dash-top">
       <h2 class="dash-heading">Guest Feedback</h2>
       <p class="dash-count" id="dash-count">Loading&hellip;</p>
@@ -152,6 +183,20 @@
       <p>&#9675;</p>
       <p>No feedback yet.</p>
     </div>
+
+    <!-- Guestbook -->
+    <div class="dash-section">
+      <h2 class="dash-section-title">Guestbook</h2>
+    </div>
+    <p class="dash-count" id="gb-count">Loading&hellip;</p>
+    <div class="gb-list" id="gb-list" style="margin-top:0.875rem">
+      <div class="dash-loading">Loading&hellip;</div>
+    </div>
+    <div class="dash-empty" id="gb-empty">
+      <p>&#9675;</p>
+      <p>No guestbook entries yet.</p>
+    </div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -176,6 +221,7 @@
       document.getElementById('dashboard').classList.add('visible');
       document.getElementById('btn-logout').style.display = 'block';
       loadFeedback();
+      loadGuestbook();
     }
 
     document.getElementById('login-form').addEventListener('submit', async function (e) {
@@ -219,6 +265,42 @@
     function esc(str) {
       if (!str) return '';
       return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    async function loadGuestbook() {
+      var list = document.getElementById('gb-list');
+      var empty = document.getElementById('gb-empty');
+      var countEl = document.getElementById('gb-count');
+      empty.classList.remove('show');
+
+      var _a = await sb.from('guestbook').select('*').order('created_at', { ascending: false });
+      if (_a.error) { list.innerHTML = '<p style="color:#b91c1c;font-size:0.875rem;padding:1rem">Failed to load guestbook.</p>'; return; }
+
+      var data = _a.data || [];
+      countEl.textContent = data.length === 0 ? 'No entries yet' : data.length === 1 ? '1 entry' : data.length + ' entries';
+
+      if (data.length === 0) { list.innerHTML = ''; empty.classList.add('show'); return; }
+
+      list.innerHTML = data.map(function(r) {
+        var date = new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        var stayLine = r.stay_month ? '<span class="gb-stay">Stay: ' + esc(r.stay_month) + '</span>' : '';
+        return '<div class="gb-card" data-id="' + r.id + '">'
+          + '<div class="gb-card-top">'
+          + '<div class="gb-card-meta"><span class="gb-guest">' + esc(r.guest_name) + '</span>' + stayLine + '</div>'
+          + '<div style="display:flex;gap:0.5rem;align-items:center">'
+          + '<span class="gb-date">' + date + '</span>'
+          + '<button class="btn-delete" onclick="deleteGuestbookEntry(\'' + r.id + '\')">Delete</button>'
+          + '</div></div>'
+          + '<p class="gb-message">' + esc(r.message) + '</p>'
+          + '</div>';
+      }).join('');
+    }
+
+    async function deleteGuestbookEntry(id) {
+      if (!confirm('Delete this guestbook entry?')) return;
+      var _a = await sb.from('guestbook').delete().eq('id', id);
+      if (_a.error) { alert('Failed to delete: ' + _a.error.message); return; }
+      loadGuestbook();
     }
   </script>
 </body>

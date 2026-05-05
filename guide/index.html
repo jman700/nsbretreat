@@ -30,6 +30,7 @@
         <a href="#checkout" class="guide-tab" data-i18n="tab_checkout">Checkout</a>
         <a href="#recommendations" class="guide-tab" data-i18n="tab_feedback">Feedback</a>
         <a href="#reviews" class="guide-tab" data-i18n="tab_reviews">Reviews</a>
+        <a href="#guestbook" class="guide-tab">Guestbook</a>
       </div>
       <div class="guide-controls">
         <button class="guide-icon-btn" id="dark-toggle" aria-label="Toggle dark mode"></button>
@@ -955,6 +956,35 @@
       </div>
     </section>
 
+    <section class="manual-section" id="guestbook">
+      <h2 class="manual-section-title">Guestbook</h2>
+      <p class="gb-intro">Leave a note for future guests! Share a highlight from your stay, a tip about the area, or just a warm hello.</p>
+
+      <form class="gb-form" id="gb-form" novalidate>
+        <div class="gb-row">
+          <div class="gb-field">
+            <label class="gb-label" for="gb-name">Your Name</label>
+            <input class="gb-input" type="text" id="gb-name" placeholder="e.g. The Johnson Family" autocomplete="name">
+          </div>
+          <div class="gb-field">
+            <label class="gb-label" for="gb-month">Month of Stay</label>
+            <input class="gb-input" type="text" id="gb-month" placeholder="e.g. July 2025">
+          </div>
+        </div>
+        <div class="gb-field">
+          <label class="gb-label" for="gb-message">Your Message</label>
+          <textarea class="gb-textarea" id="gb-message" rows="4" placeholder="What was your favorite part of the stay? Any tips for the next guests?"></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark" id="gb-submit" style="align-self:flex-start">Sign the Guestbook</button>
+        <div class="gb-msg success" id="gb-success">Thanks for signing! Your note will appear below.</div>
+        <div class="gb-msg error" id="gb-error">Something went wrong. Please try again.</div>
+      </form>
+
+      <div class="gb-entries" id="gb-entries">
+        <div class="gb-empty">Loading entries&hellip;</div>
+      </div>
+    </section>
+
     <section class="manual-section" id="recommendations">
       <h2 class="manual-section-title" data-i18n="feedback_title">Share Your Feedback</h2>
       <p style="color:var(--charcoal-light); font-size:0.9rem" data-i18n="feedback_desc">Have a suggestion or something we could improve? We read every note and genuinely appreciate the input.</p>
@@ -1130,6 +1160,91 @@
         document.getElementById('rec-comment').value = '';
         successMsg.classList.add('show');
       });
+    })();
+  </script>
+
+  <!-- Guestbook -->
+  <script>
+    (function () {
+      var SUPABASE_URL = 'https://xittuxwilxmzzawjdivd.supabase.co';
+      var SUPABASE_ANON = 'sb_publishable_AxzdizEiC3FOPYdzS3lPWA_H1aH9hSV';
+      var gbSb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+      function esc(str) {
+        if (!str) return '';
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      async function loadEntries() {
+        var entriesEl = document.getElementById('gb-entries');
+        if (!entriesEl) return;
+        var _a = await gbSb.from('guestbook').select('*').order('created_at', { ascending: false });
+        if (_a.error || !_a.data) {
+          entriesEl.innerHTML = '<div class="gb-empty">Unable to load entries.</div>';
+          return;
+        }
+        if (_a.data.length === 0) {
+          entriesEl.innerHTML = '<div class="gb-empty">No entries yet — be the first to sign!</div>';
+          return;
+        }
+        entriesEl.innerHTML = _a.data.map(function(r) {
+          var date = r.stay_month ? r.stay_month : new Date(r.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+          return '<div class="gb-entry">'
+            + '<div class="gb-entry-top">'
+            + '<span class="gb-guest-name">' + esc(r.guest_name) + '</span>'
+            + '<span class="gb-meta">' + esc(date) + '</span>'
+            + '</div>'
+            + '<p class="gb-message">' + esc(r.message) + '</p>'
+            + '</div>';
+        }).join('');
+      }
+
+      var gbForm = document.getElementById('gb-form');
+      var gbSubmit = document.getElementById('gb-submit');
+      var gbSuccess = document.getElementById('gb-success');
+      var gbError = document.getElementById('gb-error');
+
+      if (gbForm) {
+        gbForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          var name = document.getElementById('gb-name').value.trim();
+          var month = document.getElementById('gb-month').value.trim();
+          var message = document.getElementById('gb-message').value.trim();
+
+          gbSuccess.classList.remove('show');
+          gbError.classList.remove('show');
+
+          if (!name || !message) {
+            gbError.textContent = 'Please enter your name and a message.';
+            gbError.classList.add('show');
+            return;
+          }
+
+          gbSubmit.disabled = true;
+          gbSubmit.textContent = 'Signing…';
+
+          var payload = { guest_name: name, message: message };
+          if (month) payload.stay_month = month;
+
+          var _a = await gbSb.from('guestbook').insert(payload);
+          gbSubmit.disabled = false;
+          gbSubmit.textContent = 'Sign the Guestbook';
+
+          if (_a.error) {
+            gbError.textContent = 'Something went wrong. Please try again.';
+            gbError.classList.add('show');
+            return;
+          }
+
+          document.getElementById('gb-name').value = '';
+          document.getElementById('gb-month').value = '';
+          document.getElementById('gb-message').value = '';
+          gbSuccess.classList.add('show');
+          loadEntries();
+        });
+      }
+
+      loadEntries();
     })();
   </script>
 </body>

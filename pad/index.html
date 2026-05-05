@@ -162,6 +162,11 @@
         </div>
       </div>
 
+      <div class="wifi-qr-wrap">
+        <div id="wifi-qr"></div>
+        <p class="wifi-qr-label">Scan to connect</p>
+      </div>
+
       <div class="acc-list">
         <div class="acc-item">
           <button class="acc-trigger">Smart TVs &amp; Streaming</button>
@@ -638,5 +643,20 @@
   <script src="../js/config.js"></script>
   <script src="js/pad.js"></script>
   <script src="../guide/js/beach-conditions.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script>
+    (function() {
+      var qrEl = document.getElementById('wifi-qr');
+      if (!qrEl || typeof QRCode === 'undefined') return;
+      var ssid = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info.wifi_name : 'NSB Retreat';
+      var pass = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info.wifi_password : '';
+      var wifiStr = 'WIFI:T:WPA;S:' + ssid + ';P:' + pass + ';;';
+      QRCode.toCanvas(wifiStr, { width: 160, margin: 1, color: { dark: '#2d2926', light: '#f9ece8' } }, function(err, canvas) {
+        if (err) return;
+        canvas.style.borderRadius = '8px';
+        qrEl.appendChild(canvas);
+      });
+    })();
+  </script>
 </body>
 </html>
