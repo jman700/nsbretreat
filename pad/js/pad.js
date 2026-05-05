@@ -374,7 +374,8 @@
       body: JSON.stringify({ hours: hours, source: 'pad' }),
     }).catch(function(e) { console.error('spa-timer POST failed:', e); });
 
-    // 2. Send hardware command
+    // 2. Send hardware commands — spa pump routes water, heater warms it
+    sendCommand('spa_mode', 'on');  // set_spa_pump — best effort, don't block
     sendCommand('spa_heater', 'on', function() {
       heaterDurBtns.forEach(function(b) { b.disabled = false; });
       showToast('Spa heater on — ' + hours + ' hr timer started', 2500);
@@ -393,16 +394,18 @@
     // 1. Clear timer in Supabase
     fetch('/api/spa-timer', { method: 'DELETE' })
       .catch(function(e) { console.error('spa-timer DELETE failed:', e); });
-    // 2. Send hardware command
+    // 2. Send hardware commands
     sendCommand('spa_heater', 'off');
+    sendCommand('spa_mode', 'off');  // set_spa_pump off — best effort
   }
 
   // updateHeaterFromAPI — driven by pool-status response (endTime is server-provided)
+  // Always call showHeaterOn so the countdown is restored from the server after a
+  // page refresh.  The 30-second re-sync causes at most a 1–2 s tick correction.
   function updateHeaterFromAPI(isOnline, heaterState, endTime) {
     if (!isOnline) return;
     if (heaterState === 'on') {
-      // Only update UI if currently showing off (avoid resetting ticking countdown)
-      if (heaterOnUI.style.display === 'none') showHeaterOn(endTime);
+      showHeaterOn(endTime);
     } else {
       showHeaterOff();
     }

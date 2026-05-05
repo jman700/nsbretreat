@@ -48,8 +48,8 @@ function translateCommand(command, value) {
       return { iaqualinkCommand: 'set_spa_heater', extraParams: {} };
 
     case 'spa_mode':
-      // RS-4 "Spa Mode" / spillover — redirects pump valves to spa circuit.
-      return { iaqualinkCommand: 'set_spillover', extraParams: {} };
+      // RS-4 Combo: set_spa_pump routes water flow to spa circuit.
+      return { iaqualinkCommand: 'set_spa_pump', extraParams: {} };
 
     case 'spa_setpoint': {
       const temp = parseInt(value, 10);
