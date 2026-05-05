@@ -497,10 +497,16 @@ input[type="range"].pool-slider {
 /* Pool pump read-only status */
 .pool-pump-status {
   font-size: 0.85rem;
-  color: var(--charcoal-light, #666);
-  padding: 0.375rem 0.875rem;
-  background: rgba(44,44,44,0.05);
+  font-weight: 700;
+  color: var(--charcoal, #2c2c2c);
+  background: rgba(44,44,44,0.08);
   border-radius: 100px;
+  padding: 0.625rem 1.25rem;
+  min-width: 72px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Command toast */
