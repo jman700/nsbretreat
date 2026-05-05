@@ -202,8 +202,8 @@
     var constraints = {
       video: {
         facingMode: facing,
-        width:  { ideal: 1280 },
-        height: { ideal: 960  }
+        width:  { ideal: 3840 },
+        height: { ideal: 2160 }
       },
       audio: false
     };
@@ -238,42 +238,67 @@
     var btn = document.getElementById('pb-capture-btn');
     if (btn) { btn.disabled = true; }
 
-    canvas.width  = OUT_W;
-    canvas.height = OUT_H;
-    var ctx = canvas.getContext('2d');
+    // Use actual video dimensions for maximum quality
+    var vw = video.videoWidth  || OUT_W;
+    var vh = video.videoHeight || OUT_H;
 
-    // Draw video (mirror if front camera)
-    if (facing === 'user') {
-      ctx.save();
-      ctx.translate(OUT_W, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(video, 0, 0, OUT_W, OUT_H);
-      ctx.restore();
+    // Crop video to 3:4 portrait matching viewfinder object-fit:cover
+    // (avoids the stretch distortion from drawing full landscape frame)
+    var targetAspect = OUT_W / OUT_H; // 0.75
+    var srcAspect    = vw / vh;
+    var sx, sy, sw, sh;
+    if (srcAspect > targetAspect) {
+      // Video wider than portrait target — crop left/right
+      sh = vh;
+      sw = Math.round(vh * targetAspect);
+      sx = Math.round((vw - sw) / 2);
+      sy = 0;
     } else {
-      ctx.drawImage(video, 0, 0, OUT_W, OUT_H);
+      // Video taller than portrait target — crop top/bottom
+      sw = vw;
+      sh = Math.round(vw / targetAspect);
+      sx = 0;
+      sy = Math.round((vh - sh) / 2);
     }
 
-    // Draw frame overlay
+    // Canvas at full crop resolution (at least OUT_W × OUT_H)
+    var cw = Math.max(sw, OUT_W);
+    var ch = Math.max(sh, OUT_H);
+    canvas.width  = cw;
+    canvas.height = ch;
+    var ctx = canvas.getContext('2d');
+
+    // Draw video crop (mirror if front camera)
+    if (facing === 'user') {
+      ctx.save();
+      ctx.translate(cw, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
+      ctx.restore();
+    } else {
+      ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
+    }
+
+    // Draw frame overlay scaled to canvas size
     var fImg = new Image();
     fImg.onload = function () {
-      ctx.drawImage(fImg, 0, 0, OUT_W, OUT_H);
+      ctx.drawImage(fImg, 0, 0, cw, ch);
       canvas.toBlob(function (blob) {
         if (btn) { btn.disabled = false; }
         resultBlob = blob;
         resultImg.src = URL.createObjectURL(blob);
         showPreview();
         uploadSilent(blob);
-      }, 'image/jpeg', 0.92);
+      }, 'image/jpeg', 0.95);
     };
     fImg.onerror = function () {
-      // Fallback: save without frame
       canvas.toBlob(function (blob) {
         if (btn) { btn.disabled = false; }
         resultBlob = blob;
         resultImg.src = URL.createObjectURL(blob);
         showPreview();
         uploadSilent(blob);
-      }, 'image/jpeg', 0.92);
+      }, 'image/jpeg', 0.95);
     };
     fImg.src = frameSrc(activeFrame);
   }
