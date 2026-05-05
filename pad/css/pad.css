@@ -573,19 +573,7 @@ input[type="range"].pool-slider {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── Dark mode ── */
-@media (prefers-color-scheme: dark) {
-  body { background: #1a1a1a; color: #e8e0d8; }
-  .pad-nav { background: rgba(26,26,26,0.97); border-color: rgba(255,255,255,0.08); }
-  .info-card { background: rgba(255,255,255,0.06); }
-  .pool-widget { background: #242424; }
-  .temp-card { background: rgba(255,255,255,0.06); }
-  .local-card, .emg-card { background: #242424; }
-  .emg-card-red { background: rgba(244,67,54,0.15); }
-  .emg-card-util { background: rgba(255,255,255,0.05); }
-  .acc-item { border-color: rgba(255,255,255,0.08); }
-  .pool-controls { border-color: rgba(255,255,255,0.08); }
-}
+/* Dark mode intentionally disabled — kiosk always uses light theme */
 
 /* ── Responsive: portrait narrower ── */
 @media (max-width: 768px) {
