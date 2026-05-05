@@ -1211,17 +1211,18 @@
             ? r.stay_month
             : new Date(r.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
           var photoHTML = r.photo_url
-            ? '<img class=”gb-card-img” src=”' + esc(r.photo_url) + '” alt=”Guest photo” loading=”lazy”>'
+            ? ['<img class=\'gb-card-img\' src=\'', esc(r.photo_url), '\' alt=\'Guest photo\' loading=\'lazy\'>'].join('')
             : '';
-          return '<div class=”gb-card”>'
-            + '<div class=”gb-card-quote”>“</div>'
-            + '<p class=”gb-card-text”>' + esc(r.message) + '</p>'
-            + photoHTML
-            + '<div class=”gb-card-footer”>'
-            + '<span class=”gb-card-name”>' + esc(r.guest_name) + '</span>'
-            + '<span class=”gb-card-date”>' + esc(date) + '</span>'
-            + '</div>'
-            + '</div>';
+          return [
+            '<div class=\'gb-card\'>',
+            '<div class=\'gb-card-quote\'>“</div>',
+            '<p class=\'gb-card-text\'>', esc(r.message), '</p>',
+            photoHTML,
+            '<div class=\'gb-card-footer\'>',
+            '<span class=\'gb-card-name\'>', esc(r.guest_name), '</span>',
+            '<span class=\'gb-card-date\'>', esc(date), '</span>',
+            '</div></div>'
+          ].join('');
         }).join('');
       }
 
