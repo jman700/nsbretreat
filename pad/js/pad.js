@@ -79,7 +79,14 @@
   var pumpStatusEl = document.getElementById('pool-pump-status');
   var toast        = document.getElementById('pool-toast');
 
-  var btnSpaHeater = document.getElementById('btn-spa-heater');
+  // Heater timer elements
+  var heaterSub    = document.getElementById('heater-sub');
+  var heaterOffUI  = document.getElementById('heater-off-ui');
+  var heaterOnUI   = document.getElementById('heater-on-ui');
+  var heaterCdEl   = document.getElementById('heater-countdown');
+  var heaterStop   = document.getElementById('heater-stop-btn');
+  var heaterDurBtns = document.querySelectorAll('.heater-dur-btn');
+
   var btnSpaJets   = document.getElementById('btn-spa-jets');
   var btnPoolLight = document.getElementById('btn-pool-light');
   var rowSpaJets   = document.getElementById('row-spa-jets');
@@ -124,8 +131,8 @@
     // Pool pump
     pumpStatusEl.textContent = s.pool_pump === 'on' ? 'Running' : 'Off';
 
-    // Spa heater toggle
-    updateToggle(btnSpaHeater, s.spa_heater);
+    // Spa heater — handled by timer logic
+    updateHeaterFromAPI(s.online, s.spa_heater);
 
     // Spa jets (show row only if device has jets)
     if (s.spa_jets !== undefined && rowSpaJets) {
@@ -149,7 +156,8 @@
     setpointDisp.textContent = sp + '°F';
 
     // Enable all controls when online
-    btnSpaHeater.disabled = !s.online;
+    heaterDurBtns.forEach(function(b) { b.disabled = !s.online; });
+    if (heaterStop) heaterStop.disabled = !s.online;
     btnPoolLight.disabled = !s.online;
     slider.disabled       = !s.online;
     if (btnSpaJets) btnSpaJets.disabled = !s.online;
@@ -278,8 +286,121 @@
     });
   });
 
+  // ── Spa Heater Timer ──────────────────────────────────────────────────────
+  var TIMER_KEY     = 'nsb_spa_end';
+  var cdInterval    = null;
+
+  function fmtCountdown(ms) {
+    if (ms <= 0) return '0:00:00';
+    var s = Math.floor(ms / 1000);
+    var h = Math.floor(s / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    s = s % 60;
+    return h + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  function showHeaterOn(endTime) {
+    heaterOffUI.style.display = 'none';
+    heaterOnUI.style.display  = '';
+    if (endTime) {
+      heaterSub.textContent = 'Running — shuts off automatically';
+      heaterCdEl.textContent = fmtCountdown(endTime - Date.now());
+      clearInterval(cdInterval);
+      cdInterval = setInterval(function() {
+        var rem = endTime - Date.now();
+        if (rem <= 0) {
+          clearInterval(cdInterval);
+          doHeaterOff(true); // auto-off
+          return;
+        }
+        heaterCdEl.textContent = fmtCountdown(rem);
+      }, 1000);
+    } else {
+      heaterSub.textContent = 'Running — no timer set';
+      heaterCdEl.textContent = '–';
+    }
+  }
+
+  function showHeaterOff() {
+    clearInterval(cdInterval);
+    heaterOffUI.style.display = '';
+    heaterOnUI.style.display  = 'none';
+    heaterSub.textContent = 'Select a duration to start';
+  }
+
+  function doHeaterOff(autoOff) {
+    localStorage.removeItem(TIMER_KEY);
+    showHeaterOff();
+    // Send heater off then spa mode off
+    sendCommand('spa_heater', 'off', function() {
+      sendCommand('spa_mode', 'off');
+    });
+    if (autoOff) showToast('Spa heater timer expired — turned off.', 4000);
+  }
+
+  function updateHeaterFromAPI(isOnline, heaterState) {
+    if (!isOnline) return;
+    var savedEnd  = localStorage.getItem(TIMER_KEY);
+    var timerEnd  = savedEnd ? parseInt(savedEnd, 10) : null;
+    var timerLive = timerEnd && timerEnd > Date.now();
+
+    if (heaterState === 'on') {
+      // Heater is on — show on UI (restore countdown if we have one)
+      if (heaterOnUI.style.display === 'none') showHeaterOn(timerLive ? timerEnd : null);
+    } else {
+      // Heater is off — if timer was running, it was cancelled externally
+      if (timerLive) {
+        localStorage.removeItem(TIMER_KEY);
+        clearInterval(cdInterval);
+      }
+      showHeaterOff();
+    }
+  }
+
+  // Duration buttons — start heater + spa mode for selected hours
+  heaterDurBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var hours   = parseInt(btn.dataset.hours, 10);
+      var endTime = Date.now() + hours * 3600 * 1000;
+      localStorage.setItem(TIMER_KEY, endTime.toString());
+      showHeaterOn(endTime);
+      heaterDurBtns.forEach(function(b) { b.disabled = true; });
+      // Send spa_heater on, then spa_mode on
+      sendCommand('spa_heater', 'on', function() {
+        sendCommand('spa_mode', 'on', function() {
+          heaterDurBtns.forEach(function(b) { b.disabled = false; });
+          showToast('Spa heater on — ' + hours + ' hr timer started', 2500);
+        }, function() {
+          heaterDurBtns.forEach(function(b) { b.disabled = false; });
+        });
+      }, function() {
+        // Heater command failed — cancel timer
+        localStorage.removeItem(TIMER_KEY);
+        showHeaterOff();
+        heaterDurBtns.forEach(function(b) { b.disabled = false; });
+      });
+    });
+  });
+
+  // Stop button
+  if (heaterStop) {
+    heaterStop.addEventListener('click', function() {
+      doHeaterOff(false);
+      showToast('Spa heater turned off.', 2000);
+    });
+  }
+
+  // Restore timer on page load before first poll
+  (function restoreTimer() {
+    var savedEnd = localStorage.getItem(TIMER_KEY);
+    if (savedEnd) {
+      var end = parseInt(savedEnd, 10);
+      if (end > Date.now()) showHeaterOn(end);
+      else localStorage.removeItem(TIMER_KEY);
+    }
+  })();
+
   // ── Wire up toggles ──
-  handleToggle(btnSpaHeater, 'spa_heater');
   handleToggle(btnPoolLight, 'pool_light');
   if (btnSpaJets) handleToggle(btnSpaJets, 'spa_jets');
 

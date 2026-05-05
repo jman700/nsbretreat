@@ -427,6 +427,65 @@ input[type="range"].pool-slider {
 .color-swatch.active { border-color: var(--charcoal, #2c2c2c); }
 .color-swatch.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
 
+/* ── Spa Heater Timer Controls ── */
+.heater-controls {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.heater-dur-btns {
+  display: flex;
+  gap: 0.4rem;
+}
+.heater-dur-btn {
+  min-width: 58px;
+  min-height: 48px;
+  padding: 0 0.75rem;
+  border-radius: 10px;
+  border: 2px solid var(--accent, #b8967e);
+  background: transparent;
+  color: var(--accent, #b8967e);
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.heater-dur-btn:active:not(:disabled) {
+  background: var(--accent, #b8967e);
+  color: #fff;
+}
+.heater-dur-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.heater-on-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.heater-countdown {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent, #b8967e);
+  min-width: 76px;
+  text-align: right;
+}
+.heater-stop-btn {
+  min-height: 48px;
+  padding: 0 1rem;
+  border-radius: 10px;
+  border: none;
+  background: #c0392b;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.heater-stop-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
 /* Swatch colors */
 .swatch-white   { background: #f0f0f0; border-color: #ccc; }
 .swatch-blue    { background: #2196f3; }

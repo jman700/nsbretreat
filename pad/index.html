@@ -54,13 +54,23 @@
         <!-- Controls -->
         <div class="pool-controls">
 
-          <!-- Spa Heater -->
-          <div class="pool-control-row">
+          <!-- Spa Heater + Spa Mode with auto-off timer -->
+          <div class="pool-control-row heater-row">
             <div class="control-label">
               Spa Heater
-              <span class="control-sub">Heats the hot tub</span>
+              <span class="control-sub" id="heater-sub">Select a duration to start</span>
             </div>
-            <button class="pool-toggle" id="btn-spa-heater" data-command="spa_heater" data-state="off" disabled>Off</button>
+            <div class="heater-controls">
+              <div id="heater-off-ui" class="heater-dur-btns">
+                <button class="heater-dur-btn" data-hours="1" disabled>1 hr</button>
+                <button class="heater-dur-btn" data-hours="2" disabled>2 hr</button>
+                <button class="heater-dur-btn" data-hours="3" disabled>3 hr</button>
+              </div>
+              <div id="heater-on-ui" class="heater-on-controls" style="display:none">
+                <span class="heater-countdown" id="heater-countdown">–</span>
+                <button class="heater-stop-btn" id="heater-stop-btn" disabled>Stop</button>
+              </div>
+            </div>
           </div>
 
           <!-- Spa Setpoint -->

@@ -21,6 +21,7 @@ const LIGHT_COLOR_INDEX = {
 // Server-side command whitelist — pool pump is intentionally excluded.
 const ALLOWED_COMMANDS = new Set([
   'spa_heater',
+  'spa_mode',
   'spa_setpoint',
   'spa_jets',
   'pool_light',
@@ -35,8 +36,11 @@ const ALLOWED_COMMANDS = new Set([
 function translateCommand(command, value) {
   switch (command) {
     case 'spa_heater':
-      // Toggles the spa heater — iAqualink toggles on each call, so we send regardless.
       return { iaqualinkCommand: 'set_spa_heater', extraParams: {} };
+
+    case 'spa_mode':
+      // RS-4 "Spa Mode" / spillover — redirects pump valves to spa circuit.
+      return { iaqualinkCommand: 'set_spillover', extraParams: {} };
 
     case 'spa_setpoint': {
       const temp = parseInt(value, 10);
