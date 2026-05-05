@@ -106,6 +106,8 @@ export default async function handler(req, res) {
       const devData    = await deviceRequest(auth, 'get_devices');
       const devScreen  = devData.devices_screen || [];
       const auxStates  = Array.isArray(devScreen) ? parseDevicesScreen(devScreen) : {};
+      // Debug — remove once light state confirmed working
+      console.log('[pool-status] auxStates:', JSON.stringify(auxStates));
 
       // Air Blower (spa jets) — aux_1
       if (AUX_JETS in auxStates) {
@@ -127,8 +129,8 @@ export default async function handler(req, res) {
         }
       }
     } catch (devErr) {
-      console.error('[pool-status] get_devices failed:', devErr.message);
-      // Non-fatal — home screen data still returned
+      console.error('[pool-status] get_devices failed:', devErr.message, devErr.cause?.message || '');
+      status._devices_error = devErr.message; // visible in API response for debugging
     }
 
     return res.status(200).json(status);
