@@ -30,24 +30,48 @@ if (manualNav) {
   }
 })();
 
-// WiFi QR Code (guide only)
+// WiFi QR Code modal (guide only)
 (function initWifiQR() {
   var info = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info : {};
   var ssid = info.wifi_name;
   var pass = info.wifi_password;
+  var btn      = document.getElementById('wifi-qr-btn');
+  var modal    = document.getElementById('wifi-qr-modal');
+  var closeBtn = document.getElementById('wifi-qr-close');
   var container = document.getElementById('wifi-qr');
-  if (!ssid || !pass || !container || typeof QRCode === 'undefined') return;
+  if (!ssid || !pass || !btn || !modal || !container || typeof QRCode === 'undefined') return;
+
   function escWifi(s) {
     return s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/"/g, '\\"');
   }
-  new QRCode(container, {
-    text: 'WIFI:T:WPA;S:' + escWifi(ssid) + ';P:' + escWifi(pass) + ';;',
-    width: 120,
-    height: 120,
-    colorDark: '#1a1008',
-    colorLight: '#faf5f2',
-    correctLevel: QRCode.CorrectLevel.M
-  });
+
+  var generated = false;
+  function openModal() {
+    if (!generated) {
+      new QRCode(container, {
+        text: 'WIFI:T:WPA;S:' + escWifi(ssid) + ';P:' + escWifi(pass) + ';;',
+        width: 200,
+        height: 200,
+        colorDark: '#1a1008',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      generated = true;
+    }
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
 })();
 
 // ── Toast ──────────────────────────────────────────────

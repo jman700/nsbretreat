@@ -69,11 +69,20 @@
             Tap for directions
           </span>
         </a>
-        <div class="quick-card wifi-qr-card">
+        <div class="quick-card">
           <span class="quick-label" data-i18n="quick_wifi_name_label">WiFi Network</span>
           <span class="quick-value" id="qv-wifi-name">—</span>
-          <div id="wifi-qr" class="wifi-qr-wrap"></div>
-          <span class="quick-hint wifi-qr-hint">Long-press image to join</span>
+          <span class="quick-hint wifi-qr-trigger" id="wifi-qr-btn">Scan to join</span>
+        </div>
+
+        <!-- WiFi QR modal -->
+        <div class="wifi-qr-modal" id="wifi-qr-modal" aria-hidden="true">
+          <div class="wifi-qr-modal-box">
+            <button class="wifi-qr-close" id="wifi-qr-close" aria-label="Close">&#x2715;</button>
+            <p class="wifi-qr-modal-label">Scan to join WiFi</p>
+            <div id="wifi-qr"></div>
+            <p class="wifi-qr-modal-hint">Long-press image &bull; iOS: use Camera app</p>
+          </div>
         </div>
         <div class="quick-card" data-copy-key="wifi_password">
           <span class="quick-label" data-i18n="quick_wifi_pass_label">WiFi Password</span>

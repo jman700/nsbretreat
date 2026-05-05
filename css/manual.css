@@ -216,26 +216,67 @@
   flex-shrink: 0;
 }
 
-/* WiFi QR Code */
-.wifi-qr-card { cursor: default; }
-.wifi-qr-wrap {
-  margin-top: 0.625rem;
-  display: flex;
+/* WiFi QR — trigger link */
+.wifi-qr-trigger {
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-top: 0.15rem;
+}
+
+/* WiFi QR — modal */
+.wifi-qr-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+  align-items: center;
   justify-content: center;
+  padding: 1rem;
 }
-.wifi-qr-wrap canvas,
-.wifi-qr-wrap img {
-  border-radius: 6px;
+.wifi-qr-modal.open { display: flex; }
+.wifi-qr-modal-box {
+  background: #fff;
+  border-radius: 18px;
+  padding: 2rem 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+}
+.wifi-qr-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.875rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: rgba(0,0,0,0.35);
+  line-height: 1;
+  padding: 0.25rem;
+}
+.wifi-qr-close:hover { color: rgba(0,0,0,0.7); }
+.wifi-qr-modal-label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1a1008;
+  margin: 0;
+}
+#wifi-qr canvas, #wifi-qr img {
+  border-radius: 8px;
   display: block;
-  max-width: 100%;
 }
-.wifi-qr-hint {
-  font-size: 0.68rem;
-  color: rgba(0,0,0,0.38);
+.wifi-qr-modal-hint {
+  font-size: 0.75rem;
+  color: rgba(0,0,0,0.4);
+  margin: 0;
   text-align: center;
-  margin-top: 0.3rem;
 }
-html.dark .wifi-qr-hint { color: rgba(255,255,255,0.3); }
 
 .quick-label {
   font-size: 0.68rem;
