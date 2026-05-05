@@ -443,6 +443,85 @@ input[type="range"].pool-slider {
 .swatch-fat-tuesday    { background: linear-gradient(135deg, #7b1fa2, #388e3c, #f9a825); }
 .swatch-disco-tech     { background: linear-gradient(135deg, #4caf50, #2196f3, #fff, #e91e63); }
 
+/* ── Beach Conditions Card ── */
+.beach-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.25rem;
+}
+.beach-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.beach-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--charcoal, #2c2c2c);
+}
+.beach-updated {
+  font-size: 0.75rem;
+  color: var(--charcoal-light, #888);
+}
+.beach-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.beach-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 80px;
+}
+.beach-stat-wide { min-width: 140px; }
+.beach-stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--charcoal-light, #888);
+}
+.beach-stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--charcoal, #2c2c2c);
+}
+.beach-tides {
+  border-top: 1px solid rgba(44,44,44,0.08);
+  padding-top: 0.875rem;
+}
+.beach-tides-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--charcoal-light, #888);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.beach-tide-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+}
+.tide-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+.tide-arrow { font-size: 1rem; font-weight: 700; }
+.tide-type  { font-weight: 600; color: var(--charcoal, #2c2c2c); }
+.tide-time  { color: var(--charcoal, #2c2c2c); }
+.tide-ht    { color: var(--charcoal-light, #888); font-size: 0.8rem; }
+.tide-high .tide-arrow { color: #1a6fc4; }
+.tide-low  .tide-arrow { color: #e87722; }
+
 /* ── Spa Heater Timer Controls ── */
 .heater-controls {
   display: flex;
