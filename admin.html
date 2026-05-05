@@ -132,6 +132,18 @@
       transition: background 0.15s; flex-shrink: 0; align-self: flex-start;
     }
     .btn-delete:hover { background: rgba(220,53,69,0.15); }
+    .btn-hide {
+      background: rgba(107,100,96,0.1); color: var(--charcoal-light);
+      border: 1px solid rgba(107,100,96,0.25); border-radius: var(--radius-sm);
+      padding: 0.3rem 0.75rem; font-family: var(--font-sans); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer;
+      transition: background 0.15s; flex-shrink: 0;
+    }
+    .btn-hide:hover { background: rgba(107,100,96,0.2); }
+    .gb-card.gb-hidden { opacity: 0.55; }
+    .gb-card.gb-hidden .btn-hide { background: rgba(34,197,94,0.1); color: #166534; border-color: rgba(34,197,94,0.3); }
+    .gb-card.gb-hidden .btn-hide:hover { background: rgba(34,197,94,0.2); }
+    .gb-photo-thumb { max-width: 160px; max-height: 120px; border-radius: var(--radius-sm); object-fit: cover; margin-top: 0.625rem; display: block; }
 
     @media (max-width: 600px) {
       .dashboard { padding: 1.5rem 1rem 4rem; }
@@ -277,27 +289,40 @@
       if (_a.error) { list.innerHTML = '<p style="color:#b91c1c;font-size:0.875rem;padding:1rem">Failed to load guestbook.</p>'; return; }
 
       var data = _a.data || [];
-      countEl.textContent = data.length === 0 ? 'No entries yet' : data.length === 1 ? '1 entry' : data.length + ' entries';
+      var visible = data.filter(function(r) { return !r.hidden; }).length;
+      countEl.textContent = data.length === 0 ? 'No entries yet'
+        : data.length + ' total · ' + visible + ' visible';
 
       if (data.length === 0) { list.innerHTML = ''; empty.classList.add('show'); return; }
 
       list.innerHTML = data.map(function(r) {
         var date = new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         var stayLine = r.stay_month ? '<span class="gb-stay">Stay: ' + esc(r.stay_month) + '</span>' : '';
-        return '<div class="gb-card" data-id="' + r.id + '">'
+        var photoHTML = r.photo_url ? '<img class="gb-photo-thumb" src="' + esc(r.photo_url) + '" alt="Guest photo">' : '';
+        var hiddenClass = r.hidden ? ' gb-hidden' : '';
+        var hideLabel = r.hidden ? 'Show' : 'Hide';
+        return '<div class="gb-card' + hiddenClass + '" data-id="' + r.id + '">'
           + '<div class="gb-card-top">'
           + '<div class="gb-card-meta"><span class="gb-guest">' + esc(r.guest_name) + '</span>' + stayLine + '</div>'
-          + '<div style="display:flex;gap:0.5rem;align-items:center">'
+          + '<div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;justify-content:flex-end">'
           + '<span class="gb-date">' + date + '</span>'
+          + '<button class="btn-hide" onclick="toggleGuestbookHidden(\'' + r.id + '\',' + (r.hidden ? 'true' : 'false') + ')">' + hideLabel + '</button>'
           + '<button class="btn-delete" onclick="deleteGuestbookEntry(\'' + r.id + '\')">Delete</button>'
           + '</div></div>'
           + '<p class="gb-message">' + esc(r.message) + '</p>'
+          + photoHTML
           + '</div>';
       }).join('');
     }
 
+    async function toggleGuestbookHidden(id, currentHidden) {
+      var _a = await sb.from('guestbook').update({ hidden: !currentHidden }).eq('id', id);
+      if (_a.error) { alert('Failed to update: ' + _a.error.message); return; }
+      loadGuestbook();
+    }
+
     async function deleteGuestbookEntry(id) {
-      if (!confirm('Delete this guestbook entry?')) return;
+      if (!confirm('Delete this guestbook entry? This cannot be undone.')) return;
       var _a = await sb.from('guestbook').delete().eq('id', id);
       if (_a.error) { alert('Failed to delete: ' + _a.error.message); return; }
       loadGuestbook();

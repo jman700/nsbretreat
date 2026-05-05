@@ -975,6 +975,14 @@
           <label class="gb-label" for="gb-message">Your Message</label>
           <textarea class="gb-textarea" id="gb-message" rows="4" placeholder="What was your favorite part of the stay? Any tips for the next guests?"></textarea>
         </div>
+        <div class="gb-field">
+          <label class="gb-label">Photo <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+          <label class="gb-file-label" for="gb-photo">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span id="gb-file-name">Choose a photo&hellip;</span>
+          </label>
+          <input class="gb-file-input" type="file" id="gb-photo" accept="image/*">
+        </div>
         <button type="submit" class="btn btn-dark" id="gb-submit" style="align-self:flex-start">Sign the Guestbook</button>
         <div class="gb-msg success" id="gb-success">Thanks for signing! Your note will appear below.</div>
         <div class="gb-msg error" id="gb-error">Something went wrong. Please try again.</div>
@@ -1175,10 +1183,19 @@
         return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       }
 
+      // Show selected filename
+      var photoInput = document.getElementById('gb-photo');
+      var fileNameEl = document.getElementById('gb-file-name');
+      if (photoInput && fileNameEl) {
+        photoInput.addEventListener('change', function() {
+          fileNameEl.textContent = photoInput.files[0] ? photoInput.files[0].name : 'Choose a photo…';
+        });
+      }
+
       async function loadEntries() {
         var entriesEl = document.getElementById('gb-entries');
         if (!entriesEl) return;
-        var _a = await gbSb.from('guestbook').select('*').order('created_at', { ascending: false });
+        var _a = await gbSb.from('guestbook').select('*').neq('hidden', true).order('created_at', { ascending: false });
         if (_a.error || !_a.data) {
           entriesEl.innerHTML = '<div class="gb-empty">Unable to load entries.</div>';
           return;
@@ -1189,12 +1206,16 @@
         }
         entriesEl.innerHTML = _a.data.map(function(r) {
           var date = r.stay_month ? r.stay_month : new Date(r.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+          var photoHTML = r.photo_url
+            ? '<div class="gb-photo-wrap"><img class="gb-photo" src="' + esc(r.photo_url) + '" alt="Guest photo" loading="lazy"></div>'
+            : '';
           return '<div class="gb-entry">'
             + '<div class="gb-entry-top">'
             + '<span class="gb-guest-name">' + esc(r.guest_name) + '</span>'
             + '<span class="gb-meta">' + esc(date) + '</span>'
             + '</div>'
             + '<p class="gb-message">' + esc(r.message) + '</p>'
+            + photoHTML
             + '</div>';
         }).join('');
       }
@@ -1210,6 +1231,7 @@
           var name = document.getElementById('gb-name').value.trim();
           var month = document.getElementById('gb-month').value.trim();
           var message = document.getElementById('gb-message').value.trim();
+          var file = photoInput && photoInput.files[0] ? photoInput.files[0] : null;
 
           gbSuccess.classList.remove('show');
           gbError.classList.remove('show');
@@ -1219,12 +1241,32 @@
             gbError.classList.add('show');
             return;
           }
+          if (file && file.size > 5 * 1024 * 1024) {
+            gbError.textContent = 'Photo must be under 5MB. Please choose a smaller image.';
+            gbError.classList.add('show');
+            return;
+          }
 
           gbSubmit.disabled = true;
           gbSubmit.textContent = 'Signing…';
 
           var payload = { guest_name: name, message: message };
           if (month) payload.stay_month = month;
+
+          // Upload photo if provided
+          if (file) {
+            var ext = file.name.split('.').pop().toLowerCase();
+            var fileName = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+            var _up = await gbSb.storage.from('guestbook-photos').upload(fileName, file, { upsert: false });
+            if (_up.error) {
+              gbError.textContent = 'Photo upload failed. Try without a photo or use a smaller image.';
+              gbError.classList.add('show');
+              gbSubmit.disabled = false;
+              gbSubmit.textContent = 'Sign the Guestbook';
+              return;
+            }
+            payload.photo_url = gbSb.storage.from('guestbook-photos').getPublicUrl(fileName).data.publicUrl;
+          }
 
           var _a = await gbSb.from('guestbook').insert(payload);
           gbSubmit.disabled = false;
@@ -1239,6 +1281,7 @@
           document.getElementById('gb-name').value = '';
           document.getElementById('gb-month').value = '';
           document.getElementById('gb-message').value = '';
+          if (photoInput) { photoInput.value = ''; fileNameEl.textContent = 'Choose a photo…'; }
           gbSuccess.classList.add('show');
           loadEntries();
         });

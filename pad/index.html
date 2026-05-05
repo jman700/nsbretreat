@@ -643,7 +643,7 @@
   <script src="../js/config.js"></script>
   <script src="js/pad.js"></script>
   <script src="../guide/js/beach-conditions.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     (function() {
       var qrEl = document.getElementById('wifi-qr');
@@ -651,10 +651,12 @@
       var ssid = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info.wifi_name : 'NSB Retreat';
       var pass = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info.wifi_password : '';
       var wifiStr = 'WIFI:T:WPA;S:' + ssid + ';P:' + pass + ';;';
-      QRCode.toCanvas(wifiStr, { width: 160, margin: 1, color: { dark: '#2d2926', light: '#f9ece8' } }, function(err, canvas) {
-        if (err) return;
-        canvas.style.borderRadius = '8px';
-        qrEl.appendChild(canvas);
+      new QRCode(qrEl, {
+        text: wifiStr,
+        width: 160,
+        height: 160,
+        colorDark: '#2d2926',
+        colorLight: '#f9ece8'
       });
     })();
   </script>

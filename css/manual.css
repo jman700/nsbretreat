@@ -1173,9 +1173,34 @@
 .gb-meta { font-size: 0.7rem; color: var(--charcoal-light); white-space: nowrap; flex-shrink: 0; }
 .gb-message { font-size: 0.875rem; color: var(--charcoal-light); line-height: 1.65; }
 .gb-empty { text-align: center; padding: 2.5rem 1rem; font-size: 0.875rem; color: var(--charcoal-light); }
+/* Photo upload */
+.gb-file-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0.5rem 0.875rem;
+  background: var(--white);
+  border: 1.5px dashed var(--tan);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s;
+}
+.gb-file-label:hover { border-color: var(--accent); }
+.gb-file-input { display: none; }
+.gb-photo-wrap { margin-top: 0.875rem; }
+.gb-photo {
+  max-width: 100%;
+  max-height: 280px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  display: block;
+}
 html.dark .gb-form { background: #2a211c; border-color: #3a2e28; }
 html.dark .gb-input, html.dark .gb-textarea { background: #1c1714; border-color: #3a2e28; color: var(--white); }
 html.dark .gb-entry { background: #2a211c; border-color: #3a2e28; }
+html.dark .gb-file-label { background: #1c1714; border-color: #3a2e28; }
 
 /* ── Food Delivery Row ── */
 .delivery-row {

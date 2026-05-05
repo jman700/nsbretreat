@@ -1,6 +1,9 @@
 // beach-conditions.js — Live beach conditions widget for NSB Retreat guide
 
 (function initBeachConditions() {
+  var SUN_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;color:var(--accent,#b8967e)" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+  var MOON_ICON = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;color:var(--charcoal-light,#6b6460)" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+
   var WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=29.026&longitude=-80.926&current=temperature_2m,apparent_temperature,wind_speed_10m,wind_direction_10m,uv_index&wind_speed_unit=mph&temperature_unit=fahrenheit&forecast_days=1&daily=sunrise,sunset&timezone=America%2FNew_York';
   var MARINE_URL  = 'https://marine-api.open-meteo.com/v1/marine?latitude=29.026&longitude=-80.926&current=wave_height,sea_surface_temperature';
 
@@ -159,12 +162,12 @@
         '</div>' +
         '<div class="bc-card">' +
           '<span class="bc-label">Sunrise</span>' +
-          '<span class="bc-value bc-value-sm">&#9728; ' + sunrise + '</span>' +
+          '<span class="bc-value bc-value-sm">' + SUN_ICON + sunrise + '</span>' +
           '<span class="bc-sub">today</span>' +
         '</div>' +
         '<div class="bc-card">' +
           '<span class="bc-label">Sunset</span>' +
-          '<span class="bc-value bc-value-sm">&#9790; ' + sunset + '</span>' +
+          '<span class="bc-value bc-value-sm">' + MOON_ICON + sunset + '</span>' +
           '<span class="bc-sub">today</span>' +
         '</div>' +
         '<div class="bc-card bc-updated">' +
