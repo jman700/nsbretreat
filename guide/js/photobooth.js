@@ -420,10 +420,11 @@
     var dpr = window.devicePixelRatio || 1;
     STRIP_W      = Math.min(Math.round(window.innerWidth * dpr), 1080);
     var scale    = STRIP_W / 900;
-    STRIP_PHOTO  = Math.round(STRIP_W * 0.87);          // ~87% width — visible side margins
-    STRIP_MARGIN = Math.round((STRIP_W - STRIP_PHOTO) / 2);
-    STRIP_GAP    = Math.round(14 * scale);
-    STRIP_VPAD   = Math.round(16 * scale);
+    // Photos ~15% smaller than before; all gutters (side margin, gap, top/bottom pad) equal
+    STRIP_PHOTO  = Math.round(STRIP_W * 0.74);
+    STRIP_MARGIN = Math.round((STRIP_W - STRIP_PHOTO) / 2);  // ~13% each side
+    STRIP_GAP    = STRIP_MARGIN;   // gap between photos = side margin
+    STRIP_VPAD   = STRIP_MARGIN;   // top & bottom padding = side margin
     STRIP_BRAND  = Math.round(108 * scale);
 
     var STRIP_H = STRIP_VPAD
