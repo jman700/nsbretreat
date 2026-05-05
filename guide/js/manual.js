@@ -30,6 +30,26 @@ if (manualNav) {
   }
 })();
 
+// WiFi QR Code (guide only)
+(function initWifiQR() {
+  var info = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info : {};
+  var ssid = info.wifi_name;
+  var pass = info.wifi_password;
+  var container = document.getElementById('wifi-qr');
+  if (!ssid || !pass || !container || typeof QRCode === 'undefined') return;
+  function escWifi(s) {
+    return s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/"/g, '\\"');
+  }
+  new QRCode(container, {
+    text: 'WIFI:T:WPA;S:' + escWifi(ssid) + ';P:' + escWifi(pass) + ';;',
+    width: 120,
+    height: 120,
+    colorDark: '#1a1008',
+    colorLight: '#faf5f2',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+})();
+
 // ── Toast ──────────────────────────────────────────────
 const toast = document.getElementById('copy-toast');
 let toastTimer;

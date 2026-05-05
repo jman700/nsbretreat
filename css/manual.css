@@ -215,6 +215,28 @@
   height: 11px;
   flex-shrink: 0;
 }
+
+/* WiFi QR Code */
+.wifi-qr-card { cursor: default; }
+.wifi-qr-wrap {
+  margin-top: 0.625rem;
+  display: flex;
+  justify-content: center;
+}
+.wifi-qr-wrap canvas,
+.wifi-qr-wrap img {
+  border-radius: 6px;
+  display: block;
+  max-width: 100%;
+}
+.wifi-qr-hint {
+  font-size: 0.68rem;
+  color: rgba(0,0,0,0.38);
+  text-align: center;
+  margin-top: 0.3rem;
+}
+html.dark .wifi-qr-hint { color: rgba(255,255,255,0.3); }
+
 .quick-label {
   font-size: 0.68rem;
   text-transform: uppercase;

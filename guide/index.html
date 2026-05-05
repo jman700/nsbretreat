@@ -69,9 +69,11 @@
             Tap for directions
           </span>
         </a>
-        <div class="quick-card">
+        <div class="quick-card wifi-qr-card">
           <span class="quick-label" data-i18n="quick_wifi_name_label">WiFi Network</span>
           <span class="quick-value" id="qv-wifi-name">—</span>
+          <div id="wifi-qr" class="wifi-qr-wrap"></div>
+          <span class="quick-hint wifi-qr-hint">Long-press image to join</span>
         </div>
         <div class="quick-card" data-copy-key="wifi_password">
           <span class="quick-label" data-i18n="quick_wifi_pass_label">WiFi Password</span>
@@ -1080,6 +1082,7 @@
   <script src="../js/config.js"></script>
   <script src="js/translations-guide.js"></script>
   <script src="../js/i18n.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="js/manual.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="js/chatbot.js"></script>
