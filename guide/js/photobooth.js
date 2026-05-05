@@ -196,6 +196,7 @@
 
   // ── DOM refs ───────────────────────────────────────────
   var elStart   = document.getElementById('pb-start');
+  var elOverlay = document.getElementById('pb-overlay');
   var elCamera  = document.getElementById('pb-camera');
   var elPreview = document.getElementById('pb-preview');
   var video     = document.getElementById('pb-video');
@@ -224,12 +225,16 @@
     elStart.style.display   = '';
     elCamera.style.display  = 'none';
     elPreview.style.display = 'none';
+    if (elOverlay) elOverlay.style.display = 'none';
+    document.body.style.overflow = '';
     stopStream();
   }
   function showCamera() {
     elStart.style.display   = 'none';
-    elCamera.style.display  = '';
+    elCamera.style.display  = '';     // CSS flex rule takes over
     elPreview.style.display = 'none';
+    if (elOverlay) elOverlay.style.display = '';
+    document.body.style.overflow = 'hidden';
     if (activeFrame === 'strip') enterStripMode();
   }
   function showPreview() {
@@ -237,6 +242,8 @@
     elStart.style.display   = 'none';
     elCamera.style.display  = 'none';
     elPreview.style.display = '';
+    if (elOverlay) elOverlay.style.display = '';
+    document.body.style.overflow = 'hidden';
   }
 
   // ── Camera ─────────────────────────────────────────────
@@ -404,6 +411,16 @@
 
   // Compose 3 square shots into the final strip image
   function buildFinalStrip() {
+    // Scale output to device screen width (capped at 1080px for file size)
+    var dpr = window.devicePixelRatio || 1;
+    STRIP_W      = Math.min(Math.round(window.innerWidth * dpr), 1080);
+    var scale    = STRIP_W / 900;
+    STRIP_PHOTO  = Math.round(STRIP_W * 0.87);          // ~87% width — visible side margins
+    STRIP_MARGIN = Math.round((STRIP_W - STRIP_PHOTO) / 2);
+    STRIP_GAP    = Math.round(14 * scale);
+    STRIP_VPAD   = Math.round(16 * scale);
+    STRIP_BRAND  = Math.round(108 * scale);
+
     var STRIP_H = STRIP_VPAD
                 + STRIP_PHOTO + STRIP_GAP
                 + STRIP_PHOTO + STRIP_GAP
@@ -446,18 +463,18 @@
 
     // "The NSB Retreat"
     ctx.fillStyle = '#111111';
-    ctx.font      = '480 40px "Helvetica Neue", Arial, sans-serif';
-    ctx.fillText('The NSB Retreat', STRIP_W / 2, brandY + 50);
+    ctx.font      = '480 ' + Math.round(40 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
+    ctx.fillText('The NSB Retreat', STRIP_W / 2, brandY + Math.round(50 * scale));
 
     // "New Smyrna Beach, FL"
     ctx.fillStyle = '#666666';
-    ctx.font      = '300 italic 24px "Helvetica Neue", Arial, sans-serif';
-    ctx.fillText('New Smyrna Beach, FL', STRIP_W / 2, brandY + 80);
+    ctx.font      = '300 italic ' + Math.round(24 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
+    ctx.fillText('New Smyrna Beach, FL', STRIP_W / 2, brandY + Math.round(78 * scale));
 
     // "@thensbretreat"
     ctx.fillStyle = '#999999';
-    ctx.font      = '300 22px "Helvetica Neue", Arial, sans-serif';
-    ctx.fillText('@thensbretreat', STRIP_W / 2, brandY + 100);
+    ctx.font      = '300 ' + Math.round(22 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
+    ctx.fillText('@thensbretreat', STRIP_W / 2, brandY + Math.round(98 * scale));
 
     canvas.toBlob(function (blob) {
       var btn = document.getElementById('pb-capture-btn');
@@ -592,6 +609,10 @@
       return;
     }
     startCamera();
+  });
+
+  document.getElementById('pb-close-btn').addEventListener('click', function () {
+    showStart();
   });
 
   document.getElementById('pb-flip-btn').addEventListener('click', function () {
