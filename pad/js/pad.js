@@ -236,23 +236,11 @@
   }
 
   // ── Setpoint slider ──
+  var sliderTimer;
   slider.addEventListener('input', function() {
     setpointDisp.textContent = slider.value + '°F';
-  });
-  slider.addEventListener('change', function() {
-    var val = parseInt(slider.value, 10);
-    slider.disabled = true;
-    sendCommand('spa_setpoint', val,
-      function() {
-        slider.disabled = false;
-        showToast('Spa set to ' + val + '°F', 1800);
-      },
-      function() {
-        slider.value = state.spa_set_point;
-        setpointDisp.textContent = state.spa_set_point + '°F';
-        slider.disabled = false;
-      }
-    );
+    clearTimeout(sliderTimer);
+    sliderTimer = setTimeout(function() { sendCommand('spa_setpoint', parseInt(slider.value, 10)); }, 300);
   });
 
   // ── Color swatches ──

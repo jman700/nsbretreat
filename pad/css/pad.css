@@ -1,5 +1,4 @@
 /* pad.css — NSB Retreat iPad House Guide */
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
 
 /* ── Base ── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -99,7 +98,7 @@ body {
 .pad-section:last-child { border-bottom: none; }
 
 .pad-section-title {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 1.25rem;
   color: var(--charcoal, #2c2c2c);
@@ -145,7 +144,7 @@ body {
   min-height: 48px;
 }
 .welcome-signature {
-  font-family: 'Dancing Script', 'Brush Script MT', cursive;
+  font-family: 'Brush Script MT', cursive;
   font-size: 1.6rem;
   color: var(--charcoal, #2c2c2c);
   display: block;
@@ -369,7 +368,7 @@ body {
   color: var(--charcoal, #2c2c2c);
   cursor: pointer;
   min-width: 72px;
-  min-height: 44px;
+  min-height: 48px;
   transition: background 0.15s, color 0.15s;
   font-family: inherit;
 }
