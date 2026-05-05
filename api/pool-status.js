@@ -95,7 +95,8 @@ export default async function handler(req, res) {
     return res.status(200).json(status);
 
   } catch (err) {
-    console.error('[pool-status]', err.message);
-    return res.status(200).json({ online: false, error: err.message });
+    const cause = err.cause?.message || err.cause?.toString() || '';
+    console.error('[pool-status]', err.message, cause);
+    return res.status(200).json({ online: false, error: err.message, cause });
   }
 }
