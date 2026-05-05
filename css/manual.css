@@ -1206,22 +1206,24 @@ html.dark .gb-file-label { background: #1c1714; border-color: #3a2e28; }
 .gb-carousel-section {
   background: var(--charcoal, #2d2926);
   border-radius: var(--radius);
-  padding: 2rem 1.5rem 1.75rem;
   margin-top: 1.75rem;
+  overflow: hidden;
+  padding: 2rem 0 2rem;
 }
-.gb-carousel-wrap { position: relative; }
 .gb-track {
   display: flex;
   gap: 1.25rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding-bottom: 0.25rem;
+  padding: 0 1.5rem 0.25rem;
 }
 .gb-track::-webkit-scrollbar { display: none; }
+/* Cards: 2 visible on desktop with 3rd peeking; 1 visible on mobile with next peeking */
 .gb-card {
-  flex: 0 0 calc(50% - 0.625rem);
-  min-width: 280px;
+  flex: 0 0 calc(46% - 0.625rem);
+  min-width: 260px;
   scroll-snap-align: start;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
@@ -1235,10 +1237,11 @@ html.dark .gb-file-label { background: #1c1714; border-color: #3a2e28; }
 .gb-card:hover { background: rgba(255,255,255,0.08); }
 .gb-card-quote {
   font-family: var(--font-serif);
-  font-size: 4rem;
+  font-size: 3.5rem;
   line-height: 0.75;
   color: var(--accent, #b8967e);
   user-select: none;
+  margin-bottom: -0.25rem;
 }
 .gb-card-text {
   font-size: 0.9375rem;
@@ -1273,32 +1276,13 @@ html.dark .gb-file-label { background: #1c1714; border-color: #3a2e28; }
   color: rgba(255,255,255,0.4);
   padding: 2rem 0;
   font-size: 0.875rem;
-}
-.gb-controls {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
-  margin-top: 1.5rem;
-}
-.gb-ctrl-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.07);
-  color: var(--white, #fff);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition, 0.2s);
-}
-.gb-ctrl-btn:hover {
-  background: var(--accent, #b8967e);
-  border-color: var(--accent, #b8967e);
+  white-space: nowrap;
 }
 @media (max-width: 700px) {
-  .gb-card { flex: 0 0 85%; }
+  .gb-card {
+    flex: 0 0 82%;
+    min-width: unset;
+  }
 }
 
 /* ── Food Delivery Row ── */
