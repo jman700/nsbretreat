@@ -3,6 +3,7 @@
 
 const LOGIN_URL  = 'https://prod.zodiac-ios.com/users/v1/login';
 const API_BASE   = 'https://iaqualink-api.realtime.io/v1/mobile/session.json';
+// Public API key shared across all iAqualink mobile clients — not a secret.
 const API_KEY    = 'EOOEMOW4YR6QNB07';
 
 /**
@@ -21,7 +22,8 @@ export async function authenticate() {
   });
 
   if (!res.ok) {
-    throw new Error(`iAqualink login failed: ${res.status}`);
+    const body = await res.text().catch(() => '');
+    throw new Error(`iAqualink login failed: ${res.status} ${body}`);
   }
 
   const data = await res.json();
@@ -42,6 +44,9 @@ export async function authenticate() {
  */
 export async function deviceRequest(token, command, extra = {}) {
   const serial = process.env.IAQUALINK_DEVICE_SERIAL;
+  if (!serial) {
+    throw new Error('IAQUALINK_DEVICE_SERIAL env var is not set');
+  }
 
   const params = new URLSearchParams({
     actionID:  'command',
@@ -56,7 +61,8 @@ export async function deviceRequest(token, command, extra = {}) {
   const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error(`iAqualink command "${command}" failed: ${res.status}`);
+    const body = await res.text().catch(() => '');
+    throw new Error(`iAqualink command "${command}" failed: ${res.status} ${body}`);
   }
 
   return res.json();
