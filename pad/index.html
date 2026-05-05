@@ -16,11 +16,11 @@
   <nav class="pad-nav" id="pad-nav">
     <div class="pad-nav-inner" id="pad-tabs">
       <a href="../" class="pad-logo">NSB Retreat</a>
-      <a href="#welcome"    class="pad-tab active">Welcome</a>
+      <a href="#pool"       class="pad-tab active">Pool &amp; Spa</a>
+      <a href="#welcome"    class="pad-tab">Welcome</a>
       <a href="#checkin"    class="pad-tab">Check-In</a>
       <a href="#rules"      class="pad-tab">House Rules</a>
       <a href="#wifi"       class="pad-tab">WiFi &amp; Tech</a>
-      <a href="#pool"       class="pad-tab">Pool &amp; Spa</a>
       <a href="#local"      class="pad-tab">Local Guide</a>
       <a href="#emergency"  class="pad-tab">Emergency</a>
     </div>
@@ -28,7 +28,130 @@
 
   <main class="pad-main">
 
-    <!-- ── 1. Welcome ── -->
+    <!-- ── 1. Pool & Spa ── -->
+    <section class="pad-section" id="pool">
+      <h2 class="pad-section-title">Pool &amp; Spa Controls</h2>
+
+      <!-- iAqualink Live Controls Widget -->
+      <div class="pool-widget" id="pool-widget">
+        <div class="pool-status-header">
+          <h3 class="pool-widget-title">Live Controls</h3>
+          <span class="pool-online-badge offline" id="pool-badge">Loading…</span>
+        </div>
+
+        <!-- Temp display -->
+        <div class="pool-temps">
+          <div class="temp-card">
+            <span class="temp-label">Pool Temp</span>
+            <span class="temp-value" id="pool-temp-val"><span class="temp-loading">–</span></span>
+          </div>
+          <div class="temp-card">
+            <span class="temp-label">Spa Temp</span>
+            <span class="temp-value" id="spa-temp-val"><span class="temp-loading">–</span></span>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="pool-controls">
+
+          <!-- Spa Heater -->
+          <div class="pool-control-row">
+            <div class="control-label">
+              Spa Heater
+              <span class="control-sub">Heats the hot tub</span>
+            </div>
+            <button class="pool-toggle" id="btn-spa-heater" data-command="spa_heater" data-state="off" disabled>Off</button>
+          </div>
+
+          <!-- Spa Setpoint -->
+          <div class="pool-control-row setpoint-row">
+            <div class="setpoint-header">
+              <div class="control-label">
+                Spa Temperature
+                <span class="control-sub">Set target temperature (98–104°F)</span>
+              </div>
+              <span class="setpoint-display" id="setpoint-display">102°F</span>
+            </div>
+            <input type="range" class="pool-slider" id="slider-spa-setpoint"
+              min="98" max="104" step="1" value="102" disabled>
+          </div>
+
+          <!-- Spa Jets -->
+          <div class="pool-control-row" id="row-spa-jets" style="display:none">
+            <div class="control-label">
+              Spa Jets
+              <span class="control-sub">Air blower / jets</span>
+            </div>
+            <button class="pool-toggle" id="btn-spa-jets" data-command="spa_jets" data-state="off" disabled>Off</button>
+          </div>
+
+          <!-- Pool Light -->
+          <div class="pool-control-row">
+            <div class="control-label">
+              Pool Light
+              <span class="control-sub">Main pool light</span>
+            </div>
+            <button class="pool-toggle" id="btn-pool-light" data-command="pool_light" data-state="off" disabled>Off</button>
+          </div>
+
+          <!-- Pool Light Colors -->
+          <div class="pool-control-row" style="flex-direction:column; align-items:flex-start; gap:0.5rem">
+            <div class="control-label">
+              Light Color
+              <span class="control-sub">Tap a color — light must be on</span>
+            </div>
+            <div class="light-colors" id="light-colors">
+              <button class="color-swatch swatch-white  disabled" data-color="white"   title="White"   aria-label="White"></button>
+              <button class="color-swatch swatch-blue   disabled" data-color="blue"    title="Blue"    aria-label="Blue"></button>
+              <button class="color-swatch swatch-green  disabled" data-color="green"   title="Green"   aria-label="Green"></button>
+              <button class="color-swatch swatch-red    disabled" data-color="red"     title="Red"     aria-label="Red"></button>
+              <button class="color-swatch swatch-magenta disabled" data-color="magenta" title="Magenta" aria-label="Magenta"></button>
+              <button class="color-swatch swatch-party  disabled" data-color="party"   title="Party"   aria-label="Party (Color Cycle)"></button>
+            </div>
+          </div>
+
+          <!-- Pool Pump (read-only) -->
+          <div class="pool-control-row">
+            <div class="control-label">
+              Pool Pump
+              <span class="control-sub">Read-only — contact Antonio to adjust</span>
+            </div>
+            <span class="pool-pump-status" id="pool-pump-status">–</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="acc-list" style="margin-top:1.5rem">
+        <div class="acc-item">
+          <button class="acc-trigger">How to Heat the Hot Tub</button>
+          <div class="acc-body">
+            <ol class="steps-list">
+              <li><span class="step-num">1</span><div>Touch the tablet screen to wake it, then <strong>slide your finger upward from the bottom</strong> to unlock.</div></li>
+              <li><span class="step-num">2</span><div>Tap <strong>"815 NSB Pool System"</strong> to open controls.</div></li>
+              <li><span class="step-num">3</span><div>Select the <strong>"OneTouch Scenes"</strong> tab and toggle on <strong>"Spa Mode."</strong></div></li>
+              <li><span class="step-num">4</span><div>Allow approximately <strong>30 minutes</strong> to reach <strong>102°F</strong>. Or — use the live controls above.</div></li>
+            </ol>
+            <p style="margin-top:0.875rem; font-size:0.875rem"><strong>Important:</strong> Under Devices, "Spa Mode" must be toggled on — not just "Spa Heater."</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Pool Sliding Door Alarm (Child Safety)</button>
+          <div class="acc-body">
+            <p>The sliding glass doors to the pool have a legally required audible alarm — a <strong>grey rectangular box</strong> to the left of the door.</p>
+            <ul style="margin-top:0.75rem">
+              <li><strong>To exit:</strong> Press the mute button before opening the door.</li>
+              <li><strong>To re-enter:</strong> Press the small button on the outside of the door frame before opening.</li>
+              <li>The mute lasts <strong>10–15 seconds.</strong></li>
+              <li>If your group is adults only, you may disable the alarm using the black switch on the left side. <strong>Do not disable if children are present.</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 2. Welcome ── -->
+
     <section class="pad-section" id="welcome">
       <div class="welcome-layout">
         <div class="welcome-text">
@@ -189,130 +312,8 @@
         <div class="acc-item">
           <button class="acc-trigger">Pool &amp; Spa Controls (Tablet)</button>
           <div class="acc-body">
-            <p>The hot tub, bubbles, and pool/spa lights are also controllable from the <strong>tablet mounted on the wall in the kitchen</strong>. See the Pool &amp; Spa section below for full instructions, or use the live controls on this screen.</p>
+            <p>The hot tub, bubbles, and pool/spa lights are also controllable from the <strong>tablet mounted on the wall in the kitchen</strong>. Tap <strong>Pool &amp; Spa</strong> in the menu for live controls and full instructions.</p>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── 5. Pool & Spa ── -->
-    <section class="pad-section" id="pool">
-      <h2 class="pad-section-title">Pool &amp; Spa</h2>
-
-      <div class="acc-list">
-        <div class="acc-item">
-          <button class="acc-trigger">How to Heat the Hot Tub</button>
-          <div class="acc-body">
-            <ol class="steps-list">
-              <li><span class="step-num">1</span><div>Touch the tablet screen to wake it, then <strong>slide your finger upward from the bottom</strong> to unlock.</div></li>
-              <li><span class="step-num">2</span><div>Tap <strong>"815 NSB Pool System"</strong> to open controls.</div></li>
-              <li><span class="step-num">3</span><div>Select the <strong>"OneTouch Scenes"</strong> tab and toggle on <strong>"Spa Mode."</strong></div></li>
-              <li><span class="step-num">4</span><div>Allow approximately <strong>30 minutes</strong> to reach <strong>102°F</strong>. Or — use the live controls below.</div></li>
-            </ol>
-            <p style="margin-top:0.875rem; font-size:0.875rem"><strong>Important:</strong> Under Devices, "Spa Mode" must be toggled on — not just "Spa Heater."</p>
-          </div>
-        </div>
-        <div class="acc-item">
-          <button class="acc-trigger">Pool Sliding Door Alarm (Child Safety)</button>
-          <div class="acc-body">
-            <p>The sliding glass doors to the pool have a legally required audible alarm — a <strong>grey rectangular box</strong> to the left of the door.</p>
-            <ul style="margin-top:0.75rem">
-              <li><strong>To exit:</strong> Press the mute button before opening the door.</li>
-              <li><strong>To re-enter:</strong> Press the small button on the outside of the door frame before opening.</li>
-              <li>The mute lasts <strong>10–15 seconds.</strong></li>
-              <li>If your group is adults only, you may disable the alarm using the black switch on the left side. <strong>Do not disable if children are present.</strong></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- iAqualink Live Controls Widget -->
-      <div class="pool-widget" id="pool-widget">
-        <div class="pool-status-header">
-          <h3 class="pool-widget-title">Live Pool &amp; Spa Controls</h3>
-          <span class="pool-online-badge offline" id="pool-badge">Loading…</span>
-        </div>
-
-        <!-- Temp display -->
-        <div class="pool-temps">
-          <div class="temp-card">
-            <span class="temp-label">Pool Temp</span>
-            <span class="temp-value" id="pool-temp-val"><span class="temp-loading">–</span></span>
-          </div>
-          <div class="temp-card">
-            <span class="temp-label">Spa Temp</span>
-            <span class="temp-value" id="spa-temp-val"><span class="temp-loading">–</span></span>
-          </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="pool-controls">
-
-          <!-- Spa Heater -->
-          <div class="pool-control-row">
-            <div class="control-label">
-              Spa Heater
-              <span class="control-sub">Heats the hot tub</span>
-            </div>
-            <button class="pool-toggle" id="btn-spa-heater" data-command="spa_heater" data-state="off" disabled>Off</button>
-          </div>
-
-          <!-- Spa Setpoint -->
-          <div class="pool-control-row setpoint-row">
-            <div class="setpoint-header">
-              <div class="control-label">
-                Spa Temperature
-                <span class="control-sub">Set target temperature (98–104°F)</span>
-              </div>
-              <span class="setpoint-display" id="setpoint-display">102°F</span>
-            </div>
-            <input type="range" class="pool-slider" id="slider-spa-setpoint"
-              min="98" max="104" step="1" value="102" disabled>
-          </div>
-
-          <!-- Spa Jets -->
-          <div class="pool-control-row" id="row-spa-jets" style="display:none">
-            <div class="control-label">
-              Spa Jets
-              <span class="control-sub">Air blower / jets</span>
-            </div>
-            <button class="pool-toggle" id="btn-spa-jets" data-command="spa_jets" data-state="off" disabled>Off</button>
-          </div>
-
-          <!-- Pool Light -->
-          <div class="pool-control-row">
-            <div class="control-label">
-              Pool Light
-              <span class="control-sub">Main pool light</span>
-            </div>
-            <button class="pool-toggle" id="btn-pool-light" data-command="pool_light" data-state="off" disabled>Off</button>
-          </div>
-
-          <!-- Pool Light Colors -->
-          <div class="pool-control-row" style="flex-direction:column; align-items:flex-start; gap:0.5rem">
-            <div class="control-label">
-              Light Color
-              <span class="control-sub">Tap a color — light must be on</span>
-            </div>
-            <div class="light-colors" id="light-colors">
-              <button class="color-swatch swatch-white  disabled" data-color="white"   title="White"   aria-label="White"></button>
-              <button class="color-swatch swatch-blue   disabled" data-color="blue"    title="Blue"    aria-label="Blue"></button>
-              <button class="color-swatch swatch-green  disabled" data-color="green"   title="Green"   aria-label="Green"></button>
-              <button class="color-swatch swatch-red    disabled" data-color="red"     title="Red"     aria-label="Red"></button>
-              <button class="color-swatch swatch-magenta disabled" data-color="magenta" title="Magenta" aria-label="Magenta"></button>
-              <button class="color-swatch swatch-party  disabled" data-color="party"   title="Party"   aria-label="Party (Color Cycle)"></button>
-            </div>
-          </div>
-
-          <!-- Pool Pump (read-only) -->
-          <div class="pool-control-row">
-            <div class="control-label">
-              Pool Pump
-              <span class="control-sub">Read-only — contact Antonio to adjust</span>
-            </div>
-            <span class="pool-pump-status" id="pool-pump-status">–</span>
-          </div>
-
         </div>
       </div>
     </section>
