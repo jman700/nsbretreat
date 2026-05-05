@@ -168,11 +168,20 @@
   // ── Fetch status ──
   function fetchStatus() {
     fetch('/api/pool-status')
-      .then(function(r) { return r.json(); })
-      .then(function(data) { applyState(data); })
-      .catch(function() {
-        badge.textContent = 'Offline';
-        badge.classList.add('offline');
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(data) {
+        applyState(data);
+      })
+      .catch(function(err) {
+        console.error('pool-status fetch failed:', err);
+        // Show offline badge
+        if (badge) {
+          badge.textContent = 'Offline';
+          badge.className = 'pool-badge offline';
+        }
       });
   }
 
