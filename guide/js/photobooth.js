@@ -283,6 +283,11 @@
     var btn = document.getElementById('pb-capture-btn');
     if (btn) { btn.disabled = true; }
 
+    if (!stream || !video.srcObject) {
+      if (btn) btn.disabled = false;
+      return;
+    }
+
     // Use actual video dimensions for maximum quality
     var vw = video.videoWidth  || OUT_W;
     var vh = video.videoHeight || OUT_H;
@@ -313,39 +318,49 @@
     canvas.height = ch;
     var ctx = canvas.getContext('2d');
 
-    // Draw video crop (mirror if front camera)
-    if (facing === 'user') {
-      ctx.save();
-      ctx.translate(cw, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
-      ctx.restore();
-    } else {
-      ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
-    }
+    try {
+      // Draw video crop (mirror if front camera)
+      if (facing === 'user') {
+        ctx.save();
+        ctx.translate(cw, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
+        ctx.restore();
+      } else {
+        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
+      }
 
-    // Draw frame overlay scaled to canvas size
-    var fImg = new Image();
-    fImg.onload = function () {
-      ctx.drawImage(fImg, 0, 0, cw, ch);
-      canvas.toBlob(function (blob) {
-        if (btn) { btn.disabled = false; }
-        resultBlob = blob;
-        resultImg.src = URL.createObjectURL(blob);
-        showPreview();
-        uploadSilent(blob);
-      }, 'image/jpeg', 0.95);
-    };
-    fImg.onerror = function () {
-      canvas.toBlob(function (blob) {
-        if (btn) { btn.disabled = false; }
-        resultBlob = blob;
-        resultImg.src = URL.createObjectURL(blob);
-        showPreview();
-        uploadSilent(blob);
-      }, 'image/jpeg', 0.95);
-    };
-    fImg.src = frameSrc(activeFrame);
+      // Draw frame overlay scaled to canvas size
+      var fImg = new Image();
+      fImg.onload = function () {
+        try {
+          ctx.drawImage(fImg, 0, 0, cw, ch);
+          canvas.toBlob(function (blob) {
+            if (btn) { btn.disabled = false; }
+            resultBlob = blob;
+            resultImg.src = URL.createObjectURL(blob);
+            showPreview();
+            uploadSilent(blob);
+          }, 'image/jpeg', 0.95);
+        } catch (e) {
+          if (btn) btn.disabled = false;
+          return;
+        }
+      };
+      fImg.onerror = function () {
+        canvas.toBlob(function (blob) {
+          if (btn) { btn.disabled = false; }
+          resultBlob = blob;
+          resultImg.src = URL.createObjectURL(blob);
+          showPreview();
+          uploadSilent(blob);
+        }, 'image/jpeg', 0.95);
+      };
+      fImg.src = frameSrc(activeFrame);
+    } catch (e) {
+      if (btn) btn.disabled = false;
+      return;
+    }
   }
 
   // ── Background upload (silent, no user feedback) ───────
@@ -451,8 +466,8 @@
 
   // Stop camera on page hide / unload
   document.addEventListener('visibilitychange', function () {
-    if (document.hidden) stopStream();
+    if (document.hidden) { cancelCountdown(); stopStream(); }
   });
-  window.addEventListener('pagehide', stopStream);
+  window.addEventListener('pagehide', function () { cancelCountdown(); stopStream(); });
 
 })();
