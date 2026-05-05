@@ -1,7 +1,11 @@
 // api/pool-status.js
-// GET /api/pool-status — returns live pool/spa state
+// GET /api/pool-status — returns live pool/spa state + durable spa timer
 
 import { authenticate, deviceRequest } from './_iaqualink.js';
+import { getSupabase } from './_supabase.js';
+
+const TIMER_ROW_ID   = 1;
+const AUTO_TIMER_HRS = 3;
 
 // Maps raw iAqualink get_home key names to our normalized field names.
 const FIELD_MAP = {
@@ -133,6 +137,74 @@ export default async function handler(req, res) {
     } catch (devErr) {
       console.error('[pool-status] get_devices failed:', devErr.message);
     }
+
+    // ── Durable spa timer logic ──────────────────────────────────────────────
+    try {
+      const sb  = getSupabase();
+      const now = Date.now();
+
+      // Read current timer row (single row, id = 1)
+      const { data: timerRow } = await sb
+        .from('spa_timer')
+        .select('*')
+        .eq('id', TIMER_ROW_ID)
+        .maybeSingle();
+
+      const timerExpired = timerRow && timerRow.end_time <= now;
+      const timerAlive   = timerRow && timerRow.end_time > now;
+
+      if (timerExpired && status.spa_heater === 'on') {
+        // ── Timer expired while heater is still on — auto-off ─────────────
+        await sb.from('spa_timer').delete().eq('id', TIMER_ROW_ID);
+        try {
+          await deviceRequest(auth, 'set_spa_heater', {});
+          await deviceRequest(auth, 'set_spillover',  {});
+          status.spa_heater = 'off';
+          console.log('[pool-status] spa timer expired — auto-off sent');
+        } catch (offErr) {
+          console.error('[pool-status] auto-off command failed:', offErr.message);
+        }
+        status.spa_end_time         = null;
+        status.spa_seconds_remaining = 0;
+
+      } else if (status.spa_heater === 'on' && !timerAlive) {
+        // ── Heater is on but no live timer — turned on via iAqualink app ──
+        // Create 3-hr default timer; ignoreDuplicates prevents overwrite if
+        // another concurrent request already created one.
+        const end_time = now + AUTO_TIMER_HRS * 3600 * 1000;
+        await sb.from('spa_timer').upsert(
+          { id: TIMER_ROW_ID, end_time, started_at: now, source: 'iaqualink' },
+          { onConflict: 'id', ignoreDuplicates: true }
+        );
+        // Re-read to pick up whichever timestamp won the race
+        const { data: fresh } = await sb
+          .from('spa_timer').select('end_time').eq('id', TIMER_ROW_ID).maybeSingle();
+        const liveEnd = fresh ? fresh.end_time : end_time;
+        status.spa_end_time          = liveEnd;
+        status.spa_seconds_remaining = Math.max(0, Math.round((liveEnd - Date.now()) / 1000));
+        console.log('[pool-status] heater on without timer — auto-created', AUTO_TIMER_HRS, 'hr timer');
+
+      } else if (status.spa_heater === 'off' && timerRow) {
+        // ── Heater was turned off externally — clear stale timer ──────────
+        await sb.from('spa_timer').delete().eq('id', TIMER_ROW_ID);
+        status.spa_end_time          = null;
+        status.spa_seconds_remaining = 0;
+
+      } else {
+        // Normal read — include current timer in response
+        const liveEnd = timerAlive ? timerRow.end_time : null;
+        status.spa_end_time          = liveEnd;
+        status.spa_seconds_remaining = liveEnd
+          ? Math.max(0, Math.round((liveEnd - Date.now()) / 1000))
+          : 0;
+      }
+    } catch (sbErr) {
+      // Non-fatal — timer unavailable, still return device status
+      console.error('[pool-status] timer logic error:', sbErr.message);
+      status.spa_end_time          = null;
+      status.spa_seconds_remaining = 0;
+    }
+    // ── End timer logic ──────────────────────────────────────────────────────
 
     return res.status(200).json(status);
 

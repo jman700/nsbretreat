@@ -479,6 +479,21 @@
 
     <section class="manual-section" id="hottub">
       <h2 class="manual-section-title" data-i18n="hottub_title">Hot Tub</h2>
+
+      <!-- Live spa status widget — shown only when heater is active -->
+      <div id="spa-widget" style="display:none" aria-live="polite">
+        <div class="spa-widget-card">
+          <div class="spa-widget-row">
+            <span class="spa-widget-flame">🔥</span>
+            <div class="spa-widget-info">
+              <span class="spa-widget-label" id="spa-widget-label">Hot tub is heating</span>
+              <span class="spa-widget-temps" id="spa-widget-temps"></span>
+            </div>
+            <span class="spa-widget-cd" id="spa-widget-cd"></span>
+          </div>
+        </div>
+      </div>
+
       <p style="color:var(--charcoal-light); margin-bottom:1.5rem; font-size:0.95rem" data-i18n-html="hottub_intro">The hot tub, bubbles, and pool/spa lights are all controlled from the <strong>tablet mounted on the wall in the kitchen</strong>. Each function runs on a <strong>3-hour timer</strong> — reactivate it if you need longer. Want it pre-heated before you arrive? Just message us and we'll set it up.</p>
 
       <div class="accordion">
@@ -1255,6 +1270,81 @@
       document.addEventListener('click', closeDrop);
       document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDrop(); });
     })();
+
+    // ── Spa live countdown widget ─────────────────────────────────────────────
+    (function() {
+      var widget   = document.getElementById('spa-widget');
+      var labelEl  = document.getElementById('spa-widget-label');
+      var tempsEl  = document.getElementById('spa-widget-temps');
+      var cdEl     = document.getElementById('spa-widget-cd');
+      var cdInterval = null;
+      var _endTime   = null;
+
+      if (!widget) return;
+
+      function fmt(ms) {
+        if (ms <= 0) return '0:00:00';
+        var s = Math.floor(ms / 1000);
+        var h = Math.floor(s / 3600);
+        var m = Math.floor((s % 3600) / 60);
+        s = s % 60;
+        return h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      }
+
+      function startTick(endTime) {
+        clearInterval(cdInterval);
+        _endTime = endTime;
+        function tick() {
+          var rem = _endTime - Date.now();
+          if (rem <= 0) {
+            clearInterval(cdInterval);
+            cdEl.textContent = '';
+            labelEl.textContent = 'Shutting off…';
+            setTimeout(function() { widget.style.display = 'none'; }, 3000);
+            return;
+          }
+          cdEl.textContent = fmt(rem);
+        }
+        tick();
+        cdInterval = setInterval(tick, 1000);
+      }
+
+      function applyStatus(s) {
+        if (!s || !s.online || s.spa_heater !== 'on') {
+          clearInterval(cdInterval);
+          widget.style.display = 'none';
+          return;
+        }
+
+        widget.style.display = '';
+
+        // Temperature display
+        var tempStr = '';
+        if (s.spa_temp != null) tempStr += s.spa_temp + '°F';
+        if (s.spa_set_point != null) tempStr += (tempStr ? ' → ' : '') + s.spa_set_point + '°F target';
+        tempsEl.textContent = tempStr;
+
+        if (s.spa_end_time && s.spa_end_time > Date.now()) {
+          labelEl.textContent = 'Hot tub is heating';
+          if (_endTime !== s.spa_end_time) startTick(s.spa_end_time);
+        } else {
+          labelEl.textContent = 'Hot tub is running';
+          clearInterval(cdInterval);
+          cdEl.textContent = '';
+        }
+      }
+
+      function poll() {
+        fetch('/api/pool-status')
+          .then(function(r) { return r.ok ? r.json() : null; })
+          .then(function(s) { if (s) applyStatus(s); })
+          .catch(function() { /* silent */ });
+      }
+
+      poll();
+      setInterval(poll, 60000);
+    })();
+    // ── End spa widget ────────────────────────────────────────────────────────
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
