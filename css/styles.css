@@ -87,6 +87,16 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--charcoal-light, #666);
   margin: 0.25rem 0 0;
 }
+a.place-address {
+  color: var(--accent, #b8967e);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s, color 0.15s;
+  display: inline-block;
+}
+a.place-address:hover {
+  border-bottom-color: var(--accent, #b8967e);
+}
 
 /* ── Hero conditions badge ── */
 .hero-badge {
