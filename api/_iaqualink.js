@@ -15,7 +15,7 @@ export async function authenticate() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      username: process.env.IAQUALINK_EMAIL,
+      email:    process.env.IAQUALINK_EMAIL,
       password: process.env.IAQUALINK_PASSWORD,
       api_key:  API_KEY,
     }),
