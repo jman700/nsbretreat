@@ -1199,7 +1199,7 @@
   color: var(--charcoal-lighter);
   text-transform: uppercase;
 }
-.bc-fc-icon { font-size: 1.4rem; line-height: 1; margin: 0.1rem 0; }
+.bc-fc-icon { display: flex; justify-content: center; align-items: center; margin: 0.2rem 0; }
 .bc-fc-temps { display: flex; gap: 2px; align-items: baseline; }
 .bc-fc-hi {
   font-family: var(--font-serif);
@@ -1234,7 +1234,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 .bc-action-card:hover { background: var(--sand); }
-.bc-action-icon { font-size: 1.4rem; line-height: 1; }
+.bc-action-icon { display: flex; justify-content: center; align-items: center; margin-bottom: 0.1rem; }
 .bc-action-label {
   font-size: 0.75rem;
   font-weight: 600;

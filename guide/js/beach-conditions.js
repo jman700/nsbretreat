@@ -12,7 +12,7 @@
     // ── Forecast day card ──
     '.bc-forecast-day{flex:0 0 auto;min-width:70px;background:var(--blush,#f9ece8);border:1px solid var(--tan,#d4c4b0);border-radius:var(--radius-sm,8px);padding:.625rem .5rem;display:flex;flex-direction:column;align-items:center;gap:.2rem;text-align:center}' +
     '.bc-fc-day{font-size:.62rem;font-weight:600;letter-spacing:.08em;color:var(--charcoal-lighter,#9a918c);text-transform:uppercase}' +
-    '.bc-fc-icon{font-size:1.4rem;line-height:1;margin:.1rem 0}' +
+    '.bc-fc-icon{display:flex;justify-content:center;align-items:center;margin:.2rem 0}' +
     '.bc-fc-temps{display:flex;gap:2px;align-items:baseline}' +
     '.bc-fc-hi{font-size:.95rem;font-weight:600;color:var(--charcoal,#2d2926)}' +
     '.bc-fc-lo{font-size:.75rem;color:var(--charcoal-light,#6b6460)}' +
@@ -23,7 +23,7 @@
     // ── Action cards (flags & cam) ──
     '.bc-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:.625rem;margin-top:.875rem}' +
     '.bc-action-card{background:var(--blush,#f9ece8);border:1px solid var(--tan,#d4c4b0);border-radius:var(--radius-sm,8px);padding:.875rem .625rem;display:flex;flex-direction:column;align-items:center;gap:.25rem;text-decoration:none;color:var(--charcoal,#2d2926);text-align:center;-webkit-tap-highlight-color:transparent}' +
-    '.bc-action-icon{font-size:1.4rem;line-height:1}' +
+    '.bc-action-icon{display:flex;justify-content:center;align-items:center;margin-bottom:.1rem}' +
     '.bc-action-label{font-size:.75rem;font-weight:600;color:var(--charcoal,#2d2926);letter-spacing:.01em}' +
     '.bc-action-hint{font-size:.65rem;color:var(--charcoal-light,#6b6460)}' +
     // ── Dark mode ──
@@ -147,17 +147,32 @@
     '</svg>';
   }
 
+  // ── Lucide SVG helper ──
+  function lucide(paths, color, size) {
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + (size||22) + '" height="' + (size||22) + '" viewBox="0 0 24 24" fill="none" stroke="' + (color||'currentColor') + '" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + '</svg>';
+  }
+
+  var WX = {
+    sun:       '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-14.07 1.41 1.41m12.73 12.73 1.41 1.41M2 12h2M20 12h2m-15.66 5.66-1.41 1.41m14.14-14.14-1.41 1.41"/>',
+    cloudSun:  '<path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/>',
+    cloud:     '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+    fog:       '<path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 17H7"/><path d="M17 21H9"/>',
+    drizzle:   '<path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 19v1"/><path d="M8 14v1"/><path d="M16 19v1"/><path d="M16 14v1"/><path d="M12 21v1"/><path d="M12 16v1"/>',
+    rain:      '<path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/>',
+    snow:      '<path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 15h.01"/><path d="M8 19h.01"/><path d="M12 17h.01"/><path d="M12 21h.01"/><path d="M16 15h.01"/><path d="M16 19h.01"/>',
+    lightning: '<path d="M6 16.326A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.973"/><path d="m13 12-3 5h4l-3 5"/>',
+  };
+
   function wmoIcon(code) {
-    if (code === 0) return '☀️';
-    if (code <= 2) return '🌤️';
-    if (code <= 3) return '☁️';
-    if (code <= 49) return '🌫️';
-    if (code <= 59) return '🌦️';
-    if (code <= 69) return '🌧️';
-    if (code <= 79) return '🌨️';
-    if (code <= 84) return '🌦️';
-    if (code <= 94) return '⛈️';
-    return '⛈️';
+    if (code === 0)  return lucide(WX.sun,       '#e8980a');
+    if (code <= 2)   return lucide(WX.cloudSun,  '#b09a60');
+    if (code <= 3)   return lucide(WX.cloud,     '#8a9298');
+    if (code <= 49)  return lucide(WX.fog,       '#8a9aa8');
+    if (code <= 59)  return lucide(WX.drizzle,   '#5a8aaa');
+    if (code <= 69)  return lucide(WX.rain,      '#4a78aa');
+    if (code <= 79)  return lucide(WX.snow,      '#7ab0cc');
+    if (code <= 84)  return lucide(WX.rain,      '#4a78aa');
+    return lucide(WX.lightning, '#c47820');
   }
 
   function renderForecast(container, daily) {
@@ -206,15 +221,18 @@
       '<div class="bc-tide-wrap"><div class="bc-skel" style="height:108px;border-radius:8px"></div></div>';
   }
 
+  var FLAG_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528"/></svg>';
+  var CAM_SVG  = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>';
+
   var LINKS_HTML =
     '<div class="bc-action-grid">' +
       '<a class="bc-action-card" href="https://www.volusia.org/services/public-protection/beach-safety/beachcams-and-daily-safety-report.stml" target="_blank" rel="noopener" data-i18n="beach_flag_link">' +
-        '<span class="bc-action-icon">🚩</span>' +
+        '<span class="bc-action-icon">' + FLAG_SVG + '</span>' +
         '<span class="bc-action-label">Beach Flags &amp; Cams</span>' +
         '<span class="bc-action-hint">Volusia County</span>' +
       '</a>' +
       '<a class="bc-action-card" href="https://www.youtube.com/watch?v=kB2PZC-ow68" target="_blank" rel="noopener">' +
-        '<span class="bc-action-icon">📷</span>' +
+        '<span class="bc-action-icon">' + CAM_SVG + '</span>' +
         '<span class="bc-action-label">Live Beach Cam</span>' +
         '<span class="bc-action-hint">NSB · YouTube</span>' +
       '</a>' +
