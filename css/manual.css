@@ -1127,14 +1127,14 @@
   background: var(--blush);
   border: 1px solid var(--tan);
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem 0.5rem;
+  padding: 0.875rem 1rem 0.625rem;
 }
 .bc-tide-label {
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--charcoal-light);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.625rem;
 }
 .bc-tide-svg {
   width: 100%;
@@ -1148,27 +1148,98 @@
   font-family: var(--font-sans, sans-serif);
 }
 .bc-tide-lbl {
-  font-size: 9px;
+  font-size: 9.5px;
+  font-family: var(--font-sans, sans-serif);
+  font-weight: 700;
+}
+.bc-tide-now-lbl {
+  font-size: 8px;
+  fill: var(--accent, #b8967e);
   font-family: var(--font-sans, sans-serif);
   font-weight: 600;
 }
-.bc-tide-hi { fill: #b8967e; }
-.bc-tide-lo { fill: #8a7a70; }
+.bc-tide-hi { fill: #5b9fbb; }
+.bc-tide-lo { fill: #8a9aaa; }
 
-.bc-links {
+/* ── Section label (above forecast strip, etc.) ── */
+.bc-section-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--charcoal-light);
+  margin: 0.875rem 0 0.5rem;
+}
+
+/* ── 5-Day Forecast Strip ── */
+.bc-forecast-strip {
   display: flex;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0 0 0.25rem;
+  scrollbar-width: none;
 }
-.bc-flag-link {
-  display: inline-block;
-  font-size: 0.78rem;
-  color: var(--accent);
+.bc-forecast-strip::-webkit-scrollbar { display: none; }
+.bc-forecast-day {
+  flex: 0 0 auto;
+  min-width: 70px;
+  background: var(--blush);
+  border: 1px solid var(--tan);
+  border-radius: var(--radius-sm);
+  padding: 0.625rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-align: center;
+}
+.bc-fc-day {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--charcoal-lighter);
+  text-transform: uppercase;
+}
+.bc-fc-icon { font-size: 1.4rem; line-height: 1; margin: 0.1rem 0; }
+.bc-fc-temps { display: flex; gap: 2px; align-items: baseline; }
+.bc-fc-hi {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+.bc-fc-lo { font-size: 0.75rem; color: var(--charcoal-light); }
+.bc-fc-rain { font-size: 0.65rem; color: #4a8aaa; }
+.bc-fc-wind { font-size: 0.65rem; color: var(--charcoal-light); }
+
+/* ── Action Cards (Flags & Cam) ── */
+.bc-action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+  margin-top: 0.875rem;
+}
+.bc-action-card {
+  background: var(--blush);
+  border: 1px solid var(--tan);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 0.625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
   text-decoration: none;
-  letter-spacing: 0.04em;
+  text-align: center;
+  transition: background 0.15s;
 }
-.bc-flag-link:hover { text-decoration: underline; }
+.bc-action-card:hover { background: var(--sand); }
+.bc-action-icon { font-size: 1.4rem; line-height: 1; }
+.bc-action-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  letter-spacing: 0.01em;
+}
+.bc-action-hint { font-size: 0.65rem; color: var(--charcoal-light); }
 
 /* ── Spa status widget ── */
 #spa-widget {
@@ -1505,8 +1576,17 @@ html.dark .emg-card { background: #2a211c; border-color: #3a2e28; }
 html.dark .emg-card-util { background: #2a211c; }
 html.dark .bc-card { background: #2a211c; border-color: #3a2e28; }
 html.dark .bc-tide-wrap { background: #2a211c; border-color: #3a2e28; }
-html.dark .bc-tide-hour { fill: #9a8a82; }
-html.dark .bc-tide-lo { fill: #9a8a82; }
+html.dark .bc-tide-hour { fill: #7a6e6a; }
+html.dark .bc-tide-lo { fill: #7a8a94; }
+html.dark .bc-forecast-day { background: #2a211c; border-color: #3a2e28; }
+html.dark .bc-fc-hi { color: #f0ebe6; }
+html.dark .bc-fc-lo { color: #9a8a82; }
+html.dark .bc-fc-day { color: #7a7370; }
+html.dark .bc-fc-wind { color: #7a7370; }
+html.dark .bc-action-card { background: #2a211c; border-color: #3a2e28; }
+html.dark .bc-action-card:hover { background: #332620; }
+html.dark .bc-action-label { color: #f0ebe6; }
+html.dark .bc-action-hint { color: #9a8a82; }
 html.dark .wi-chip { background: #2a211c; border-color: #3a2e28; color: #f0ebe6; }
 html.dark .wi-chip:hover { background: #32271f; }
 html.dark .ath-banner { background: #2a211c; border-top-color: #d4a882; }

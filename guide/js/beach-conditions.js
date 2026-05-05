@@ -1,13 +1,5 @@
 // beach-conditions.js — Live beach conditions widget for NSB Retreat guide
 
-(function injectForecastStyles() {
-  if (document.getElementById('bc-forecast-style')) return;
-  var s = document.createElement('style');
-  s.id = 'bc-forecast-style';
-  s.textContent = '.bc-forecast-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 0 4px;scrollbar-width:none}.bc-forecast-strip::-webkit-scrollbar{display:none}.bc-forecast-day{flex:0 0 auto;min-width:72px;background:var(--card,rgba(255,255,255,0.05));border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}.bc-fc-day{font-size:0.72rem;font-weight:600;letter-spacing:0.04em;color:var(--charcoal-light,#9a918c);text-transform:uppercase}.bc-fc-icon{font-size:1.5rem;line-height:1}.bc-fc-temps{display:flex;gap:4px;align-items:center}.bc-fc-hi{font-size:0.88rem;font-weight:600;color:var(--charcoal,#2d2926)}.bc-fc-lo{font-size:0.78rem;color:var(--charcoal-light,#9a918c)}.bc-fc-rain{font-size:0.72rem;color:#4a8aaa}.bc-fc-wind{font-size:0.72rem;color:var(--charcoal-light,#9a918c)}.dark .bc-forecast-day{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1)}.dark .bc-fc-hi{color:#f0ebe6}.dark .bc-fc-lo{color:#9a918c}.dark .bc-fc-day{color:#7a7370}.dark .bc-fc-wind{color:#7a7370}';
-  document.head.appendChild(s);
-})();
-
 (function initBeachConditions() {
   var SUN_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;color:var(--accent,#b8967e)" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
   var MOON_ICON = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;color:var(--charcoal-light,#6b6460)" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
@@ -43,13 +35,12 @@
   }
 
   function formatSunTime(isoStr) {
-    // Open-Meteo daily returns ISO strings like "2024-01-01T06:45"
     var d = new Date(isoStr);
     return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   }
 
   function buildTideChart(predictions) {
-    var W = 460, H = 88, PX = 14, PY = 14;
+    var W = 460, H = 108, PX = 16, PY = 22;
     var vals = predictions.map(function(p) { return parseFloat(p.v); });
     var hours = predictions.map(function(p) {
       return parseInt(p.t.split(' ')[1].split(':')[0], 10);
@@ -64,14 +55,23 @@
     function px(i) { return PX + i * stepX; }
     function py(v) { return H - PY - ((v - minV) / range) * (H - PY * 2); }
 
-    // Build area fill path (closed) and line
-    var linePoints = vals.map(function(v, i) { return px(i).toFixed(1) + ',' + py(v).toFixed(1); }).join(' ');
-    var areaPath = 'M ' + px(0).toFixed(1) + ',' + py(vals[0]).toFixed(1) +
-      vals.map(function(v, i) { return ' L ' + px(i).toFixed(1) + ',' + py(v).toFixed(1); }).join('') +
-      ' L ' + px(n - 1).toFixed(1) + ',' + (H - PY) +
-      ' L ' + PX.toFixed(1) + ',' + (H - PY) + ' Z';
+    // Smooth Catmull-Rom → cubic bezier
+    var pts = vals.map(function(v, i) { return [px(i), py(v)]; });
+    var linePath = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = pts[i > 0 ? i - 1 : 0];
+      var p1 = pts[i];
+      var p2 = pts[i + 1];
+      var p3 = pts[i < pts.length - 2 ? i + 2 : i + 1];
+      var cp1x = (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1);
+      var cp1y = (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1);
+      var cp2x = (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1);
+      var cp2y = (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1);
+      linePath += ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+    }
+    var areaPath = linePath + ' L' + px(n - 1).toFixed(1) + ',' + (H - PY) + ' L' + PX + ',' + (H - PY) + ' Z';
 
-    // High / low indices
+    // Hi / Lo indices
     var maxIdx = vals.indexOf(maxV);
     var minIdx = vals.indexOf(minV);
 
@@ -81,27 +81,33 @@
     if (nowIdx < 0) nowIdx = Math.min(nowH, n - 1);
     var nowX = px(nowIdx).toFixed(1);
     var nowY = py(vals[nowIdx]).toFixed(1);
+    var nowTxtX = Math.min(Math.max(px(nowIdx), 22), W - 22).toFixed(1);
 
     // Hour labels every 6h
     var timeLabels = '';
-    for (var i = 0; i < n; i += 6) {
-      var h = hours[i] !== undefined ? hours[i] : i;
+    for (var j = 0; j < n; j += 6) {
+      var h = hours[j] !== undefined ? hours[j] : j;
       var lbl = h === 0 ? '12a' : h < 12 ? h + 'a' : h === 12 ? '12p' : (h - 12) + 'p';
-      timeLabels += '<text x="' + px(i).toFixed(1) + '" y="' + (H + 2) + '" text-anchor="middle" class="bc-tide-hour">' + lbl + '</text>';
+      timeLabels += '<text x="' + px(j).toFixed(1) + '" y="' + (H + 6) + '" text-anchor="middle" class="bc-tide-hour">' + lbl + '</text>';
     }
 
-    // Clamp labels to avoid overflow
-    var hiX = Math.min(Math.max(px(maxIdx), 22), W - 22);
-    var loX = Math.min(Math.max(px(minIdx), 22), W - 22);
-    var hiLabel = '<text x="' + hiX.toFixed(1) + '" y="' + Math.max(py(maxV) - 5, 8).toFixed(1) + '" text-anchor="middle" class="bc-tide-lbl bc-tide-hi">' + maxV.toFixed(1) + 'ft</text>';
-    var loLabel = '<text x="' + loX.toFixed(1) + '" y="' + Math.min(py(minV) + 13, H - 2).toFixed(1) + '" text-anchor="middle" class="bc-tide-lbl bc-tide-lo">' + minV.toFixed(1) + 'ft</text>';
+    // Hi / Lo labels
+    var hiX = Math.min(Math.max(px(maxIdx), 26), W - 26).toFixed(1);
+    var loX = Math.min(Math.max(px(minIdx), 26), W - 26).toFixed(1);
+    var hiLabel = '<text x="' + hiX + '" y="' + Math.max(py(maxV) - 7, 12).toFixed(1) + '" text-anchor="middle" class="bc-tide-lbl bc-tide-hi">' + maxV.toFixed(1) + ' ft</text>';
+    var loLabel = '<text x="' + loX + '" y="' + Math.min(py(minV) + 14, H - 4).toFixed(1) + '" text-anchor="middle" class="bc-tide-lbl bc-tide-lo">' + minV.toFixed(1) + ' ft</text>';
 
-    return '<svg class="bc-tide-svg" viewBox="0 0 ' + W + ' ' + (H + 14) + '" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs><linearGradient id="tideGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b8967e" stop-opacity="0.18"/><stop offset="100%" stop-color="#b8967e" stop-opacity="0"/></linearGradient></defs>' +
+    return '<svg class="bc-tide-svg" viewBox="0 0 ' + W + ' ' + (H + 16) + '" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><linearGradient id="tideGrad" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="#5b9fbb" stop-opacity="0.28"/>' +
+        '<stop offset="100%" stop-color="#5b9fbb" stop-opacity="0"/>' +
+      '</linearGradient></defs>' +
       '<path d="' + areaPath + '" fill="url(#tideGrad)"/>' +
-      '<polyline points="' + linePoints + '" fill="none" stroke="#b8967e" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' +
-      '<line x1="' + nowX + '" y1="' + PY + '" x2="' + nowX + '" y2="' + (H - PY) + '" stroke="var(--charcoal,#2d2926)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.5"/>' +
-      '<circle cx="' + nowX + '" cy="' + nowY + '" r="3.5" fill="var(--charcoal,#2d2926)" opacity="0.7"/>' +
+      '<path d="' + linePath + '" fill="none" stroke="#5b9fbb" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
+      '<line x1="' + nowX + '" y1="' + PY + '" x2="' + nowX + '" y2="' + (H - PY) + '" stroke="var(--accent,#b8967e)" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.8"/>' +
+      '<circle cx="' + nowX + '" cy="' + nowY + '" r="5" fill="var(--accent,#b8967e)" opacity="0.2"/>' +
+      '<circle cx="' + nowX + '" cy="' + nowY + '" r="2.8" fill="var(--accent,#b8967e)"/>' +
+      '<text x="' + nowTxtX + '" y="' + (PY - 6) + '" text-anchor="middle" class="bc-tide-now-lbl">Now</text>' +
       hiLabel + loLabel + timeLabels +
     '</svg>';
   }
@@ -110,7 +116,7 @@
     if (code === 0) return '☀️';
     if (code <= 2) return '🌤️';
     if (code <= 3) return '☁️';
-    if (code <= 49) return '🌫️'; // fog/mist; codes 4-44 unassigned in WMO, fog is reasonable fallback
+    if (code <= 49) return '🌫️';
     if (code <= 59) return '🌦️';
     if (code <= 69) return '🌧️';
     if (code <= 79) return '🌨️';
@@ -122,8 +128,17 @@
   function renderForecast(container, daily) {
     if (!daily || !daily.weather_code) return;
     var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    var wrap = document.createElement('div');
+
+    var lbl = document.createElement('div');
+    lbl.className = 'bc-section-label';
+    lbl.textContent = '5-Day Forecast';
+    wrap.appendChild(lbl);
+
     var strip = document.createElement('div');
     strip.className = 'bc-forecast-strip';
+
     for (var i = 0; i < 5; i++) {
       var code = daily.weather_code[i];
       if (code === undefined || code === null) continue;
@@ -143,7 +158,9 @@
         '<span class="bc-fc-wind">' + wind + ' mph</span>';
       strip.appendChild(card);
     }
-    container.appendChild(strip);
+
+    wrap.appendChild(strip);
+    container.appendChild(wrap);
   }
 
   function renderSkeleton(container) {
@@ -151,13 +168,21 @@
       '<div class="beach-cond-grid">' +
         '<div class="bc-card bc-loading"><div class="bc-skel"></div><div class="bc-skel bc-skel-sm"></div></div>'.repeat(8) +
       '</div>' +
-      '<div class="bc-tide-wrap"><div class="bc-skel" style="height:88px;border-radius:8px"></div></div>';
+      '<div class="bc-tide-wrap"><div class="bc-skel" style="height:108px;border-radius:8px"></div></div>';
   }
 
   var LINKS_HTML =
-    '<div class="bc-links">' +
-      '<a class="bc-flag-link" href="https://www.volusia.org/services/public-protection/beach-safety/beachcams-and-daily-safety-report.stml" target="_blank" rel="noopener" data-i18n="beach_flag_link">NSB Beach Flags &amp; Cams →</a>' +
-      '<a class="bc-flag-link" href="https://www.youtube.com/watch?v=kB2PZC-ow68" target="_blank" rel="noopener">Live NSB Beach Cam →</a>' +
+    '<div class="bc-action-grid">' +
+      '<a class="bc-action-card" href="https://www.volusia.org/services/public-protection/beach-safety/beachcams-and-daily-safety-report.stml" target="_blank" rel="noopener" data-i18n="beach_flag_link">' +
+        '<span class="bc-action-icon">🚩</span>' +
+        '<span class="bc-action-label">Beach Flags &amp; Cams</span>' +
+        '<span class="bc-action-hint">Volusia County</span>' +
+      '</a>' +
+      '<a class="bc-action-card" href="https://www.youtube.com/watch?v=kB2PZC-ow68" target="_blank" rel="noopener">' +
+        '<span class="bc-action-icon">📷</span>' +
+        '<span class="bc-action-label">Live Beach Cam</span>' +
+        '<span class="bc-action-hint">NSB · YouTube</span>' +
+      '</a>' +
     '</div>';
 
   function renderError(container) {
@@ -234,11 +259,8 @@
       tideHTML;
 
     renderForecast(container, wx.daily);
-
-    // Flag status + beach cam links
     container.insertAdjacentHTML('beforeend', LINKS_HTML);
 
-    // Re-run i18n on new elements if available
     if (typeof I18N !== 'undefined' && I18N.applyLang) {
       I18N.applyLang();
     }
