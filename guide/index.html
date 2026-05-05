@@ -75,15 +75,6 @@
           <span class="quick-hint wifi-qr-trigger" id="wifi-qr-btn">Scan to join</span>
         </div>
 
-        <!-- WiFi QR modal -->
-        <div class="wifi-qr-modal" id="wifi-qr-modal" aria-hidden="true">
-          <div class="wifi-qr-modal-box">
-            <button class="wifi-qr-close" id="wifi-qr-close" aria-label="Close">&#x2715;</button>
-            <p class="wifi-qr-modal-label">Scan to join WiFi</p>
-            <div id="wifi-qr"></div>
-            <p class="wifi-qr-modal-hint">Long-press image &bull; iOS: use Camera app</p>
-          </div>
-        </div>
         <div class="quick-card" data-copy-key="wifi_password">
           <span class="quick-label" data-i18n="quick_wifi_pass_label">WiFi Password</span>
           <span class="quick-value" id="qv-wifi-pass">—</span>
@@ -100,6 +91,17 @@
           <span class="quick-hint" data-i18n="quick_checkout_hint">See checkout section</span>
         </div>
       </div>
+
+      <!-- WiFi QR modal (outside grid) -->
+      <div class="wifi-qr-modal" id="wifi-qr-modal" aria-hidden="true">
+        <div class="wifi-qr-modal-box">
+          <button class="wifi-qr-close" id="wifi-qr-close" aria-label="Close">&#x2715;</button>
+          <p class="wifi-qr-modal-label">Scan to join WiFi</p>
+          <div id="wifi-qr"></div>
+          <p class="wifi-qr-modal-hint">Long-press image &bull; iOS: use Camera app</p>
+        </div>
+      </div>
+
       <div class="toast" id="copy-toast">Copied!</div>
     </section>
 

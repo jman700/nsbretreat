@@ -166,7 +166,7 @@
 /* ── Quick Info ── */
 .quick-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.875rem;
 }
 .quick-card {
@@ -988,7 +988,7 @@
 }
 .wi-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
 }
 @media (max-width: 480px) {
@@ -1055,7 +1055,7 @@
 }
 .beach-cond-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0.625rem;
   margin-bottom: 0.875rem;
 }
