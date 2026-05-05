@@ -3,8 +3,7 @@
 
 import { authenticate, deviceRequest } from './_iaqualink.js';
 
-// Maps raw iAqualink key names to our normalized field names.
-// Add entries here if the device returns unexpected keys.
+// Maps raw iAqualink get_home key names to our normalized field names.
 const FIELD_MAP = {
   pool_temp:         'pool_temp',
   spa_temp:          'spa_temp',
@@ -14,13 +13,13 @@ const FIELD_MAP = {
   spa_pump:          'spa_pump',
   pool_set_point:    'pool_set_point',
   spa_set_point:     'spa_set_point',
-  // Light — iAqualink may call this aux_1, pool_light, or a named aux
-  aux_1:             'pool_light',
-  pool_light:        'pool_light',
-  // Jets / air blower — varies by installation
-  aux_2:             'spa_jets',
-  air_blower:        'spa_jets',
 };
+
+// Confirmed aux slot assignments for this RS-4 Combo via get_devices:
+//   aux_1 = Air Blower (spa jets)
+//   aux_2 = Pool Light
+const AUX_JETS  = 'aux_1';
+const AUX_LIGHT = 'aux_2';
 
 /**
  * Parses the home_screen array into a flat key→value map.
@@ -60,17 +59,24 @@ function parseHomeScreen(homeScreenArray) {
     }
   }
 
-  // Light color: if aux_1 or pool_light has a numeric value > 1, it's a color mode index.
-  // iAqualink color mode indices (IntelliBrite/ColorLogic):
-  // 2=blue, 3=green, 4=red, 5=white, 6=magenta, 7=party
-  const lightRaw = raw['aux_1'] || raw['pool_light'];
-  if (lightRaw && parseInt(lightRaw, 10) > 1) {
-    const colorMap = { 2: 'blue', 3: 'green', 4: 'red', 5: 'white', 6: 'magenta', 7: 'party' };
-    result.pool_light       = 'on';
-    result.pool_light_color = colorMap[parseInt(lightRaw, 10)] || 'white';
-  }
-
   return result;
+}
+
+/**
+ * Extracts aux device states from the devices_screen array returned by get_devices.
+ * Each aux item is: { aux_N: [{state}, {label}, {icon}, {type}, {subtype}] }
+ * Returns a flat map: { aux_1: '0', aux_2: '1', ... }
+ */
+function parseDevicesScreen(devicesScreenArray) {
+  const states = {};
+  for (const item of devicesScreenArray) {
+    const key = Object.keys(item)[0];
+    if (!key || !key.startsWith('aux_')) continue;
+    const fields   = item[key];
+    const stateObj = Array.isArray(fields) ? fields.find(f => f.state !== undefined) : null;
+    if (stateObj) states[key] = stateObj.state;
+  }
+  return states;
 }
 
 export default async function handler(req, res) {
@@ -95,13 +101,29 @@ export default async function handler(req, res) {
 
     const status = parseHomeScreen(homeScreen);
 
-    // Probe get_devices to find relay/aux key names for light & jets mapping.
-    // Remove once relay keys are confirmed and added to FIELD_MAP.
+    // Pull aux states (light, jets) from get_devices — RS-4 doesn't include them in get_home.
     try {
-      const devData = await deviceRequest(auth, 'get_devices');
-      status._devices_raw = devData;
+      const devData    = await deviceRequest(auth, 'get_devices');
+      const devScreen  = devData.devices_screen || [];
+      const auxStates  = Array.isArray(devScreen) ? parseDevicesScreen(devScreen) : {};
+
+      // Air Blower (spa jets) — aux_1
+      if (AUX_JETS in auxStates) {
+        status.spa_jets = parseInt(auxStates[AUX_JETS], 10) > 0 ? 'on' : 'off';
+      }
+
+      // Pool Light — aux_2; state > 1 encodes color mode index
+      if (AUX_LIGHT in auxStates) {
+        const lightVal = parseInt(auxStates[AUX_LIGHT], 10);
+        status.pool_light = lightVal > 0 ? 'on' : 'off';
+        if (lightVal > 1) {
+          const colorMap = { 2: 'blue', 3: 'green', 4: 'red', 5: 'white', 6: 'magenta', 7: 'party' };
+          status.pool_light_color = colorMap[lightVal] || 'white';
+        }
+      }
     } catch (devErr) {
-      status._devices_raw = { error: devErr.message };
+      console.error('[pool-status] get_devices failed:', devErr.message);
+      // Non-fatal — home screen data still returned
     }
 
     return res.status(200).json(status);

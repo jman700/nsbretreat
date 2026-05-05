@@ -5,8 +5,9 @@ import { authenticate, deviceRequest } from './_iaqualink.js';
 
 // Aux slot numbers for pool light and spa jets.
 // Check _raw from /api/pool-status to verify your device's aux numbers.
-const AUX_LIGHT_NUM = '1';  // aux_1
-const AUX_JETS_NUM  = '2';  // aux_2
+// Confirmed via get_devices: aux_2 = Pool Light, aux_1 = Air Blower (spa jets)
+const AUX_LIGHT_NUM = '2';  // aux_2 = Pool Light
+const AUX_JETS_NUM  = '1';  // aux_1 = Air Blower
 
 const LIGHT_COLOR_INDEX = {
   white:   1,
