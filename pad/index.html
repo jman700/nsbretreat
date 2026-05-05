@@ -17,10 +17,10 @@
     <div class="pad-nav-inner" id="pad-tabs">
       <span class="pad-logo">NSB Retreat</span>
       <a href="#pool"       class="pad-tab active">Pool &amp; Spa</a>
-      <a href="#welcome"    class="pad-tab">Welcome</a>
+      <a href="#beach"      class="pad-tab">Beach</a>
+      <a href="#wifi"       class="pad-tab">WiFi &amp; Tech</a>
       <a href="#checkin"    class="pad-tab">Check-In</a>
       <a href="#rules"      class="pad-tab">House Rules</a>
-      <a href="#wifi"       class="pad-tab">WiFi &amp; Tech</a>
       <a href="#local"      class="pad-tab">Local Guide</a>
       <a href="#emergency"  class="pad-tab">Emergency</a>
     </div>
@@ -28,11 +28,10 @@
 
   <main class="pad-main">
 
-    <!-- ── 1. Pool & Spa ── -->
+    <!-- ── 1. Pool & Spa Controls ── -->
     <section class="pad-section" id="pool">
       <h2 class="pad-section-title">Pool &amp; Spa Controls</h2>
 
-      <!-- iAqualink Live Controls Widget -->
       <div class="pool-widget" id="pool-widget">
         <div class="pool-status-header">
           <h3 class="pool-widget-title">Live Controls</h3>
@@ -111,20 +110,20 @@
               <span class="control-sub">Tap a color — light must be on</span>
             </div>
             <div class="light-colors" id="light-colors">
-              <button class="color-swatch swatch-alpine-white   disabled" data-color="alpine_white"   title="Alpine White"       aria-label="Alpine White"></button>
-              <button class="color-swatch swatch-sky-blue       disabled" data-color="sky_blue"       title="Sky Blue"           aria-label="Sky Blue"></button>
-              <button class="color-swatch swatch-cobalt-blue    disabled" data-color="cobalt_blue"    title="Cobalt Blue"        aria-label="Cobalt Blue"></button>
-              <button class="color-swatch swatch-caribbean-blue disabled" data-color="caribbean_blue" title="Caribbean Blue"     aria-label="Caribbean Blue"></button>
-              <button class="color-swatch swatch-spring-green   disabled" data-color="spring_green"   title="Spring Green"       aria-label="Spring Green"></button>
-              <button class="color-swatch swatch-emerald-green  disabled" data-color="emerald_green"  title="Emerald Green"      aria-label="Emerald Green"></button>
-              <button class="color-swatch swatch-emerald-rose   disabled" data-color="emerald_rose"   title="Emerald Rose"       aria-label="Emerald Rose"></button>
-              <button class="color-swatch swatch-magenta        disabled" data-color="magenta"        title="Magenta"            aria-label="Magenta"></button>
-              <button class="color-swatch swatch-violet         disabled" data-color="violet"         title="Violet"             aria-label="Violet"></button>
-              <button class="color-swatch swatch-slow-splash    disabled" data-color="slow_splash"    title="Slow Color Splash"  aria-label="Slow Color Splash"></button>
-              <button class="color-swatch swatch-fast-splash    disabled" data-color="fast_splash"    title="Fast Color Splash"  aria-label="Fast Color Splash"></button>
+              <button class="color-swatch swatch-alpine-white   disabled" data-color="alpine_white"   title="Alpine White"          aria-label="Alpine White"></button>
+              <button class="color-swatch swatch-sky-blue       disabled" data-color="sky_blue"       title="Sky Blue"              aria-label="Sky Blue"></button>
+              <button class="color-swatch swatch-cobalt-blue    disabled" data-color="cobalt_blue"    title="Cobalt Blue"           aria-label="Cobalt Blue"></button>
+              <button class="color-swatch swatch-caribbean-blue disabled" data-color="caribbean_blue" title="Caribbean Blue"        aria-label="Caribbean Blue"></button>
+              <button class="color-swatch swatch-spring-green   disabled" data-color="spring_green"   title="Spring Green"          aria-label="Spring Green"></button>
+              <button class="color-swatch swatch-emerald-green  disabled" data-color="emerald_green"  title="Emerald Green"         aria-label="Emerald Green"></button>
+              <button class="color-swatch swatch-emerald-rose   disabled" data-color="emerald_rose"   title="Emerald Rose"          aria-label="Emerald Rose"></button>
+              <button class="color-swatch swatch-magenta        disabled" data-color="magenta"        title="Magenta"               aria-label="Magenta"></button>
+              <button class="color-swatch swatch-violet         disabled" data-color="violet"         title="Violet"                aria-label="Violet"></button>
+              <button class="color-swatch swatch-slow-splash    disabled" data-color="slow_splash"    title="Slow Color Splash"     aria-label="Slow Color Splash"></button>
+              <button class="color-swatch swatch-fast-splash    disabled" data-color="fast_splash"    title="Fast Color Splash"     aria-label="Fast Color Splash"></button>
               <button class="color-swatch swatch-america        disabled" data-color="america"        title="America The Beautiful" aria-label="America The Beautiful"></button>
-              <button class="color-swatch swatch-fat-tuesday    disabled" data-color="fat_tuesday"    title="Fat Tuesday"        aria-label="Fat Tuesday"></button>
-              <button class="color-swatch swatch-disco-tech     disabled" data-color="disco_tech"     title="Disco Tech"         aria-label="Disco Tech"></button>
+              <button class="color-swatch swatch-fat-tuesday    disabled" data-color="fat_tuesday"    title="Fat Tuesday"           aria-label="Fat Tuesday"></button>
+              <button class="color-swatch swatch-disco-tech     disabled" data-color="disco_tech"     title="Disco Tech"            aria-label="Disco Tech"></button>
             </div>
           </div>
 
@@ -139,31 +138,47 @@
 
         </div>
       </div>
+    </section>
 
-      <!-- Beach Conditions — same widget as guide/index.html -->
-      <h3 class="pad-subsection-title">Current Beach Conditions</h3>
+    <!-- ── 2. Beach Conditions ── -->
+    <section class="pad-section" id="beach">
+      <h2 class="pad-section-title">Current Beach Conditions</h2>
       <div class="beach-cond-widget" id="beach-cond-widget"></div>
     </section>
 
-    <!-- ── 2. Welcome ── -->
+    <!-- ── 3. WiFi & Tech ── -->
+    <section class="pad-section" id="wifi">
+      <h2 class="pad-section-title">WiFi &amp; Tech</h2>
 
-    <section class="pad-section" id="welcome">
-      <div class="welcome-layout">
-        <div class="welcome-text">
-          <p class="welcome-address">815 Carol Ave · New Smyrna Beach, FL 32169</p>
-          <h1 class="pad-section-title" style="margin-bottom:0.5rem">Welcome!</h1>
-          <p class="welcome-bio">We are Antonio and Yani — two brothers and Florida locals who now call New Smyrna Beach our second home. Hosting is something we truly enjoy and we hope you feel the love that was put into this home.</p>
-          <span class="welcome-signature">Antonio &amp; Yani</span>
-          <a href="tel:4075066654" class="welcome-call-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.45 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            Call or Text Antonio · (407) 506-6654
-          </a>
+      <div class="info-grid">
+        <div class="info-card">
+          <span class="info-label">WiFi Network</span>
+          <span class="info-value" id="pad-wifi-name">NSB Retreat</span>
         </div>
-        <img src="../assets/photos/hosts.jpg" alt="Antonio and Yani" class="welcome-photo">
+        <div class="info-card copyable" id="pad-wifi-pass-card">
+          <span class="info-label">WiFi Password</span>
+          <span class="info-value" id="pad-wifi-pass">seashells815!</span>
+          <span class="info-hint">Tap to copy</span>
+        </div>
+      </div>
+
+      <div class="acc-list">
+        <div class="acc-item">
+          <button class="acc-trigger">Smart TVs &amp; Streaming</button>
+          <div class="acc-body">
+            <p>Every bedroom and living space has a Smart TV. Netflix, Hulu, YouTube TV, and more are available to download. <strong>Sign in with your own account.</strong> Please sign out before you check out.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Pool &amp; Spa Controls (Tablet)</button>
+          <div class="acc-body">
+            <p>The hot tub, bubbles, and pool/spa lights are also controllable from the <strong>tablet mounted on the wall in the kitchen</strong>. Tap <strong>Pool &amp; Spa</strong> in the menu for live controls and full instructions.</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ── 2. Check-In ── -->
+    <!-- ── 4. Check-In ── -->
     <section class="pad-section" id="checkin">
       <h2 class="pad-section-title">Check-In</h2>
 
@@ -209,10 +224,10 @@
           <button class="acc-trigger">How to Heat the Hot Tub</button>
           <div class="acc-body">
             <ol class="steps-list">
-              <li><span class="step-num">1</span><div>Touch the tablet screen to wake it, then <strong>slide your finger upward from the bottom</strong> to unlock.</div></li>
-              <li><span class="step-num">2</span><div>Tap <strong>"815 NSB Pool System"</strong> to open controls.</div></li>
-              <li><span class="step-num">3</span><div>Select the <strong>"OneTouch Scenes"</strong> tab and toggle on <strong>"Spa Mode."</strong></div></li>
-              <li><span class="step-num">4</span><div>Allow approximately <strong>30 minutes</strong> to reach <strong>102°F</strong>. Or — use the live controls on the Pool &amp; Spa tab.</div></li>
+              <li><span class="step-num">1</span><div class="step-body">Touch the tablet screen to wake it, then <strong>slide your finger upward from the bottom</strong> to unlock.</div></li>
+              <li><span class="step-num">2</span><div class="step-body">Tap <strong>"815 NSB Pool System"</strong> to open controls.</div></li>
+              <li><span class="step-num">3</span><div class="step-body">Select the <strong>"OneTouch Scenes"</strong> tab and toggle on <strong>"Spa Mode."</strong></div></li>
+              <li><span class="step-num">4</span><div class="step-body">Allow approximately <strong>30 minutes</strong> to reach <strong>102°F</strong>. Or — use the live controls on the Pool &amp; Spa tab.</div></li>
             </ol>
             <p style="margin-top:0.875rem; font-size:0.875rem"><strong>Important:</strong> Under Devices, "Spa Mode" must be toggled on — not just "Spa Heater."</p>
           </div>
@@ -232,7 +247,7 @@
       </div>
     </section>
 
-    <!-- ── 3. House Rules ── -->
+    <!-- ── 5. House Rules ── -->
     <section class="pad-section" id="rules">
       <h2 class="pad-section-title">House Rules</h2>
       <div class="acc-list">
@@ -305,121 +320,255 @@
       </div>
     </section>
 
-    <!-- ── 4. WiFi & Tech ── -->
-    <section class="pad-section" id="wifi">
-      <h2 class="pad-section-title">WiFi &amp; Tech</h2>
-
-      <div class="info-grid">
-        <div class="info-card">
-          <span class="info-label">WiFi Network</span>
-          <span class="info-value" id="pad-wifi-name">NSB Retreat</span>
-        </div>
-        <div class="info-card copyable" id="pad-wifi-pass-card">
-          <span class="info-label">WiFi Password</span>
-          <span class="info-value" id="pad-wifi-pass">seashells815!</span>
-          <span class="info-hint">Tap to copy</span>
-        </div>
-      </div>
-
-      <div class="acc-list">
-        <div class="acc-item">
-          <button class="acc-trigger">Smart TVs &amp; Streaming</button>
-          <div class="acc-body">
-            <p>Every bedroom and living space has a Smart TV. Netflix, Hulu, YouTube TV, and more are available to download. <strong>Sign in with your own account.</strong> Please sign out before you check out.</p>
-          </div>
-        </div>
-        <div class="acc-item">
-          <button class="acc-trigger">Pool &amp; Spa Controls (Tablet)</button>
-          <div class="acc-body">
-            <p>The hot tub, bubbles, and pool/spa lights are also controllable from the <strong>tablet mounted on the wall in the kitchen</strong>. Tap <strong>Pool &amp; Spa</strong> in the menu for live controls and full instructions.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ── 6. Local Guide ── -->
     <section class="pad-section" id="local">
       <h2 class="pad-section-title">Local Guide</h2>
-      <div class="local-grid">
+      <div class="local-filter-tabs">
+        <button class="filter-btn active" data-filter="eat">Eat</button>
+        <button class="filter-btn" data-filter="drink">Drink</button>
+        <button class="filter-btn" data-filter="see">See</button>
+        <button class="filter-btn" data-filter="do">Do</button>
+        <button class="filter-btn" data-filter="coffee">Coffee</button>
+        <button class="filter-btn" data-filter="essentials">Essentials</button>
+        <button class="filter-btn" data-filter="">All</button>
+      </div>
 
-        <!-- Eat -->
-        <div class="local-card">
-          <span class="local-card-tag">Eat · On the Beach</span>
-          <h3 class="local-card-name">The Breakers</h3>
-          <p class="local-card-desc">Beachfront dining with burgers, seafood, and ocean views. Possibly the best burger in Central Florida.</p>
-          <a href="https://maps.google.com/?q=The+Breakers+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
-        </div>
-        <div class="local-card">
-          <span class="local-card-tag">Eat · Italian</span>
-          <h3 class="local-card-name">The Garlic</h3>
-          <p class="local-card-desc">Rustic Italian with lush garden seating, wood-fired pizza, and an extensive wine list.</p>
-          <a href="https://maps.google.com/?q=The+Garlic+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
-        </div>
-        <div class="local-card">
-          <span class="local-card-tag">Eat · Waterfront</span>
-          <h3 class="local-card-name">Outriggers Tiki Bar &amp; Grille</h3>
-          <p class="local-card-desc">Waterfront tiki bar with marina views, seafood, and tropical cocktails.</p>
-          <a href="https://maps.google.com/?q=Outriggers+Tiki+Bar+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
-        </div>
-        <div class="local-card">
-          <span class="local-card-tag">Eat · Elevated</span>
-          <h3 class="local-card-name">The Spott</h3>
-          <p class="local-card-desc">Fresh fish, Black Angus steaks, speakeasy bar upstairs. Reserve in advance.</p>
-          <a href="https://maps.google.com/?q=The+Spott+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
+      <div class="local-guide-cards" id="local-guide-cards">
+
+        <div class="place-card" data-category="eat">
+          <img src="../assets/photos/local-breakers.jpg" alt="The Breakers" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Casual · On the Beach</span>
+            <h3>The Breakers</h3>
+            <p>Beachfront dining with burgers, seafood, and ocean views. Possibly the best burger in Central Florida.</p>
+            <a href="https://maps.google.com/?q=The+Breakers+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
         </div>
 
-        <!-- Drink -->
-        <div class="local-card">
-          <span class="local-card-tag">Drink · Nightlife</span>
-          <h3 class="local-card-name">Flagler Tavern</h3>
-          <p class="local-card-desc">Vibrant nightlife, extensive drink menu, and live entertainment on Flagler Ave.</p>
-          <a href="https://maps.google.com/?q=Flagler+Tavern+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
-        </div>
-        <div class="local-card">
-          <span class="local-card-tag">Drink · Beachfront</span>
-          <h3 class="local-card-name">Toni &amp; Joe's Patio</h3>
-          <p class="local-card-desc">Beachfront bar with live music and a diverse selection of drinks.</p>
-          <a href="https://maps.google.com/?q=Toni+and+Joes+Patio+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
+        <div class="place-card" data-category="eat">
+          <img src="../assets/photos/local-garlic.jpg" alt="The Garlic" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Casual · Lively</span>
+            <h3>The Garlic</h3>
+            <p>Rustic Italian with lush garden seating, wood-fired pizza, and an extensive wine list.</p>
+            <a href="https://maps.google.com/?q=The+Garlic+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
         </div>
 
-        <!-- Coffee -->
-        <div class="local-card">
-          <span class="local-card-tag">Coffee · Outdoor</span>
-          <h3 class="local-card-name">Luma</h3>
-          <p class="local-card-desc">Beautiful outdoor bohemian vibe with coffee, teas, juices, and even beers &amp; wines.</p>
-          <a href="https://maps.google.com/?q=Luma+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
-        </div>
-        <div class="local-card">
-          <span class="local-card-tag">Coffee · Specialty</span>
-          <h3 class="local-card-name">Island Roasters Coffee Co.</h3>
-          <p class="local-card-desc">Freshly roasted beans and specialty drinks. Their beans are in our espresso machine.</p>
-          <a href="https://maps.google.com/?q=Island+Roasters+Coffee+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
-        </div>
-        <div class="local-card">
-          <span class="local-card-tag">Coffee · Artisanal</span>
-          <h3 class="local-card-name">Third Wave Café</h3>
-          <p class="local-card-desc">Artisanal coffee and wine selection in a cozy setting with exceptional food.</p>
-          <a href="https://maps.google.com/?q=Third+Wave+Cafe+New+Smyrna+Beach" target="_blank" class="local-card-link">Directions →</a>
+        <div class="place-card" data-category="eat">
+          <img src="../assets/photos/local-outriggers.jpg" alt="Outriggers" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Casual · Waterfront</span>
+            <h3>Outriggers Tiki Bar &amp; Grille</h3>
+            <p>Waterfront tiki bar with marina views, seafood, and tropical cocktails. Perfect sunset spot.</p>
+            <a href="https://maps.google.com/?q=Outriggers+Tiki+Bar+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
         </div>
 
-        <!-- Essentials -->
-        <div class="local-card">
-          <span class="local-card-tag">Grocery · 1.2 mi</span>
-          <h3 class="local-card-name">Publix</h3>
-          <p class="local-card-desc">Full grocery, fresh seafood, bakery, and pharmacy.</p>
-          <a href="https://maps.google.com/?q=Publix+New+Smyrna+Beach+FL" target="_blank" class="local-card-link">Directions →</a>
+        <div class="place-card" data-category="eat">
+          <img src="../assets/photos/local-spott.jpg" alt="The Spott" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Elevated Dining</span>
+            <h3>The Spott</h3>
+            <p>Fresh fish, Black Angus steaks, and a speakeasy bar upstairs. Reserve in advance — highly recommended.</p>
+            <a href="https://maps.google.com/?q=The+Spott+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
         </div>
-        <div class="local-card">
-          <span class="local-card-tag">Pharmacy · 0.8 mi</span>
-          <h3 class="local-card-name">Walgreens</h3>
-          <p class="local-card-desc">Pharmacy, OTC meds, snacks, and late hours.</p>
-          <a href="https://maps.google.com/?q=Walgreens+New+Smyrna+Beach+FL" target="_blank" class="local-card-link">Directions →</a>
+
+        <div class="place-card" data-category="see">
+          <img src="../assets/photos/flagler.jpg" alt="Flagler Avenue" loading="lazy">
+          <div class="place-card-body">
+            <span class="place-tag">Shopping · Beach Access</span>
+            <h3>Flagler Avenue</h3>
+            <p>The heart of NSB — local shops, restaurants, festivals, and direct beach access.</p>
+            <a href="https://maps.google.com/?q=Flagler+Ave+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
         </div>
-        <div class="local-card">
-          <span class="local-card-tag">Grocery · 5 mi</span>
-          <h3 class="local-card-name">Walmart Supercenter</h3>
-          <p class="local-card-desc">Groceries, household goods, beach gear, and more at the lowest prices.</p>
-          <a href="https://maps.google.com/?q=Walmart+New+Smyrna+Beach+FL" target="_blank" class="local-card-link">Directions →</a>
+
+        <div class="place-card" data-category="see">
+          <img src="../assets/photos/dunes.jpg" alt="Smyrna Dunes Park" loading="lazy">
+          <div class="place-card-body">
+            <span class="place-tag">Nature · Dog Friendly</span>
+            <h3>Smyrna Dunes Park</h3>
+            <p>184-acre park with a boardwalk, nature trails, wildlife observation, and stunning Ponce Inlet views.</p>
+            <a href="https://maps.google.com/?q=Smyrna+Dunes+Park+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="see">
+          <img src="../assets/photos/canal.jpg" alt="Canal Street" loading="lazy">
+          <div class="place-card-body">
+            <span class="place-tag">Historic · Culture</span>
+            <h3>Canal Street Historic District</h3>
+            <p>Across the causeway — art galleries, local eateries, historic architecture, and community events.</p>
+            <a href="https://maps.google.com/?q=Canal+Street+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="drink">
+          <img src="../assets/photos/local-flagler-tavern.jpg" alt="Flagler Tavern" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Bar · Nightlife</span>
+            <h3>Flagler Tavern</h3>
+            <p>Known for its vibrant nightlife, extensive drink menu, and live entertainment.</p>
+            <a href="https://maps.google.com/?q=Flagler+Tavern+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="drink">
+          <img src="../assets/photos/local-traders.jpg" alt="Traders Sports Bar" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Sports Bar · Casual</span>
+            <h3>Traders Sports Bar</h3>
+            <p>A lively sports bar with a wide selection of beers, cocktails, and pub food.</p>
+            <a href="https://maps.google.com/?q=Traders+Sports+Bar+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="drink">
+          <img src="../assets/photos/local-ciao-bella.jpg" alt="Ciao Bella" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Italian · Martini Bar</span>
+            <h3>Ciao Bella Italian Restaurant</h3>
+            <p>This Italian restaurant has an extensive martini and wine selection.</p>
+            <a href="https://maps.google.com/?q=Ciao+Bella+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="drink">
+          <img src="../assets/photos/local-toni-joes.jpg" alt="Toni &amp; Joe's Patio" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Beachfront Bar · Live Music</span>
+            <h3>Toni &amp; Joe's Patio</h3>
+            <p>This beachfront bar offers a lively atmosphere with live music and a diverse selection of drinks.</p>
+            <a href="https://maps.google.com/?q=Toni+and+Joes+Patio+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="do">
+          <img src="../assets/photos/local-surfing.jpg" alt="Surf Lessons" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Water Sport · All Levels</span>
+            <h3>Surf Lessons</h3>
+            <p>NSB is one of Florida's best surf spots. Local schools offer beginner-friendly lessons right on the beach.</p>
+            <a href="https://maps.google.com/?q=surf+lessons+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Find a School</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="do">
+          <img src="../assets/photos/dunes.jpg" alt="Smyrna Dunes Park" loading="lazy">
+          <div class="place-card-body">
+            <span class="place-tag">Nature · Active</span>
+            <h3>Smyrna Dunes Park</h3>
+            <p>Walk or bike the 1.5-mile boardwalk through dunes, maritime hammock, and around Ponce Inlet. Dog-friendly.</p>
+            <a href="https://maps.google.com/?q=Smyrna+Dunes+Park" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="do">
+          <img src="../assets/photos/local-kayak.jpg" alt="Kayaking &amp; Paddleboard" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Water Sport · Rental</span>
+            <h3>Kayaking &amp; Paddleboarding</h3>
+            <p>Rent kayaks or SUPs from several local outfitters and explore the Indian River Lagoon or inshore waterways.</p>
+            <a href="https://maps.google.com/?q=kayak+rental+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Find Rentals</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-luma.jpg" alt="Luma" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Café · Outdoor · Beachy</span>
+            <h3>Luma</h3>
+            <p>Beautiful outdoor, beachy, bohemian vibe with coffee, teas, juices, food, and even beers &amp; wines. A must-visit to relax and unwind.</p>
+            <a href="https://maps.google.com/?q=Luma+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-third-wave.jpg" alt="Third Wave Café" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Artisanal Coffee · Outdoor Dining</span>
+            <h3>Third Wave Café</h3>
+            <p>Artisanal coffee and an extensive wine selection in a cozy atmosphere, attached to a restaurant with exceptional food and a beautiful outdoor venue.</p>
+            <a href="https://maps.google.com/?q=Third+Wave+Cafe+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-island-roasters.jpg" alt="Island Roasters Coffee Co." loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Coffee Roaster · Specialty</span>
+            <h3>Island Roasters Coffee Co.</h3>
+            <p>Freshly roasted coffee beans and specialty drinks in a relaxed setting. Their beans are available at many restaurants and cafés in the area.</p>
+            <a href="https://maps.google.com/?q=Island+Roasters+Coffee+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-bakers-table.jpg" alt="The Bakers Table" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Café · Bakery</span>
+            <h3>The Bakers Table</h3>
+            <p>A café and bakery known for freshly baked goods and excellent coffee. A bit further away but worth the trip.</p>
+            <a href="https://maps.google.com/?q=The+Bakers+Table+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-hub-canal.jpg" alt="The Hub on Canal" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Gallery · Café · Canal Street</span>
+            <h3>The Hub on Canal</h3>
+            <p>A community-focused art gallery and coffee shop offering artisanal coffee across the causeway in the historic Canal Street area.</p>
+            <a href="https://maps.google.com/?q=The+Hub+on+Canal+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="coffee">
+          <img src="../assets/photos/local-wake-up.jpg" alt="Wake Up Café" loading="lazy" onerror="this.style.display='none'">
+          <div class="place-card-body">
+            <span class="place-tag">Café · Local Favorite</span>
+            <h3>Wake Up Café</h3>
+            <p>A local favorite known for its cozy atmosphere and superb coffee selection, including specialty brews and espresso drinks.</p>
+            <a href="https://maps.google.com/?q=Wake+Up+Cafe+New+Smyrna+Beach" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="essentials">
+          <div class="place-card-body">
+            <span class="place-tag">Grocery · 1.2 mi</span>
+            <h3>Publix Super Market</h3>
+            <p>Full grocery, fresh seafood, bakery, and pharmacy.</p>
+            <a href="https://maps.google.com/?q=Publix+New+Smyrna+Beach+FL" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="essentials">
+          <div class="place-card-body">
+            <span class="place-tag">Pharmacy · 0.8 mi</span>
+            <h3>Walgreens</h3>
+            <p>Pharmacy, OTC meds, snacks, and late hours.</p>
+            <a href="https://maps.google.com/?q=Walgreens+New+Smyrna+Beach+FL" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="essentials">
+          <div class="place-card-body">
+            <span class="place-tag">Pharmacy · 1.5 mi</span>
+            <h3>CVS Pharmacy</h3>
+            <p>Pharmacy and health essentials.</p>
+            <a href="https://maps.google.com/?q=CVS+New+Smyrna+Beach+FL" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
+        </div>
+
+        <div class="place-card" data-category="essentials">
+          <div class="place-card-body">
+            <span class="place-tag">Grocery · 5 mi</span>
+            <h3>Walmart Supercenter</h3>
+            <p>Groceries, household goods, beach gear, and more.</p>
+            <a href="https://maps.google.com/?q=Walmart+New+Smyrna+Beach+FL" target="_blank" class="place-directions btn btn-outline">Directions</a>
+          </div>
         </div>
 
       </div>

@@ -25,6 +25,29 @@
   });
 })();
 
+// ── Local Guide Filter ─────────────────────────────────────────────────────
+(function initFilter() {
+  var btns  = document.querySelectorAll('.filter-btn');
+  var cards = document.querySelectorAll('.place-card');
+
+  function applyFilter(f) {
+    cards.forEach(function(c) {
+      c.style.display = (!f || c.dataset.category === f) ? '' : 'none';
+    });
+  }
+
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      applyFilter(btn.dataset.filter);
+    });
+  });
+
+  var activeBtn = document.querySelector('.filter-btn.active');
+  if (activeBtn) applyFilter(activeBtn.dataset.filter);
+})();
+
 // ── Accordion ──────────────────────────────────────────────────────────────
 (function initAccordion() {
   document.querySelectorAll('.acc-trigger').forEach(function(trigger) {
