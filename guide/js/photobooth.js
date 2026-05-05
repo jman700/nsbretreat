@@ -2,6 +2,35 @@
 (function () {
   'use strict';
 
+  // ── CSS injection ──────────────────────────────────────
+  (function () {
+    var style = document.createElement('style');
+    style.textContent = [
+      '.pb-countdown {',
+      '  display: none;',
+      '  position: absolute;',
+      '  inset: 0;',
+      '  align-items: center;',
+      '  justify-content: center;',
+      '  font-size: 6rem;',
+      '  font-weight: 700;',
+      '  color: white;',
+      '  text-shadow: 0 2px 24px rgba(0,0,0,0.7);',
+      '  z-index: 10;',
+      '  pointer-events: none;',
+      '  background: rgba(0,0,0,0.15);',
+      '}',
+      '.pb-countdown.active {',
+      '  display: flex;',
+      '}',
+      '.pb-icon-btn.active {',
+      '  color: var(--accent, #b8967e);',
+      '  opacity: 1;',
+      '}'
+    ].join('\n');
+    document.head.appendChild(style);
+  })();
+
   var section = document.getElementById('pb-section');
   if (!section) return;
 
@@ -9,10 +38,12 @@
   var OUT_W = 900, OUT_H = 1200;
 
   // ── State ──────────────────────────────────────────────
-  var facing       = 'environment'; // rear camera default
-  var stream       = null;
-  var activeFrame  = 'minimal';
-  var resultBlob   = null;
+  var facing         = 'environment'; // rear camera default
+  var stream         = null;
+  var activeFrame    = 'minimal';
+  var resultBlob     = null;
+  var timerActive    = false;
+  var countdownTimer = null;
 
   // ── Supabase (background upload, silent) ───────────────
   var pbSb = (typeof supabase !== 'undefined')
@@ -178,8 +209,21 @@
   var canvas    = document.getElementById('pb-canvas');
   var resultImg = document.getElementById('pb-result-img');
 
+  // ── Countdown helpers ──────────────────────────────────
+  function cancelCountdown() {
+    if (countdownTimer !== null) {
+      clearTimeout(countdownTimer);
+      countdownTimer = null;
+    }
+    var cd = document.getElementById('pb-countdown');
+    if (cd) { cd.textContent = ''; cd.classList.remove('active'); }
+    var btn = document.getElementById('pb-capture-btn');
+    if (btn) { btn.disabled = false; }
+  }
+
   // ── Screen transitions ─────────────────────────────────
   function showStart() {
+    cancelCountdown();
     elStart.style.display   = '';
     elCamera.style.display  = 'none';
     elPreview.style.display = 'none';
@@ -191,6 +235,7 @@
     elPreview.style.display = 'none';
   }
   function showPreview() {
+    cancelCountdown();
     elStart.style.display   = 'none';
     elCamera.style.display  = 'none';
     elPreview.style.display = '';
@@ -351,7 +396,38 @@
     startCamera();
   });
 
-  document.getElementById('pb-capture-btn').addEventListener('click', capture);
+  document.getElementById('pb-timer-btn').addEventListener('click', function () {
+    timerActive = !timerActive;
+    this.classList.toggle('active', timerActive);
+  });
+
+  document.getElementById('pb-capture-btn').addEventListener('click', function () {
+    if (countdownTimer !== null) {
+      // Cancel in-progress countdown
+      cancelCountdown();
+      return;
+    }
+    if (!timerActive) {
+      capture();
+      return;
+    }
+    // Start 3-2-1 countdown
+    var cd = document.getElementById('pb-countdown');
+    var count = 3;
+    cd.textContent = count;
+    cd.classList.add('active');
+    function tick() {
+      count--;
+      if (count <= 0) {
+        cancelCountdown();
+        capture();
+      } else {
+        cd.textContent = count;
+        countdownTimer = setTimeout(tick, 1000);
+      }
+    }
+    countdownTimer = setTimeout(tick, 1000);
+  });
 
   document.getElementById('pb-retake-btn').addEventListener('click', function () {
     showCamera();
