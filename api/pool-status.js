@@ -158,7 +158,6 @@ export default async function handler(req, res) {
         await sb.from('spa_timer').delete().eq('id', TIMER_ROW_ID);
         try {
           await deviceRequest(auth, 'set_spa_heater', {});
-          await deviceRequest(auth, 'set_spillover',  {});
           status.spa_heater = 'off';
           console.log('[pool-status] spa timer expired — auto-off sent');
         } catch (offErr) {

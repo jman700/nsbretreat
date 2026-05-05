@@ -185,7 +185,12 @@
     if (heaterStop) heaterStop.disabled = !s.online;
     btnPoolLight.disabled = !s.online;
     slider.disabled       = !s.online;
-    if (btnSpaJets) btnSpaJets.disabled = !s.online;
+    // Spa jets only allowed while heater is on
+    if (btnSpaJets) {
+      var jetsAllowed = s.online && s.spa_heater === 'on';
+      btnSpaJets.disabled = !jetsAllowed;
+      btnSpaJets.title    = jetsAllowed ? '' : 'Start the hot tub heater first';
+    }
 
     Object.assign(state, s);
   }
@@ -369,14 +374,10 @@
       body: JSON.stringify({ hours: hours, source: 'pad' }),
     }).catch(function(e) { console.error('spa-timer POST failed:', e); });
 
-    // 2. Send hardware commands
+    // 2. Send hardware command
     sendCommand('spa_heater', 'on', function() {
-      sendCommand('spa_mode', 'on', function() {
-        heaterDurBtns.forEach(function(b) { b.disabled = false; });
-        showToast('Spa heater on — ' + hours + ' hr timer started', 2500);
-      }, function() {
-        heaterDurBtns.forEach(function(b) { b.disabled = false; });
-      });
+      heaterDurBtns.forEach(function(b) { b.disabled = false; });
+      showToast('Spa heater on — ' + hours + ' hr timer started', 2500);
     }, function() {
       // Heater command failed — clear optimistic UI and delete timer
       showHeaterOff();
@@ -392,10 +393,8 @@
     // 1. Clear timer in Supabase
     fetch('/api/spa-timer', { method: 'DELETE' })
       .catch(function(e) { console.error('spa-timer DELETE failed:', e); });
-    // 2. Send hardware commands
-    sendCommand('spa_heater', 'off', function() {
-      sendCommand('spa_mode', 'off');
-    });
+    // 2. Send hardware command
+    sendCommand('spa_heater', 'off');
   }
 
   // updateHeaterFromAPI — driven by pool-status response (endTime is server-provided)
