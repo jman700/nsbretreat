@@ -111,11 +111,12 @@
       polaroid: [
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">',
           '<defs>',
-            // Paper texture filter — subtle fractal noise on white areas
+            // Paper texture filter — only applied to white frame areas, not photo opening
             '<filter id="pol-paper" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">',
-              '<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="3" stitchTiles="stitch" result="noise"/>',
-              '<feColorMatrix in="noise" type="matrix" values="0.07 0 0 0 0.93  0 0.07 0 0 0.93  0 0 0.07 0 0.93  0 0 0 1 0" result="tex"/>',
-              '<feBlend in="SourceGraphic" in2="tex" mode="multiply"/>',
+              '<feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" seed="3" stitchTiles="stitch" result="noise"/>',
+              '<feColorMatrix in="noise" type="matrix" values="0.18 0 0 0 0.82  0 0.18 0 0 0.82  0 0 0.18 0 0.82  0 0 0 1 0" result="tex"/>',
+              '<feBlend in="SourceGraphic" in2="tex" mode="multiply" result="blended"/>',
+              '<feComposite in="blended" in2="SourceGraphic" operator="in"/>',
             '</filter>',
             // Inset shadow gradients
             '<linearGradient id="pol-st" x1="0" y1="0" x2="0" y2="1">',
