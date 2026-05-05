@@ -112,13 +112,18 @@ export default async function handler(req, res) {
         status.spa_jets = parseInt(auxStates[AUX_JETS], 10) > 0 ? 'on' : 'off';
       }
 
-      // Pool Light — aux_2; state > 1 encodes color mode index
+      // Pool Light — aux_2; state value = Jandy ColorLogic index (1–14)
       if (AUX_LIGHT in auxStates) {
         const lightVal = parseInt(auxStates[AUX_LIGHT], 10);
         status.pool_light = lightVal > 0 ? 'on' : 'off';
-        if (lightVal > 1) {
-          const colorMap = { 2: 'blue', 3: 'green', 4: 'red', 5: 'white', 6: 'magenta', 7: 'party' };
-          status.pool_light_color = colorMap[lightVal] || 'white';
+        if (lightVal >= 1) {
+          const colorMap = {
+             1: 'alpine_white',  2: 'sky_blue',    3: 'cobalt_blue',  4: 'caribbean_blue',
+             5: 'spring_green',  6: 'emerald_green', 7: 'emerald_rose', 8: 'magenta',
+             9: 'violet',       10: 'slow_splash',  11: 'fast_splash', 12: 'america',
+            13: 'fat_tuesday',  14: 'disco_tech',
+          };
+          status.pool_light_color = colorMap[lightVal] || 'alpine_white';
         }
       }
     } catch (devErr) {

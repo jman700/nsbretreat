@@ -9,13 +9,22 @@ import { authenticate, deviceRequest } from './_iaqualink.js';
 const AUX_LIGHT_NUM = '2';  // aux_2 = Pool Light
 const AUX_JETS_NUM  = '1';  // aux_1 = Air Blower
 
+// Jandy ColorLogic color indices (confirmed subtype 4 from get_devices aux_2)
 const LIGHT_COLOR_INDEX = {
-  white:   1,
-  blue:    2,
-  green:   3,
-  red:     4,
-  magenta: 6,
-  party:   7,
+  alpine_white:   1,
+  sky_blue:       2,
+  cobalt_blue:    3,
+  caribbean_blue: 4,
+  spring_green:   5,
+  emerald_green:  6,
+  emerald_rose:   7,
+  magenta:        8,
+  violet:         9,
+  slow_splash:   10,
+  fast_splash:   11,
+  america:       12,
+  fat_tuesday:   13,
+  disco_tech:    14,
 };
 
 // Server-side command whitelist — pool pump is intentionally excluded.
@@ -65,7 +74,7 @@ function translateCommand(command, value) {
       // set_light with aux slot, effect index, and subtype 1 (IntelliBrite/generic color)
       return {
         iaqualinkCommand: 'set_light',
-        extraParams: { aux: AUX_LIGHT_NUM, light: idx, subtype: 1 },
+        extraParams: { aux: AUX_LIGHT_NUM, light: idx, subtype: 4 }, // 4 = Jandy ColorLogic
       };
     }
 

@@ -427,6 +427,22 @@ input[type="range"].pool-slider {
 .color-swatch.active { border-color: var(--charcoal, #2c2c2c); }
 .color-swatch.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
 
+/* Jandy ColorLogic swatches */
+.swatch-alpine-white   { background: #cceeff; border-color: #aaddee; }
+.swatch-sky-blue       { background: #7ec8e3; }
+.swatch-cobalt-blue    { background: #1a5eb8; }
+.swatch-caribbean-blue { background: linear-gradient(135deg, #00bcd4, #1565c0); }
+.swatch-spring-green   { background: #33d966; }
+.swatch-emerald-green  { background: #00a550; }
+.swatch-emerald-rose   { background: linear-gradient(135deg, #00c9a0, #e040a0); }
+.swatch-magenta        { background: #d920a0; }
+.swatch-violet         { background: #9b30c8; }
+.swatch-slow-splash    { background: linear-gradient(135deg, #9c27b0, #2196f3, #4caf50); }
+.swatch-fast-splash    { background: linear-gradient(135deg, #f44336, #9c27b0, #2196f3, #4caf50); }
+.swatch-america        { background: linear-gradient(135deg, #b22234 33%, #fff 33% 66%, #3c3b6e 66%); }
+.swatch-fat-tuesday    { background: linear-gradient(135deg, #7b1fa2, #388e3c, #f9a825); }
+.swatch-disco-tech     { background: linear-gradient(135deg, #4caf50, #2196f3, #fff, #e91e63); }
+
 /* ── Spa Heater Timer Controls ── */
 .heater-controls {
   display: flex;
@@ -486,13 +502,6 @@ input[type="range"].pool-slider {
 }
 .heater-stop-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-/* Swatch colors */
-.swatch-white   { background: #f0f0f0; border-color: #ccc; }
-.swatch-blue    { background: #2196f3; }
-.swatch-green   { background: #4caf50; }
-.swatch-red     { background: #f44336; }
-.swatch-magenta { background: #e91e99; }
-.swatch-party   { background: linear-gradient(135deg, #f44336, #9c27b0, #2196f3, #4caf50); }
 
 /* Pool pump read-only status */
 .pool-pump-status {
