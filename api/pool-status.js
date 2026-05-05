@@ -53,8 +53,10 @@ function parseHomeScreen(homeScreenArray) {
     if (mapped === 'pool_temp' || mapped === 'spa_temp' || mapped === 'spa_set_point' || mapped === 'pool_set_point') {
       result[mapped] = parseInt(val, 10) || null;
     } else {
-      // "0" = off, "1" = on; some return "true"/"false"
-      result[mapped] = (val === '1' || val === 'true' || val === 'on') ? 'on' : 'off';
+      // "0" = off; "1"/"true"/"on" = on; numeric > 0 (e.g. "3" = RS-4 heating mode) = on
+      const numVal = parseInt(val, 10);
+      result[mapped] = (val === '1' || val === 'true' || val === 'on' || (!isNaN(numVal) && numVal > 0))
+        ? 'on' : 'off';
     }
   }
 
@@ -92,6 +94,16 @@ export default async function handler(req, res) {
     }
 
     const status = parseHomeScreen(homeScreen);
+
+    // Probe get_devices to find relay/aux key names for light & jets mapping.
+    // Remove once relay keys are confirmed and added to FIELD_MAP.
+    try {
+      const devData = await deviceRequest(auth, 'get_devices');
+      status._devices_raw = devData;
+    } catch (devErr) {
+      status._devices_raw = { error: devErr.message };
+    }
+
     return res.status(200).json(status);
 
   } catch (err) {
