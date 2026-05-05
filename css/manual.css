@@ -1200,15 +1200,23 @@
   text-transform: uppercase;
 }
 .bc-fc-icon { display: flex; justify-content: center; align-items: center; margin: 0.2rem 0; }
-.bc-fc-temps { display: flex; gap: 2px; align-items: baseline; }
+.bc-fc-temps { display: flex; flex-direction: column; gap: 0.05rem; align-items: flex-start; }
+.bc-fc-temp-row { display: flex; align-items: baseline; gap: 3px; }
+.bc-fc-temp-lbl {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--charcoal-lighter);
+  text-transform: uppercase;
+}
 .bc-fc-hi {
   font-family: var(--font-serif);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--charcoal);
 }
-.bc-fc-lo { font-size: 0.75rem; color: var(--charcoal-light); }
-.bc-fc-rain { font-size: 0.65rem; color: #4a8aaa; }
+.bc-fc-lo { font-size: 0.85rem; color: var(--charcoal-light); }
+.bc-fc-rain { display: flex; align-items: center; gap: 2px; font-size: 0.65rem; color: #4a8aaa; }
 .bc-fc-wind { font-size: 0.65rem; color: var(--charcoal-light); }
 
 /* ── Action Cards (Flags & Cam) ── */

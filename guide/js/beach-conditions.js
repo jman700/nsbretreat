@@ -13,10 +13,12 @@
     '.bc-forecast-day{flex:0 0 auto;min-width:70px;background:var(--blush,#f9ece8);border:1px solid var(--tan,#d4c4b0);border-radius:var(--radius-sm,8px);padding:.625rem .5rem;display:flex;flex-direction:column;align-items:center;gap:.2rem;text-align:center}' +
     '.bc-fc-day{font-size:.62rem;font-weight:600;letter-spacing:.08em;color:var(--charcoal-lighter,#9a918c);text-transform:uppercase}' +
     '.bc-fc-icon{display:flex;justify-content:center;align-items:center;margin:.2rem 0}' +
-    '.bc-fc-temps{display:flex;gap:2px;align-items:baseline}' +
-    '.bc-fc-hi{font-size:.95rem;font-weight:600;color:var(--charcoal,#2d2926)}' +
-    '.bc-fc-lo{font-size:.75rem;color:var(--charcoal-light,#6b6460)}' +
-    '.bc-fc-rain{font-size:.65rem;color:#4a8aaa}' +
+    '.bc-fc-temps{display:flex;flex-direction:column;gap:.05rem;align-items:flex-start}' +
+    '.bc-fc-temp-row{display:flex;align-items:baseline;gap:3px}' +
+    '.bc-fc-temp-lbl{font-size:.5rem;font-weight:700;letter-spacing:.05em;color:var(--charcoal-lighter,#9a918c);text-transform:uppercase}' +
+    '.bc-fc-hi{font-size:.9rem;font-weight:600;color:var(--charcoal,#2d2926)}' +
+    '.bc-fc-lo{font-size:.85rem;color:var(--charcoal-light,#6b6460)}' +
+    '.bc-fc-rain{display:flex;align-items:center;gap:2px;font-size:.65rem;color:#4a8aaa}' +
     '.bc-fc-wind{font-size:.65rem;color:var(--charcoal-light,#6b6460)}' +
     // ── Section label ──
     '.bc-section-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--charcoal-light,#6b6460);margin:.875rem 0 .5rem}' +
@@ -197,13 +199,17 @@
       var precip = daily.precipitation_probability_max ? daily.precipitation_probability_max[i] : 0;
       var wind = daily.wind_speed_10m_max ? Math.round(daily.wind_speed_10m_max[i]) : '—';
       var dayLabel = i === 0 ? 'Today' : days[new Date(Date.now() + i * 86400000).getDay()];
-      var rainHTML = (precip > 0) ? '<span class="bc-fc-rain">💧 ' + precip + '%</span>' : '';
+      var dropletSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>';
+      var rainHTML = (precip > 0) ? '<span class="bc-fc-rain">' + dropletSVG + precip + '%</span>' : '';
       var card = document.createElement('div');
       card.className = 'bc-forecast-day';
       card.innerHTML =
         '<span class="bc-fc-day">' + dayLabel + '</span>' +
         '<span class="bc-fc-icon">' + wmoIcon(code) + '</span>' +
-        '<span class="bc-fc-temps"><span class="bc-fc-hi">' + hiF + '°</span><span class="bc-fc-lo">' + loF + '°</span></span>' +
+        '<div class="bc-fc-temps">' +
+          '<div class="bc-fc-temp-row"><span class="bc-fc-temp-lbl">H</span><span class="bc-fc-hi">' + hiF + '°</span></div>' +
+          '<div class="bc-fc-temp-row"><span class="bc-fc-temp-lbl">L</span><span class="bc-fc-lo">' + loF + '°</span></div>' +
+        '</div>' +
         rainHTML +
         '<span class="bc-fc-wind">' + wind + ' mph</span>';
       strip.appendChild(card);
