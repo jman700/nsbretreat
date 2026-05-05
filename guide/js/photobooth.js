@@ -88,24 +88,30 @@
         '</svg>'
       ].join(''),
 
-      // Retro / Polaroid
+      // Retro / Polaroid — authentic proportions
+      // Real Polaroid: thin top/sides (~6%), thick bottom (~25% of total height)
+      // Cream/off-white border, clean sans-serif, subtle hairline at photo edge
       polaroid: [
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">',
-          // Borders — top
-          '<rect x="0" y="0" width="900" height="54" fill="white" opacity="0.96"/>',
-          // Borders — sides
-          '<rect x="0" y="0" width="54" height="1200" fill="white" opacity="0.96"/>',
-          '<rect x="846" y="0" width="54" height="1200" fill="white" opacity="0.96"/>',
-          // Thick bottom caption strip
-          '<rect x="0" y="1008" width="900" height="192" fill="white" opacity="0.96"/>',
-          // Divider line above caption
-          '<line x1="80" y1="1020" x2="820" y2="1020" stroke="#e0d6d0" stroke-width="1"/>',
-          // Hole at top center
-          '<circle cx="450" cy="27" r="8" fill="#ddd4cc" opacity="0.65"/>',
-          // Caption text
-          '<text x="450" y="1088" text-anchor="middle" fill="#1a1008" font-family="Georgia,serif" font-size="44" letter-spacing="2">The NSB Retreat</text>',
-          '<text x="450" y="1124" text-anchor="middle" fill="#6a4a30" font-family="Georgia,serif" font-size="22" letter-spacing="2" font-style="italic">New Smyrna Beach, FL</text>',
-          '<text x="450" y="1158" text-anchor="middle" fill="#8a6a50" font-family="Arial,sans-serif" font-size="24" letter-spacing="2">@thensbretreat</text>',
+          // Outer card edge — very slightly warm gray to look like plastic casing
+          '<rect x="0" y="0" width="900" height="1200" fill="#e8e2da"/>',
+          // Main cream body
+          '<rect x="6" y="6" width="888" height="1188" fill="#fdf9f3"/>',
+          // Top border (thin ~48px)
+          '<rect x="6" y="6" width="888" height="48" fill="#fdf9f3"/>',
+          // Side borders (thin ~56px each)
+          '<rect x="6" y="6" width="56" height="892" fill="#fdf9f3"/>',
+          '<rect x="838" y="6" width="56" height="892" fill="#fdf9f3"/>',
+          // Thick bottom caption strip (~300px, ~25% of 1200)
+          '<rect x="6" y="898" width="888" height="296" fill="#fdf9f3"/>',
+          // Very subtle inner shadow at top of caption strip
+          '<rect x="62" y="898" width="776" height="3" fill="rgba(0,0,0,0.07)"/>',
+          // Hairline separator
+          '<line x1="62" y1="901" x2="838" y2="901" stroke="#ddd5c8" stroke-width="1"/>',
+          // Caption text — clean, physical feel
+          '<text x="450" y="1000" text-anchor="middle" fill="#1c1510" font-family="Helvetica Neue,Arial,sans-serif" font-size="44" font-weight="300" letter-spacing="3">The NSB Retreat</text>',
+          '<text x="450" y="1052" text-anchor="middle" fill="#6a5a4a" font-family="Helvetica Neue,Arial,sans-serif" font-size="24" font-weight="300" letter-spacing="2" font-style="italic">New Smyrna Beach, FL</text>',
+          '<text x="450" y="1098" text-anchor="middle" fill="#9a8a7a" font-family="Helvetica Neue,Arial,sans-serif" font-size="22" font-weight="300" letter-spacing="3">@thensbretreat</text>',
         '</svg>'
       ].join('')
     };
@@ -237,30 +243,27 @@
     } catch (e) {}
   }
 
-  // ── Download ───────────────────────────────────────────
-  function downloadPhoto() {
+  // ── Native share sheet (iOS/Android) or fallback download ──
+  function nativeShareOrDownload() {
     if (!resultBlob) return;
-    var a = document.createElement('a');
-    a.href     = URL.createObjectURL(resultBlob);
-    a.download = 'the-nsb-retreat.jpg';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    var file = new File([resultBlob], 'the-nsb-retreat.jpg', { type: 'image/jpeg' });
+    var shareData = { files: [file], title: 'The NSB Retreat' };
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      navigator.share(shareData).catch(function () {});
+    } else {
+      // Desktop fallback — trigger browser download
+      var a = document.createElement('a');
+      a.href     = URL.createObjectURL(resultBlob);
+      a.download = 'the-nsb-retreat.jpg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   }
 
-  // ── Share (Web Share API → fallback download) ──────────
-  function sharePhoto() {
-    if (!resultBlob) return;
-    if (navigator.share) {
-      var file = new File([resultBlob], 'the-nsb-retreat.jpg', { type: 'image/jpeg' });
-      var shareData = { files: [file], title: 'The NSB Retreat' };
-      if (navigator.canShare && navigator.canShare(shareData)) {
-        navigator.share(shareData).catch(function () {});
-        return;
-      }
-    }
-    downloadPhoto();
-  }
+  // Save and Share both use the native sheet on mobile
+  function downloadPhoto() { nativeShareOrDownload(); }
+  function sharePhoto()    { nativeShareOrDownload(); }
 
   // ── Events ─────────────────────────────────────────────
   document.getElementById('pb-open-btn').addEventListener('click', function () {

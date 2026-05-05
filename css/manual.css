@@ -1683,11 +1683,16 @@ html.dark .beach-fee-card { background: #2a211c; border-color: #3a2e28; }
   border-color: #d94f38;
   border-width: 3px;
 }
-/* Polaroid: white thick border */
+/* Polaroid: cream border, thick bottom */
 .pb-preview-polaroid {
-  background: #5a7a98;
-  box-shadow: inset 6px 6px 0 rgba(255,255,255,0.95), inset -6px 0 0 rgba(255,255,255,0.95), inset 0 -18px 0 rgba(255,255,255,0.95);
-  border-color: rgba(255,255,255,0.7);
+  background: #7a9ab8;
+  outline: 3px solid #e8e2da;
+  outline-offset: -3px;
+  box-shadow:
+    inset 5px 5px 0 #fdf9f3,
+    inset -5px 0 0 #fdf9f3,
+    inset 0 -22px 0 #fdf9f3;
+  border-color: #e8e2da;
 }
 
 .pb-open-btn {
