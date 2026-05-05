@@ -26,6 +26,27 @@
       '.pb-icon-btn.active {',
       '  color: var(--accent, #b8967e);',
       '  opacity: 1;',
+      '}',
+      '.pb-strip-btn {',
+      '  display: flex;',
+      '  align-items: center;',
+      '  gap: 6px;',
+      '  margin: 8px auto 0;',
+      '  padding: 6px 14px;',
+      '  border: 1px solid rgba(255,255,255,0.2);',
+      '  border-radius: 20px;',
+      '  background: transparent;',
+      '  color: rgba(255,255,255,0.65);',
+      '  font-size: 0.78rem;',
+      '  font-weight: 500;',
+      '  letter-spacing: 0.04em;',
+      '  cursor: pointer;',
+      '  transition: all 0.15s;',
+      '}',
+      '.pb-strip-btn.active {',
+      '  background: var(--accent, #b8967e);',
+      '  border-color: var(--accent, #b8967e);',
+      '  color: #fff;',
       '}'
     ].join('\n');
     document.head.appendChild(style);
@@ -44,6 +65,7 @@
   var resultBlob     = null;
   var timerActive    = false;
   var countdownTimer = null;
+  var stripMode      = false;
 
   // ── Supabase (background upload, silent) ───────────────
   var pbSb = (typeof supabase !== 'undefined')
@@ -363,6 +385,113 @@
     }
   }
 
+  // ── Strip capture ─────────────────────────────────────
+  function captureStrip() {
+    var btn = document.getElementById('pb-capture-btn');
+    if (btn) btn.disabled = true;
+    if (!stream || !video.srcObject) {
+      if (btn) btn.disabled = false;
+      return;
+    }
+    var shots = [];
+    var cd = document.getElementById('pb-countdown');
+
+    function takeShot(n) {
+      if (cd) { cd.textContent = n + '/3'; cd.classList.add('active'); }
+      var vw = video.videoWidth || OUT_W;
+      var vh = video.videoHeight || OUT_H;
+      var targetAspect = OUT_W / OUT_H;
+      var srcAspect = vw / vh;
+      var sx, sy, sw, sh;
+      if (srcAspect > targetAspect) {
+        sh = vh; sw = Math.round(vh * targetAspect); sx = Math.round((vw - sw) / 2); sy = 0;
+      } else {
+        sw = vw; sh = Math.round(vw / targetAspect); sx = 0; sy = Math.round((vh - sh) / 2);
+      }
+      var cw = Math.max(sw, OUT_W);
+      var ch = Math.max(sh, OUT_H);
+      var tmp = document.createElement('canvas');
+      tmp.width = cw; tmp.height = ch;
+      var ctx = tmp.getContext('2d');
+      if (facing === 'user') {
+        ctx.save(); ctx.translate(cw, 0); ctx.scale(-1, 1);
+        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
+        ctx.restore();
+      } else {
+        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch);
+      }
+      shots.push(tmp);
+      if (shots.length < 3) {
+        setTimeout(function() { takeShot(shots.length + 1); }, 1200);
+      } else {
+        if (cd) { cd.textContent = ''; cd.classList.remove('active'); }
+        buildStrip(shots);
+      }
+    }
+    takeShot(1);
+  }
+
+  function buildStrip(shots) {
+    var PHOTO_H = 380;
+    var GAP = 12;
+    var BRAND_H = 100;
+    var stripW = OUT_W;
+    var stripH = (PHOTO_H * 3) + (GAP * 2) + BRAND_H;
+
+    canvas.width = stripW;
+    canvas.height = stripH;
+    var ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, stripW, stripH);
+
+    var fImg = new Image();
+    fImg.onload = function() {
+      for (var i = 0; i < 3; i++) {
+        var y = i * (PHOTO_H + GAP);
+        ctx.drawImage(shots[i], 0, 0, shots[i].width, shots[i].height, 0, y, stripW, PHOTO_H);
+        ctx.drawImage(fImg, 0, y, stripW, PHOTO_H);
+      }
+      finishStrip();
+    };
+    fImg.onerror = function() {
+      for (var i = 0; i < 3; i++) {
+        var y = i * (PHOTO_H + GAP);
+        ctx.drawImage(shots[i], 0, 0, shots[i].width, shots[i].height, 0, y, stripW, PHOTO_H);
+      }
+      finishStrip();
+    };
+
+    function finishStrip() {
+      var brandY = PHOTO_H * 3 + GAP * 2;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, brandY, stripW, BRAND_H);
+      ctx.fillStyle = '#111111';
+      ctx.textAlign = 'center';
+      ctx.font = '500 28px "Helvetica Neue", Arial, sans-serif';
+      ctx.fillText('The NSB Retreat', stripW / 2, brandY + 42);
+      ctx.fillStyle = '#777777';
+      ctx.font = '300 italic 18px "Helvetica Neue", Arial, sans-serif';
+      ctx.fillText('New Smyrna Beach, FL', stripW / 2, brandY + 68);
+      ctx.fillStyle = '#999999';
+      ctx.font = '300 16px "Helvetica Neue", Arial, sans-serif';
+      ctx.fillText('@thensbretreat', stripW / 2, brandY + 91);
+      ctx.fillStyle = 'rgba(0,0,0,0.08)';
+      ctx.fillRect(0, brandY, stripW, 2);
+
+      canvas.toBlob(function(blob) {
+        var btn = document.getElementById('pb-capture-btn');
+        if (btn) btn.disabled = false;
+        resultBlob = blob;
+        resultImg.src = URL.createObjectURL(blob);
+        showPreview();
+        uploadSilent(blob);
+      }, 'image/jpeg', 0.95);
+    }
+
+    fImg.src = frameSrc(activeFrame);
+  }
+
   // ── Background upload (silent, no user feedback) ───────
   function uploadSilent(blob) {
     if (!pbSb) return;
@@ -423,7 +552,7 @@
       return;
     }
     if (!timerActive) {
-      capture();
+      stripMode ? captureStrip() : capture();
       return;
     }
     // Start 3-2-1 countdown
@@ -435,7 +564,7 @@
       count--;
       if (count <= 0) {
         cancelCountdown();
-        capture();
+        stripMode ? captureStrip() : capture();
       } else {
         cd.textContent = count;
         countdownTimer = setTimeout(tick, 1000);
@@ -451,6 +580,11 @@
 
   document.getElementById('pb-download-btn').addEventListener('click', downloadPhoto);
   document.getElementById('pb-share-btn').addEventListener('click', sharePhoto);
+
+  document.getElementById('pb-strip-btn').addEventListener('click', function () {
+    stripMode = !stripMode;
+    this.classList.toggle('active', stripMode);
+  });
 
   // Frame selector
   document.querySelectorAll('.pb-frame-opt').forEach(function (btn) {
