@@ -1228,8 +1228,10 @@
   align-items: center;
   gap: 0.25rem;
   text-decoration: none;
+  color: var(--charcoal);
   text-align: center;
   transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
 }
 .bc-action-card:hover { background: var(--sand); }
 .bc-action-icon { font-size: 1.4rem; line-height: 1; }
@@ -1583,7 +1585,7 @@ html.dark .bc-fc-hi { color: #f0ebe6; }
 html.dark .bc-fc-lo { color: #9a8a82; }
 html.dark .bc-fc-day { color: #7a7370; }
 html.dark .bc-fc-wind { color: #7a7370; }
-html.dark .bc-action-card { background: #2a211c; border-color: #3a2e28; }
+html.dark .bc-action-card { background: #2a211c; border-color: #3a2e28; color: #f0ebe6; }
 html.dark .bc-action-card:hover { background: #332620; }
 html.dark .bc-action-label { color: #f0ebe6; }
 html.dark .bc-action-hint { color: #9a8a82; }

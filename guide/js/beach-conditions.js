@@ -1,5 +1,40 @@
 // beach-conditions.js — Live beach conditions widget for NSB Retreat guide
 
+// Self-contained widget styles — injected so they work regardless of CSS caching
+(function injectWidgetStyles() {
+  if (document.getElementById('bc-widget-style')) return;
+  var s = document.createElement('style');
+  s.id = 'bc-widget-style';
+  s.textContent =
+    // ── Forecast strip ──
+    '.bc-forecast-strip{display:flex;gap:.5rem;overflow-x:auto;padding:0 0 .25rem;scrollbar-width:none}' +
+    '.bc-forecast-strip::-webkit-scrollbar{display:none}' +
+    // ── Forecast day card ──
+    '.bc-forecast-day{flex:0 0 auto;min-width:70px;background:var(--blush,#f9ece8);border:1px solid var(--tan,#d4c4b0);border-radius:var(--radius-sm,8px);padding:.625rem .5rem;display:flex;flex-direction:column;align-items:center;gap:.2rem;text-align:center}' +
+    '.bc-fc-day{font-size:.62rem;font-weight:600;letter-spacing:.08em;color:var(--charcoal-lighter,#9a918c);text-transform:uppercase}' +
+    '.bc-fc-icon{font-size:1.4rem;line-height:1;margin:.1rem 0}' +
+    '.bc-fc-temps{display:flex;gap:2px;align-items:baseline}' +
+    '.bc-fc-hi{font-size:.95rem;font-weight:600;color:var(--charcoal,#2d2926)}' +
+    '.bc-fc-lo{font-size:.75rem;color:var(--charcoal-light,#6b6460)}' +
+    '.bc-fc-rain{font-size:.65rem;color:#4a8aaa}' +
+    '.bc-fc-wind{font-size:.65rem;color:var(--charcoal-light,#6b6460)}' +
+    // ── Section label ──
+    '.bc-section-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--charcoal-light,#6b6460);margin:.875rem 0 .5rem}' +
+    // ── Action cards (flags & cam) ──
+    '.bc-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:.625rem;margin-top:.875rem}' +
+    '.bc-action-card{background:var(--blush,#f9ece8);border:1px solid var(--tan,#d4c4b0);border-radius:var(--radius-sm,8px);padding:.875rem .625rem;display:flex;flex-direction:column;align-items:center;gap:.25rem;text-decoration:none;color:var(--charcoal,#2d2926);text-align:center;-webkit-tap-highlight-color:transparent}' +
+    '.bc-action-icon{font-size:1.4rem;line-height:1}' +
+    '.bc-action-label{font-size:.75rem;font-weight:600;color:var(--charcoal,#2d2926);letter-spacing:.01em}' +
+    '.bc-action-hint{font-size:.65rem;color:var(--charcoal-light,#6b6460)}' +
+    // ── Dark mode ──
+    'html.dark .bc-forecast-day{background:#2a211c;border-color:#3a2e28}' +
+    'html.dark .bc-fc-hi{color:#f0ebe6}html.dark .bc-fc-lo{color:#9a8a82}' +
+    'html.dark .bc-fc-day{color:#7a7370}html.dark .bc-fc-wind{color:#7a7370}' +
+    'html.dark .bc-action-card{background:#2a211c;border-color:#3a2e28;color:#f0ebe6}' +
+    'html.dark .bc-action-label{color:#f0ebe6}html.dark .bc-action-hint{color:#9a8a82}';
+  document.head.appendChild(s);
+})();
+
 (function initBeachConditions() {
   var SUN_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;color:var(--accent,#b8967e)" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
   var MOON_ICON = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;color:var(--charcoal-light,#6b6460)" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
