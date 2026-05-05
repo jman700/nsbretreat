@@ -88,30 +88,27 @@
         '</svg>'
       ].join(''),
 
-      // Retro / Polaroid — authentic proportions
-      // Real Polaroid: thin top/sides (~6%), thick bottom (~25% of total height)
-      // Cream/off-white border, clean sans-serif, subtle hairline at photo edge
+      // Retro / Polaroid — authentic proportions, BORDER ONLY (photo area stays transparent)
+      // Real Polaroid: ~56px top, ~64px sides, ~296px thick bottom strip (25% of 1200)
+      // Photo opening: x=64 y=56 w=772 h=848 — nearly square, matching actual Polaroid
       polaroid: [
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">',
-          // Outer card edge — very slightly warm gray to look like plastic casing
-          '<rect x="0" y="0" width="900" height="1200" fill="#e8e2da"/>',
-          // Main cream body
-          '<rect x="6" y="6" width="888" height="1188" fill="#fdf9f3"/>',
-          // Top border (thin ~48px)
-          '<rect x="6" y="6" width="888" height="48" fill="#fdf9f3"/>',
-          // Side borders (thin ~56px each)
-          '<rect x="6" y="6" width="56" height="892" fill="#fdf9f3"/>',
-          '<rect x="838" y="6" width="56" height="892" fill="#fdf9f3"/>',
-          // Thick bottom caption strip (~300px, ~25% of 1200)
-          '<rect x="6" y="898" width="888" height="296" fill="#fdf9f3"/>',
-          // Very subtle inner shadow at top of caption strip
-          '<rect x="62" y="898" width="776" height="3" fill="rgba(0,0,0,0.07)"/>',
-          // Hairline separator
-          '<line x1="62" y1="901" x2="838" y2="901" stroke="#ddd5c8" stroke-width="1"/>',
-          // Caption text — clean, physical feel
-          '<text x="450" y="1000" text-anchor="middle" fill="#1c1510" font-family="Helvetica Neue,Arial,sans-serif" font-size="44" font-weight="300" letter-spacing="3">The NSB Retreat</text>',
-          '<text x="450" y="1052" text-anchor="middle" fill="#6a5a4a" font-family="Helvetica Neue,Arial,sans-serif" font-size="24" font-weight="300" letter-spacing="2" font-style="italic">New Smyrna Beach, FL</text>',
-          '<text x="450" y="1098" text-anchor="middle" fill="#9a8a7a" font-family="Helvetica Neue,Arial,sans-serif" font-size="22" font-weight="300" letter-spacing="3">@thensbretreat</text>',
+          // Top border strip
+          '<rect x="0" y="0" width="900" height="56" fill="#f5f2ee"/>',
+          // Left border strip
+          '<rect x="0" y="56" width="64" height="848" fill="#f5f2ee"/>',
+          // Right border strip
+          '<rect x="836" y="56" width="64" height="848" fill="#f5f2ee"/>',
+          // Thick bottom caption strip
+          '<rect x="0" y="904" width="900" height="296" fill="#f5f2ee"/>',
+          // Subtle shadow along top edge of caption strip (gives depth)
+          '<rect x="64" y="904" width="772" height="5" fill="rgba(0,0,0,0.09)"/>',
+          // Outer edge — thin warm-gray line simulating plastic casing
+          '<rect x="0" y="0" width="900" height="1200" fill="none" stroke="#ccc8c2" stroke-width="5"/>',
+          // Caption text
+          '<text x="450" y="1010" text-anchor="middle" fill="#1a1510" font-family="Helvetica Neue,Arial,sans-serif" font-size="40" font-weight="300" letter-spacing="2">The NSB Retreat</text>',
+          '<text x="450" y="1060" text-anchor="middle" fill="#6a5848" font-family="Helvetica Neue,Arial,sans-serif" font-size="23" font-weight="300" font-style="italic" letter-spacing="2">New Smyrna Beach, FL</text>',
+          '<text x="450" y="1106" text-anchor="middle" fill="#9a8878" font-family="Helvetica Neue,Arial,sans-serif" font-size="22" font-weight="300" letter-spacing="3">@thensbretreat</text>',
         '</svg>'
       ].join('')
     };
