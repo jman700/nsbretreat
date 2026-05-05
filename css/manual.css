@@ -1788,42 +1788,65 @@ html.dark .pb-privacy-note { color: rgba(255,255,255,0.28); }
   overflow: hidden;
 }
 
-/* Viewfinder: fills available height in flex column */
+/* Viewfinder: fixed 3:4 ratio, positioned so frame overlay stays anchored */
 .pb-viewfinder {
   width: 100%;
-  flex: 1;
-  min-height: 0;
+  aspect-ratio: 3 / 4;
+  flex: 0 0 auto;
+  position: relative;
   overflow: hidden;
   border-radius: var(--radius);
   background: #000;
-  margin-bottom: 0;
 }
 
-/* Strip viewfinder: flex column, all 3 slots fill height without scrolling */
+/* Strip viewfinder: flex column, overflow-y auto as fallback */
 .pb-strip-vf {
   width: 100%;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   border-radius: var(--radius);
   background: #f0ede8;
-  margin-bottom: 0;
 }
+.pb-strip-vf::-webkit-scrollbar { display: none; }
+
+/* Base slot: auto-sized (each state controls its own height) */
 .pb-sslot {
   width: 100%;
-  flex: 1;
-  min-height: 0;
+  flex: 0 0 auto;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ddd;
+  background: #ccc;
+  transition: height 0.3s ease, opacity 0.3s ease;
 }
-.pb-sslot-pending { background: #e4e1dc; }
-.pb-sslot + .pb-sslot { border-top: 10px solid #f0ede8; }
+
+/* Active slot: square live camera — shows exactly what the final crop will be */
+.pb-sslot-active {
+  aspect-ratio: 1 / 1;
+  background: #1a1a1a;
+}
+
+/* Done slot: compact thumbnail strip */
+.pb-sslot-done {
+  height: 80px;
+  background: #d0cdc8;
+}
+
+/* Pending slot: ghosted placeholder */
+.pb-sslot-pending {
+  height: 58px;
+  background: #e4e1dc;
+  opacity: 0.55;
+}
+
+.pb-sslot + .pb-sslot { border-top: 6px solid #f0ede8; }
 .pb-sslot > video,
 .pb-sslot > canvas.pb-sslot-photo {
   position: absolute;
@@ -1835,26 +1858,37 @@ html.dark .pb-privacy-note { color: rgba(255,255,255,0.28); }
   z-index: 2;
 }
 .pb-sslot-num {
-  font-size: 5rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: rgba(0,0,0,0.10);
+  color: rgba(0,0,0,0.12);
   user-select: none;
   z-index: 1;
   line-height: 1;
 }
+.pb-sslot-active .pb-sslot-num {
+  font-size: 5rem;
+  color: rgba(255,255,255,0.08);
+}
 .pb-sslot-label {
   position: absolute;
-  bottom: 12px;
+  bottom: 10px;
   left: 0;
   right: 0;
   text-align: center;
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-shadow: 0 1px 8px rgba(0,0,0,0.75);
   z-index: 3;
   pointer-events: none;
   letter-spacing: 0.03em;
+}
+/* Done-slot label: small checkmark overlay */
+.pb-sslot-done .pb-sslot-label {
+  bottom: 50%;
+  transform: translateY(50%);
+  font-size: 1.1rem;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.55);
 }
 .pb-strip-brand-foot {
   background: white;

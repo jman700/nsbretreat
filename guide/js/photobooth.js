@@ -317,30 +317,35 @@
       // Remove any previously captured canvas
       var old = slot.querySelector('canvas.pb-sslot-photo');
       if (old) old.remove();
-      // Reset classes
-      slot.className = 'pb-sslot' + (i > 0 ? ' pb-sslot-pending' : '');
-      // Reset label
+      // Slot 0 starts active (live camera), 1 & 2 start as ghosted pending
+      slot.className = i === 0 ? 'pb-sslot pb-sslot-active' : 'pb-sslot pb-sslot-pending';
+      // Label
       var lbl = slot.querySelector('.pb-sslot-label');
       if (lbl) lbl.textContent = i === 0 ? 'Tap shutter · shot 1 of 3' : '';
-      // Show number placeholder
+      // Number
       var num = slot.querySelector('.pb-sslot-num');
-      if (num) num.style.visibility = '';
+      if (num) { num.style.visibility = ''; num.textContent = i + 1; }
     }
   }
 
   function moveVideoToSlot(idx) {
     var slot = document.getElementById('pb-sslot-' + idx);
     if (!slot || !video) return;
-    // Move the video element into this slot
+    // Expand this slot as active square live view
+    slot.classList.remove('pb-sslot-pending', 'pb-sslot-done');
+    slot.classList.add('pb-sslot-active');
+    // Move the live video into this slot
     slot.insertBefore(video, slot.firstChild);
-    // Scroll so this slot is visible
-    slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     // Update hint label
     var lbl = slot.querySelector('.pb-sslot-label');
     if (lbl) lbl.textContent = 'Tap shutter · shot ' + (idx + 1) + ' of 3';
-    // Hide number (video covers it anyway, but keep clean)
+    // Hide number behind video
     var num = slot.querySelector('.pb-sslot-num');
     if (num) num.style.visibility = 'hidden';
+    // Scroll slot into view after CSS transition starts
+    setTimeout(function () {
+      slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 60);
   }
 
   // Capture one shot in strip mode
@@ -390,7 +395,7 @@
       preview.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;z-index:2;';
       var lbl = currentSlot.querySelector('.pb-sslot-label');
       if (lbl) lbl.textContent = '✓';
-      currentSlot.classList.remove('pb-sslot-pending');
+      currentSlot.classList.remove('pb-sslot-active', 'pb-sslot-pending');
       currentSlot.classList.add('pb-sslot-done');
     }
 
