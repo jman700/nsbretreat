@@ -1735,15 +1735,99 @@ html.dark .pb-privacy-note { color: rgba(255,255,255,0.28); }
   color: white;
 }
 
+/* Camera section needs position:relative for countdown overlay */
+#pb-camera { position: relative; }
+
 /* Viewfinder */
 .pb-viewfinder {
-  position: relative;
   width: 100%;
   aspect-ratio: 3/4;
   overflow: hidden;
   border-radius: var(--radius);
   background: #000;
   margin-bottom: 1rem;
+}
+
+/* Strip viewfinder */
+.pb-strip-vf {
+  width: 100%;
+  max-height: 68vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  background: #f0ede8;
+  margin-bottom: 1rem;
+}
+.pb-strip-vf::-webkit-scrollbar { display: none; }
+.pb-sslot {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ddd;
+}
+.pb-sslot-pending { background: #e4e1dc; }
+.pb-sslot + .pb-sslot { border-top: 10px solid #f0ede8; }
+.pb-sslot > video,
+.pb-sslot > canvas.pb-sslot-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 2;
+}
+.pb-sslot-num {
+  font-size: 5rem;
+  font-weight: 700;
+  color: rgba(0,0,0,0.10);
+  user-select: none;
+  z-index: 1;
+  line-height: 1;
+}
+.pb-sslot-label {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.75);
+  z-index: 3;
+  pointer-events: none;
+  letter-spacing: 0.03em;
+}
+.pb-strip-brand-foot {
+  background: white;
+  text-align: center;
+  padding: 12px 8px 14px;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+.pb-strip-brand-foot strong {
+  display: block;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #111;
+  letter-spacing: 0.02em;
+}
+.pb-strip-brand-foot span {
+  display: block;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.72rem;
+  color: #777;
+  margin-top: 3px;
+  letter-spacing: 0.03em;
 }
 #pb-video {
   width: 100%;
@@ -1794,13 +1878,7 @@ html.dark .pb-privacy-note { color: rgba(255,255,255,0.28); }
   line-height: 1;
   pointer-events: none;
 }
-/* Modes row (strip, future toggles) */
-.pb-modes-row {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
-}
+
 .pb-capture-btn {
   width: 68px;
   height: 68px;

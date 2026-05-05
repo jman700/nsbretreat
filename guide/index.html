@@ -1003,19 +1003,41 @@
 
         <!-- Camera screen -->
         <div id="pb-camera" style="display:none">
-          <!-- Frame selector -->
+          <!-- Frame selector (Strip is the last option) -->
           <div class="pb-frame-selector">
             <button class="pb-frame-opt active" data-frame="minimal">Minimal</button>
             <button class="pb-frame-opt" data-frame="beach">Beach</button>
             <button class="pb-frame-opt" data-frame="tropical">Tropical</button>
             <button class="pb-frame-opt" data-frame="polaroid">Polaroid</button>
+            <button class="pb-frame-opt" data-frame="strip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11" aria-hidden="true" style="vertical-align:-1px;margin-right:3px"><rect x="4" y="2" width="16" height="6" rx="1"/><rect x="4" y="9" width="16" height="6" rx="1"/><rect x="4" y="16" width="16" height="6" rx="1"/></svg>Strip
+            </button>
           </div>
 
-          <!-- Viewfinder with live frame overlay -->
-          <div class="pb-viewfinder">
+          <!-- Single-shot viewfinder (hidden when Strip is selected) -->
+          <div class="pb-viewfinder" id="pb-single-vf">
             <video id="pb-video" autoplay playsinline muted></video>
             <img id="pb-frame-img" class="pb-frame-overlay" src="" alt="" aria-hidden="true">
-            <div id="pb-countdown" class="pb-countdown"></div>
+          </div>
+
+          <!-- Strip viewfinder (shown when Strip is selected) -->
+          <div class="pb-strip-vf" id="pb-strip-vf" style="display:none">
+            <div class="pb-sslot" id="pb-sslot-0">
+              <span class="pb-sslot-num">1</span>
+              <span class="pb-sslot-label">Tap shutter · shot 1 of 3</span>
+            </div>
+            <div class="pb-sslot pb-sslot-pending" id="pb-sslot-1">
+              <span class="pb-sslot-num">2</span>
+              <span class="pb-sslot-label"></span>
+            </div>
+            <div class="pb-sslot pb-sslot-pending" id="pb-sslot-2">
+              <span class="pb-sslot-num">3</span>
+              <span class="pb-sslot-label"></span>
+            </div>
+            <div class="pb-strip-brand-foot">
+              <strong>The NSB Retreat</strong>
+              <span>New Smyrna Beach, FL · @thensbretreat</span>
+            </div>
           </div>
 
           <!-- Controls: flip | shutter | timer -->
@@ -1033,13 +1055,8 @@
             </button>
           </div>
 
-          <!-- Mode toggles row -->
-          <div class="pb-modes-row">
-            <button class="pb-strip-btn" id="pb-strip-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true"><rect x="4" y="2" width="16" height="6" rx="1"/><rect x="4" y="10" width="16" height="6" rx="1"/><rect x="4" y="18" width="16" height="6" rx="1"/></svg>
-              Strip Mode · 3 shots
-            </button>
-          </div>
+          <!-- Countdown overlay — covers camera section for 3-2-1 timer -->
+          <div id="pb-countdown" class="pb-countdown"></div>
         </div>
 
         <!-- Preview screen -->
