@@ -2,18 +2,24 @@
 // Shared iAqualink API helper — not a public route (Vercel ignores _ prefix)
 
 const LOGIN_URL  = 'https://prod.zodiac-io.com/users/v1/login';
-const API_BASE   = 'https://iaqualink-api.realtime.io/v1/mobile/session.json';
+const API_BASE   = 'https://r-api.iaqualink.net/v2/mobile/session.json';
 // Public API key shared across all iAqualink mobile clients — not a secret.
 const API_KEY    = 'EOOEMOW4YR6QNB07';
 
+const HEADERS = {
+  'Content-Type': 'application/json',
+  'user-agent':   'okhttp/3.14.7',
+};
+
 /**
- * Authenticate with iAqualink and return a session token.
+ * Authenticate with iAqualink.
+ * Returns { clientId, idToken } needed for subsequent device requests.
  * Throws on failure.
  */
 export async function authenticate() {
   const res = await fetch(LOGIN_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method:  'POST',
+    headers: HEADERS,
     body: JSON.stringify({
       email:    process.env.IAQUALINK_EMAIL,
       password: process.env.IAQUALINK_PASSWORD,
@@ -28,21 +34,20 @@ export async function authenticate() {
 
   const data = await res.json();
 
-  // Response shape: { id, authentication_token, ... }
-  if (!data.authentication_token) {
-    throw new Error('iAqualink login: no authentication_token in response');
+  if (!data.client_id || !data.id_token) {
+    throw new Error(`iAqualink login: missing client_id or id_token in response`);
   }
 
-  return data.authentication_token;
+  return { clientId: data.client_id, idToken: data.id_token };
 }
 
 /**
  * Make a request to the iAqualink session API.
- * @param {string} token      - authentication_token from authenticate()
- * @param {string} command    - e.g. "get_home_screen", "set_spa_temp"
+ * @param {{ clientId: string, idToken: string }} auth  - from authenticate()
+ * @param {string} command    - e.g. "get_home", "set_spa_heater"
  * @param {Record<string,string|number>} extra - additional query params
  */
-export async function deviceRequest(token, command, extra = {}) {
+export async function deviceRequest(auth, command, extra = {}) {
   const serial = process.env.IAQUALINK_DEVICE_SERIAL;
   if (!serial) {
     throw new Error('IAQUALINK_DEVICE_SERIAL env var is not set');
@@ -52,13 +57,18 @@ export async function deviceRequest(token, command, extra = {}) {
     actionID:  'command',
     command,
     serial,
-    sessionID: token,
-    api_key:   API_KEY,
+    sessionID: auth.clientId,
     ...extra,
   });
 
   const url = `${API_BASE}?${params.toString()}`;
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${auth.idToken}`,
+      'api_key':       API_KEY,
+      'user-agent':    'okhttp/3.14.7',
+    },
+  });
 
   if (!res.ok) {
     const body = await res.text().catch(() => '');

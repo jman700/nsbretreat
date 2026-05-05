@@ -82,8 +82,8 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 
   try {
-    const token      = await authenticate();
-    const data       = await deviceRequest(token, 'get_home_screen');
+    const auth       = await authenticate();
+    const data       = await deviceRequest(auth, 'get_home');
     const homeScreen = data.home_screen || data.data || [];
 
     if (!Array.isArray(homeScreen)) {

@@ -3,16 +3,16 @@
 
 import { authenticate, deviceRequest } from './_iaqualink.js';
 
-// Adjust these if your installation uses different aux slot names.
-// Check _raw from /api/pool-status to discover your device's aux names.
-const AUX_LIGHT = 'aux_1';
-const AUX_JETS  = 'aux_2';
+// Aux slot numbers for pool light and spa jets.
+// Check _raw from /api/pool-status to verify your device's aux numbers.
+const AUX_LIGHT_NUM = '1';  // aux_1
+const AUX_JETS_NUM  = '2';  // aux_2
 
 const LIGHT_COLOR_INDEX = {
+  white:   1,
   blue:    2,
   green:   3,
   red:     4,
-  white:   5,
   magenta: 6,
   party:   7,
 };
@@ -28,45 +28,39 @@ const ALLOWED_COMMANDS = new Set([
 
 /**
  * Translates our normalized command + value into an iAqualink API call.
- * Returns { iaqualinkCommand, extraParams } ready to pass to deviceRequest().
+ * New API: toggle commands use set_aux_N (no level param), set_spa_heater toggles,
+ * set_temps uses temp1 for spa setpoint, set_light uses aux+light+subtype params.
  */
 function translateCommand(command, value) {
   switch (command) {
     case 'spa_heater':
-      return {
-        iaqualinkCommand: 'set_spa_heater',
-        extraParams: { level: value === 'on' ? 1 : 0 },
-      };
+      // Toggles the spa heater — iAqualink toggles on each call, so we send regardless.
+      return { iaqualinkCommand: 'set_spa_heater', extraParams: {} };
 
     case 'spa_setpoint': {
       const temp = parseInt(value, 10);
       if (isNaN(temp) || temp < 98 || temp > 104) {
         throw new Error('spa_setpoint must be 98–104');
       }
-      return {
-        iaqualinkCommand: 'set_spa_temp',
-        extraParams: { level: temp },
-      };
+      // set_temps with temp1 = spa target temperature
+      return { iaqualinkCommand: 'set_temps', extraParams: { temp1: temp } };
     }
 
     case 'spa_jets':
-      return {
-        iaqualinkCommand: 'set_aux',
-        extraParams: { aux: AUX_JETS, level: value === 'on' ? 1 : 0 },
-      };
+      // Toggles aux_2 (spa jets/blower)
+      return { iaqualinkCommand: `set_aux_${AUX_JETS_NUM}`, extraParams: {} };
 
     case 'pool_light':
-      return {
-        iaqualinkCommand: 'set_aux',
-        extraParams: { aux: AUX_LIGHT, level: value === 'on' ? 1 : 0 },
-      };
+      // Toggles aux_1 (pool light)
+      return { iaqualinkCommand: `set_aux_${AUX_LIGHT_NUM}`, extraParams: {} };
 
     case 'pool_light_color': {
       const idx = LIGHT_COLOR_INDEX[value];
       if (!idx) throw new Error(`Unknown color: ${value}`);
+      // set_light with aux slot, effect index, and subtype 1 (IntelliBrite/generic color)
       return {
-        iaqualinkCommand: 'set_aux',
-        extraParams: { aux: AUX_LIGHT, level: idx },
+        iaqualinkCommand: 'set_light',
+        extraParams: { aux: AUX_LIGHT_NUM, light: idx, subtype: 1 },
       };
     }
 
@@ -95,8 +89,8 @@ export default async function handler(req, res) {
 
   try {
     const { iaqualinkCommand, extraParams } = translateCommand(command, value);
-    const token = await authenticate();
-    await deviceRequest(token, iaqualinkCommand, extraParams);
+    const auth = await authenticate();
+    await deviceRequest(auth, iaqualinkCommand, extraParams);
     return res.status(200).json({ success: true });
   } catch (err) {
     console.error('[pool-command]', err.message);
