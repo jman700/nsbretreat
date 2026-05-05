@@ -140,35 +140,9 @@
         </div>
       </div>
 
-      <!-- Beach Conditions Card -->
-      <div class="beach-card" id="beach-card">
-        <div class="beach-header">
-          <h3 class="beach-title">Beach Conditions</h3>
-          <span class="beach-updated" id="beach-updated">Loading…</span>
-        </div>
-        <div class="beach-stats">
-          <div class="beach-stat">
-            <span class="beach-stat-label">Air Temp</span>
-            <span class="beach-stat-value" id="bch-air">–</span>
-          </div>
-          <div class="beach-stat">
-            <span class="beach-stat-label">Ocean Temp</span>
-            <span class="beach-stat-value" id="bch-water">–</span>
-          </div>
-          <div class="beach-stat beach-stat-wide">
-            <span class="beach-stat-label">Conditions</span>
-            <span class="beach-stat-value" id="bch-conditions">–</span>
-          </div>
-          <div class="beach-stat">
-            <span class="beach-stat-label">Wind</span>
-            <span class="beach-stat-value" id="bch-wind">–</span>
-          </div>
-        </div>
-        <div class="beach-tides" id="beach-tides">
-          <span class="beach-tides-label">Tides (Ponce Inlet)</span>
-          <div class="beach-tide-list" id="beach-tide-list">–</div>
-        </div>
-      </div>
+      <!-- Beach Conditions — same widget as guide/index.html -->
+      <h3 class="pad-subsection-title">Current Beach Conditions</h3>
+      <div class="beach-cond-widget" id="beach-cond-widget"></div>
     </section>
 
     <!-- ── 2. Welcome ── -->
@@ -514,5 +488,6 @@
 
   <script src="../js/config.js"></script>
   <script src="js/pad.js"></script>
+  <script src="../guide/js/beach-conditions.js"></script>
 </body>
 </html>

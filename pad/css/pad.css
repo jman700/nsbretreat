@@ -443,84 +443,88 @@ input[type="range"].pool-slider {
 .swatch-fat-tuesday    { background: linear-gradient(135deg, #7b1fa2, #388e3c, #f9a825); }
 .swatch-disco-tech     { background: linear-gradient(135deg, #4caf50, #2196f3, #fff, #e91e63); }
 
-/* ── Beach Conditions Card ── */
-.beach-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 1.25rem 1.5rem;
-  margin-top: 1.25rem;
-}
-.beach-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-.beach-title {
-  font-size: 1rem;
+/* ── Beach Conditions (same as guide/css/manual.css) ── */
+.pad-subsection-title {
+  font-size: 0.95rem;
   font-weight: 700;
-  margin: 0;
   color: var(--charcoal, #2c2c2c);
+  margin: 1.5rem 0 0.75rem;
 }
-.beach-updated {
-  font-size: 0.75rem;
-  color: var(--charcoal-light, #888);
+.beach-cond-widget { margin-bottom: 0.5rem; }
+.beach-cond-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.625rem;
+  margin-bottom: 0.875rem;
 }
-.beach-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
-  margin-bottom: 1rem;
-}
-.beach-stat {
+.bc-card {
+  background: var(--blush, #f9ece8);
+  border: 1px solid var(--tan, #d4c4b0);
+  border-radius: var(--radius-sm, 8px);
+  padding: 0.875rem;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
-  min-width: 80px;
 }
-.beach-stat-wide { min-width: 140px; }
-.beach-stat-label {
-  font-size: 0.7rem;
-  font-weight: 600;
+.bc-label {
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--charcoal-light, #888);
+  letter-spacing: 0.1em;
+  color: var(--charcoal-lighter, #9a9390);
 }
-.beach-stat-value {
-  font-size: 1.1rem;
-  font-weight: 700;
+.bc-value {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.35rem;
   color: var(--charcoal, #2c2c2c);
+  line-height: 1.1;
 }
-.beach-tides {
-  border-top: 1px solid rgba(44,44,44,0.08);
-  padding-top: 0.875rem;
+.bc-value-sm { font-size: 1.05rem; }
+.bc-sub { font-size: 0.7rem; color: var(--charcoal-light, #666); }
+.bc-loading { background: var(--sand, #f5ede4); }
+.bc-skel {
+  height: 1.2rem;
+  background: var(--tan, #d4c4b0);
+  border-radius: 4px;
+  animation: bc-pulse 1.2s ease-in-out infinite;
 }
-.beach-tides-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--charcoal-light, #888);
-  display: block;
-  margin-bottom: 0.5rem;
+.bc-skel-sm { height: 0.8rem; width: 60%; margin-top: 0.25rem; }
+@keyframes bc-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
 }
-.beach-tide-list {
+.bc-uv.uv-low          { background: rgba(34,197,94,0.12);   border-color: rgba(34,197,94,0.35); }
+.bc-uv.uv-low .bc-value, .bc-uv.uv-low .bc-sub { color: #166534; }
+.bc-uv.uv-moderate     { background: rgba(234,179,8,0.12);   border-color: rgba(234,179,8,0.35); }
+.bc-uv.uv-moderate .bc-value, .bc-uv.uv-moderate .bc-sub { color: #854d0e; }
+.bc-uv.uv-high         { background: rgba(249,115,22,0.12);  border-color: rgba(249,115,22,0.35); }
+.bc-uv.uv-high .bc-value, .bc-uv.uv-high .bc-sub { color: #9a3412; }
+.bc-uv.uv-very-high    { background: rgba(220,53,69,0.1);    border-color: rgba(220,53,69,0.3); }
+.bc-uv.uv-very-high .bc-value, .bc-uv.uv-very-high .bc-sub { color: #b91c1c; }
+.bc-uv.uv-extreme      { background: rgba(139,92,246,0.12);  border-color: rgba(139,92,246,0.3); }
+.bc-uv.uv-extreme .bc-value, .bc-uv.uv-extreme .bc-sub { color: #5b21b6; }
+.bc-error {
+  font-size: 0.85rem;
+  color: var(--charcoal-light, #666);
+  padding: 0.75rem;
+  background: var(--blush, #f9ece8);
+  border-radius: var(--radius-sm, 8px);
+  margin-bottom: 0.875rem;
+}
+.bc-error a { color: var(--accent, #b8967e); }
+.bc-links {
   display: flex;
+  gap: 1.25rem;
   flex-wrap: wrap;
-  gap: 0.4rem 1.25rem;
+  margin-top: 1rem;
 }
-.tide-entry {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.9rem;
+.bc-flag-link {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--accent, #b8967e);
+  text-decoration: none;
+  letter-spacing: 0.04em;
 }
-.tide-arrow { font-size: 1rem; font-weight: 700; }
-.tide-type  { font-weight: 600; color: var(--charcoal, #2c2c2c); }
-.tide-time  { color: var(--charcoal, #2c2c2c); }
-.tide-ht    { color: var(--charcoal-light, #888); font-size: 0.8rem; }
-.tide-high .tide-arrow { color: #1a6fc4; }
-.tide-low  .tide-arrow { color: #e87722; }
+.bc-flag-link:hover { text-decoration: underline; }
 
 /* ── Spa Heater Timer Controls ── */
 .heater-controls {
