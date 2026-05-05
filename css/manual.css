@@ -1202,6 +1202,105 @@ html.dark .gb-input, html.dark .gb-textarea { background: #1c1714; border-color:
 html.dark .gb-entry { background: #2a211c; border-color: #3a2e28; }
 html.dark .gb-file-label { background: #1c1714; border-color: #3a2e28; }
 
+/* ── Guestbook Carousel ── */
+.gb-carousel-section {
+  background: var(--charcoal, #2d2926);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem 1.75rem;
+  margin-top: 1.75rem;
+}
+.gb-carousel-wrap { position: relative; }
+.gb-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 0.25rem;
+}
+.gb-track::-webkit-scrollbar { display: none; }
+.gb-card {
+  flex: 0 0 calc(50% - 0.625rem);
+  min-width: 280px;
+  scroll-snap-align: start;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: background var(--transition, 0.2s);
+}
+.gb-card:hover { background: rgba(255,255,255,0.08); }
+.gb-card-quote {
+  font-family: var(--font-serif);
+  font-size: 4rem;
+  line-height: 0.75;
+  color: var(--accent, #b8967e);
+  user-select: none;
+}
+.gb-card-text {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.82);
+  flex: 1;
+}
+.gb-card-img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: calc(var(--radius) - 4px);
+  display: block;
+}
+.gb-card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 0.875rem;
+}
+.gb-card-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--white, #fff);
+}
+.gb-card-date {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+}
+.gb-track .gb-empty {
+  color: rgba(255,255,255,0.4);
+  padding: 2rem 0;
+  font-size: 0.875rem;
+}
+.gb-controls {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.gb-ctrl-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.07);
+  color: var(--white, #fff);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition, 0.2s);
+}
+.gb-ctrl-btn:hover {
+  background: var(--accent, #b8967e);
+  border-color: var(--accent, #b8967e);
+}
+@media (max-width: 700px) {
+  .gb-card { flex: 0 0 85%; }
+}
+
 /* ── Food Delivery Row ── */
 .delivery-row {
   margin-bottom: 1.25rem;
