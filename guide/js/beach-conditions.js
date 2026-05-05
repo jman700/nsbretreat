@@ -200,7 +200,7 @@
       var wind = daily.wind_speed_10m_max ? Math.round(daily.wind_speed_10m_max[i]) : '—';
       var dayLabel = i === 0 ? 'Today' : days[new Date(Date.now() + i * 86400000).getDay()];
       var dropletSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>';
-      var rainHTML = (precip > 0) ? '<span class="bc-fc-rain">' + dropletSVG + precip + '%</span>' : '';
+      var rainHTML = '<span class="bc-fc-rain">' + dropletSVG + (precip || 0) + '%</span>';
       var card = document.createElement('div');
       card.className = 'bc-forecast-day';
       card.innerHTML =
