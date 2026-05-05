@@ -360,6 +360,7 @@
           canvas.toBlob(function (blob) {
             if (btn) { btn.disabled = false; }
             resultBlob = blob;
+            if (resultImg.src && resultImg.src.startsWith('blob:')) URL.revokeObjectURL(resultImg.src);
             resultImg.src = URL.createObjectURL(blob);
             showPreview();
             uploadSilent(blob);
@@ -373,6 +374,7 @@
         canvas.toBlob(function (blob) {
           if (btn) { btn.disabled = false; }
           resultBlob = blob;
+          if (resultImg.src && resultImg.src.startsWith('blob:')) URL.revokeObjectURL(resultImg.src);
           resultImg.src = URL.createObjectURL(blob);
           showPreview();
           uploadSilent(blob);
@@ -397,6 +399,13 @@
     var cd = document.getElementById('pb-countdown');
 
     function takeShot(n) {
+      // Abort if stream was killed (e.g. visibilitychange) or capture was cancelled
+      if (!stream || !video.srcObject) {
+        if (cd) { cd.textContent = ''; cd.classList.remove('active'); }
+        var sbtn = document.getElementById('pb-capture-btn');
+        if (sbtn) sbtn.disabled = false;
+        return;
+      }
       if (cd) { cd.textContent = n + '/3'; cd.classList.add('active'); }
       var vw = video.videoWidth || OUT_W;
       var vh = video.videoHeight || OUT_H;
@@ -422,7 +431,10 @@
       }
       shots.push(tmp);
       if (shots.length < 3) {
-        setTimeout(function() { takeShot(shots.length + 1); }, 1200);
+        countdownTimer = setTimeout(function() {
+          countdownTimer = null;
+          takeShot(shots.length + 1);
+        }, 1200);
       } else {
         if (cd) { cd.textContent = ''; cd.classList.remove('active'); }
         buildStrip(shots);
@@ -451,6 +463,7 @@
         var y = i * (PHOTO_H + GAP);
         ctx.drawImage(shots[i], 0, 0, shots[i].width, shots[i].height, 0, y, stripW, PHOTO_H);
         ctx.drawImage(fImg, 0, y, stripW, PHOTO_H);
+        shots[i] = null; // release temp canvas backing store
       }
       finishStrip();
     };
@@ -458,6 +471,7 @@
       for (var i = 0; i < 3; i++) {
         var y = i * (PHOTO_H + GAP);
         ctx.drawImage(shots[i], 0, 0, shots[i].width, shots[i].height, 0, y, stripW, PHOTO_H);
+        shots[i] = null; // release temp canvas backing store
       }
       finishStrip();
     };
@@ -475,7 +489,7 @@
       ctx.fillText('New Smyrna Beach, FL', stripW / 2, brandY + 68);
       ctx.fillStyle = '#999999';
       ctx.font = '300 16px "Helvetica Neue", Arial, sans-serif';
-      ctx.fillText('@thensbretreat', stripW / 2, brandY + 91);
+      ctx.fillText('@thensbretreat', stripW / 2, brandY + 87);
       ctx.fillStyle = 'rgba(0,0,0,0.08)';
       ctx.fillRect(0, brandY, stripW, 2);
 
@@ -483,6 +497,7 @@
         var btn = document.getElementById('pb-capture-btn');
         if (btn) btn.disabled = false;
         resultBlob = blob;
+        if (resultImg.src && resultImg.src.startsWith('blob:')) URL.revokeObjectURL(resultImg.src);
         resultImg.src = URL.createObjectURL(blob);
         showPreview();
         uploadSilent(blob);
@@ -514,11 +529,13 @@
     } else {
       // Desktop fallback — trigger browser download
       var a = document.createElement('a');
-      a.href     = URL.createObjectURL(resultBlob);
+      var dlUrl = URL.createObjectURL(resultBlob);
+      a.href     = dlUrl;
       a.download = 'the-nsb-retreat.jpg';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      setTimeout(function() { URL.revokeObjectURL(dlUrl); }, 60000);
     }
   }
 
