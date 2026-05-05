@@ -88,27 +88,47 @@
         '</svg>'
       ].join(''),
 
-      // Retro / Polaroid — pure white border, black outer edge, authentic proportions
-      // Real Polaroid: ~56px top, ~64px sides, ~296px thick bottom strip (25% of 1200)
-      // Photo opening: x=64 y=56 w=772 h=848 — nearly square, matching actual Polaroid
+      // Retro / Polaroid — white border, inset shadow on photo edges, black outer casing
+      // Real Polaroid 600: top~56px sides~64px bottom~296px (25%), photo 772×848 nearly-square
       polaroid: [
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">',
-          // Top border strip — pure white
+          '<defs>',
+            // Inset shadow gradients — darken photo edges to simulate recessed photo
+            '<linearGradient id="pol-st" x1="0" y1="0" x2="0" y2="1">',
+              '<stop offset="0" stop-color="rgba(0,0,0,0.32)"/>',
+              '<stop offset="1" stop-color="rgba(0,0,0,0)"/>',
+            '</linearGradient>',
+            '<linearGradient id="pol-sb" x1="0" y1="1" x2="0" y2="0">',
+              '<stop offset="0" stop-color="rgba(0,0,0,0.22)"/>',
+              '<stop offset="1" stop-color="rgba(0,0,0,0)"/>',
+            '</linearGradient>',
+            '<linearGradient id="pol-sl" x1="0" y1="0" x2="1" y2="0">',
+              '<stop offset="0" stop-color="rgba(0,0,0,0.22)"/>',
+              '<stop offset="1" stop-color="rgba(0,0,0,0)"/>',
+            '</linearGradient>',
+            '<linearGradient id="pol-sr" x1="1" y1="0" x2="0" y2="0">',
+              '<stop offset="0" stop-color="rgba(0,0,0,0.22)"/>',
+              '<stop offset="1" stop-color="rgba(0,0,0,0)"/>',
+            '</linearGradient>',
+          '</defs>',
+          // White border strips (all four sides + full-height left/right for clean overlap)
           '<rect x="0" y="0" width="900" height="56" fill="#ffffff"/>',
-          // Left border strip
-          '<rect x="0" y="56" width="64" height="848" fill="#ffffff"/>',
-          // Right border strip
-          '<rect x="836" y="56" width="64" height="848" fill="#ffffff"/>',
-          // Thick bottom caption strip
+          '<rect x="0" y="0" width="64" height="1200" fill="#ffffff"/>',
+          '<rect x="836" y="0" width="64" height="1200" fill="#ffffff"/>',
           '<rect x="0" y="904" width="900" height="296" fill="#ffffff"/>',
-          // Thin shadow at top of caption strip
-          '<rect x="64" y="904" width="772" height="3" fill="rgba(0,0,0,0.10)"/>',
-          // Black outer border — simulates Polaroid plastic casing
-          '<rect x="0" y="0" width="900" height="1200" fill="none" stroke="#111111" stroke-width="6"/>',
-          // Caption text — dark on white
-          '<text x="450" y="1012" text-anchor="middle" fill="#111111" font-family="Helvetica Neue,Arial,sans-serif" font-size="40" font-weight="400" letter-spacing="2">The NSB Retreat</text>',
-          '<text x="450" y="1060" text-anchor="middle" fill="#444444" font-family="Helvetica Neue,Arial,sans-serif" font-size="23" font-weight="300" font-style="italic" letter-spacing="2">New Smyrna Beach, FL</text>',
-          '<text x="450" y="1104" text-anchor="middle" fill="#666666" font-family="Helvetica Neue,Arial,sans-serif" font-size="22" font-weight="300" letter-spacing="3">@thensbretreat</text>',
+          // Inset shadow — all 4 photo edges (drawn over transparent photo area)
+          '<rect x="64" y="56" width="772" height="50" fill="url(#pol-st)"/>',
+          '<rect x="64" y="854" width="772" height="50" fill="url(#pol-sb)"/>',
+          '<rect x="64" y="56" width="50" height="848" fill="url(#pol-sl)"/>',
+          '<rect x="786" y="56" width="50" height="848" fill="url(#pol-sr)"/>',
+          // Hard shadow line at top of caption strip
+          '<rect x="64" y="904" width="772" height="4" fill="rgba(0,0,0,0.13)"/>',
+          // Outer casing — black edge
+          '<rect x="0" y="0" width="900" height="1200" fill="none" stroke="#1a1a1a" stroke-width="8"/>',
+          // Caption
+          '<text x="450" y="1010" text-anchor="middle" fill="#111111" font-family="Helvetica Neue,Arial,sans-serif" font-size="42" font-weight="400" letter-spacing="1">The NSB Retreat</text>',
+          '<text x="450" y="1058" text-anchor="middle" fill="#555555" font-family="Helvetica Neue,Arial,sans-serif" font-size="24" font-weight="300" font-style="italic" letter-spacing="2">New Smyrna Beach, FL</text>',
+          '<text x="450" y="1104" text-anchor="middle" fill="#777777" font-family="Helvetica Neue,Arial,sans-serif" font-size="22" font-weight="300" letter-spacing="3">@thensbretreat</text>',
         '</svg>'
       ].join('')
     };
