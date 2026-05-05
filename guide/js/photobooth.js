@@ -36,6 +36,12 @@
           '<text x="450" y="1100" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="38" letter-spacing="8">THE NSB RETREAT</text>',
           '<text x="450" y="1134" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="21" letter-spacing="4" opacity="0.72" font-style="italic">New Smyrna Beach, FL</text>',
           '<text x="450" y="1168" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="22" letter-spacing="3" opacity="0.58">@thensbretreat</text>',
+          // Instagram icon — left of @thensbretreat (white, matching text opacity)
+          '<g transform="translate(316,1150) scale(0.833)" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.58">',
+            '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>',
+            '<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>',
+            '<circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/>',
+          '</g>',
         '</svg>'
       ].join(''),
 
@@ -49,6 +55,12 @@
           '<text x="450" y="1132" text-anchor="middle" fill="#1a4a6b" font-family="Georgia,serif" font-size="32" letter-spacing="5">THE NSB RETREAT</text>',
           '<text x="450" y="1160" text-anchor="middle" fill="#2a6a8a" font-family="Georgia,serif" font-size="19" letter-spacing="3" font-style="italic">New Smyrna Beach, FL</text>',
           '<text x="450" y="1188" text-anchor="middle" fill="#4a8aaa" font-family="Arial,sans-serif" font-size="20" letter-spacing="3">@thensbretreat</text>',
+          // Instagram icon
+          '<g transform="translate(320,1171) scale(0.833)" fill="none" stroke="#4a8aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">',
+            '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>',
+            '<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>',
+            '<circle cx="17.5" cy="6.5" r="1.5" fill="#4a8aaa" stroke="none"/>',
+          '</g>',
           // Compass — top left
           '<circle cx="46" cy="46" r="28" fill="none" stroke="white" stroke-width="2" opacity="0.85"/>',
           '<line x1="46" y1="18" x2="46" y2="74" stroke="white" stroke-width="2" opacity="0.85"/>',
@@ -77,6 +89,12 @@
           '<text x="450" y="1141" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="26" letter-spacing="5">THE NSB RETREAT</text>',
           '<text x="450" y="1164" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="17" letter-spacing="3" opacity="0.88" font-style="italic">New Smyrna Beach, FL</text>',
           '<text x="450" y="1187" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="18" letter-spacing="3" opacity="0.8">@thensbretreat</text>',
+          // Instagram icon
+          '<g transform="translate(327,1170) scale(0.833)" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8">',
+            '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>',
+            '<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>',
+            '<circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/>',
+          '</g>',
           // Palm leaves — top left
           '<path d="M22,76 C50,20 110,18 130,46 C100,46 62,58 22,76 Z" fill="#2a7a4e" opacity="0.82"/>',
           '<path d="M22,76 C36,14 90,6 106,34 C80,38 50,56 22,76 Z" fill="#3a9e68" opacity="0.72"/>',
@@ -88,14 +106,20 @@
         '</svg>'
       ].join(''),
 
-      // Retro / Polaroid — white border, inset shadow on photo edges, black outer casing
+      // Retro / Polaroid — paper-textured white border, inset shadow, thin inner photo border
       // Real Polaroid 600: top~56px sides~64px bottom~296px (25%), photo 772×848 nearly-square
       polaroid: [
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">',
           '<defs>',
-            // Inset shadow gradients — darken photo edges to simulate recessed photo
+            // Paper texture filter — subtle fractal noise on white areas
+            '<filter id="pol-paper" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">',
+              '<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="3" stitchTiles="stitch" result="noise"/>',
+              '<feColorMatrix in="noise" type="matrix" values="0.07 0 0 0 0.93  0 0.07 0 0 0.93  0 0 0.07 0 0.93  0 0 0 1 0" result="tex"/>',
+              '<feBlend in="SourceGraphic" in2="tex" mode="multiply"/>',
+            '</filter>',
+            // Inset shadow gradients
             '<linearGradient id="pol-st" x1="0" y1="0" x2="0" y2="1">',
-              '<stop offset="0" stop-color="rgba(0,0,0,0.32)"/>',
+              '<stop offset="0" stop-color="rgba(0,0,0,0.34)"/>',
               '<stop offset="1" stop-color="rgba(0,0,0,0)"/>',
             '</linearGradient>',
             '<linearGradient id="pol-sb" x1="0" y1="1" x2="0" y2="0">',
@@ -111,17 +135,16 @@
               '<stop offset="1" stop-color="rgba(0,0,0,0)"/>',
             '</linearGradient>',
           '</defs>',
-          // White border strips (all four sides + full-height left/right for clean overlap)
-          '<rect x="0" y="0" width="900" height="56" fill="#ffffff"/>',
-          '<rect x="0" y="0" width="64" height="1200" fill="#ffffff"/>',
-          '<rect x="836" y="0" width="64" height="1200" fill="#ffffff"/>',
-          '<rect x="0" y="904" width="900" height="296" fill="#ffffff"/>',
-          // Inset shadow — all 4 photo edges (drawn over transparent photo area)
+          // White frame — compound path with photo cutout, paper texture applied
+          '<path fill-rule="evenodd" fill="#ffffff" filter="url(#pol-paper)" d="M0,0 H900 V1200 H0 Z M64,56 H836 V904 H64 Z"/>',
+          // Thin black border around photo opening
+          '<rect x="64" y="56" width="772" height="848" fill="none" stroke="#1a1a1a" stroke-width="3"/>',
+          // Inset shadow — all 4 photo edges
           '<rect x="64" y="56" width="772" height="50" fill="url(#pol-st)"/>',
           '<rect x="64" y="854" width="772" height="50" fill="url(#pol-sb)"/>',
           '<rect x="64" y="56" width="50" height="848" fill="url(#pol-sl)"/>',
           '<rect x="786" y="56" width="50" height="848" fill="url(#pol-sr)"/>',
-          // Hard shadow line at top of caption strip
+          // Shadow line at top of caption strip
           '<rect x="64" y="904" width="772" height="4" fill="rgba(0,0,0,0.13)"/>',
           // Outer casing — black edge
           '<rect x="0" y="0" width="900" height="1200" fill="none" stroke="#1a1a1a" stroke-width="8"/>',
@@ -129,6 +152,12 @@
           '<text x="450" y="1010" text-anchor="middle" fill="#111111" font-family="Helvetica Neue,Arial,sans-serif" font-size="42" font-weight="400" letter-spacing="1">The NSB Retreat</text>',
           '<text x="450" y="1058" text-anchor="middle" fill="#555555" font-family="Helvetica Neue,Arial,sans-serif" font-size="24" font-weight="300" font-style="italic" letter-spacing="2">New Smyrna Beach, FL</text>',
           '<text x="450" y="1104" text-anchor="middle" fill="#777777" font-family="Helvetica Neue,Arial,sans-serif" font-size="22" font-weight="300" letter-spacing="3">@thensbretreat</text>',
+          // Instagram icon
+          '<g transform="translate(316,1087) scale(0.833)" fill="none" stroke="#777777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">',
+            '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>',
+            '<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>',
+            '<circle cx="17.5" cy="6.5" r="1.5" fill="#777777" stroke="none"/>',
+          '</g>',
         '</svg>'
       ].join('')
     };
