@@ -154,9 +154,16 @@
       '<div class="bc-tide-wrap"><div class="bc-skel" style="height:88px;border-radius:8px"></div></div>';
   }
 
+  var LINKS_HTML =
+    '<div class="bc-links">' +
+      '<a class="bc-flag-link" href="https://www.volusia.org/services/public-protection/beach-safety/beachcams-and-daily-safety-report.stml" target="_blank" rel="noopener" data-i18n="beach_flag_link">NSB Beach Flags &amp; Cams →</a>' +
+      '<a class="bc-flag-link" href="https://www.youtube.com/watch?v=kB2PZC-ow68" target="_blank" rel="noopener">Live NSB Beach Cam →</a>' +
+    '</div>';
+
   function renderError(container) {
     container.innerHTML =
-      '<p class="bc-error">Unable to load conditions right now. Try again in a moment.</p>';
+      '<p class="bc-error">Unable to load conditions right now. Try again in a moment.</p>' +
+      LINKS_HTML;
   }
 
   function renderConditions(container, wx, marine, tides) {
@@ -227,6 +234,9 @@
       tideHTML;
 
     renderForecast(container, wx.daily);
+
+    // Flag status + beach cam links
+    container.insertAdjacentHTML('beforeend', LINKS_HTML);
 
     // Re-run i18n on new elements if available
     if (typeof I18N !== 'undefined' && I18N.applyLang) {
