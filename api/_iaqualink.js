@@ -34,20 +34,27 @@ export async function authenticate() {
 
   const data = await res.json();
 
-  // Log keys for debugging — remove once working
-  console.log('[iaqualink-auth] response keys:', Object.keys(data).join(', '));
+  // Cognito tokens are nested inside userPoolOAuth or credentials objects.
+  // Fall back to top-level fields for older API versions.
+  const idToken =
+    data.userPoolOAuth?.IdToken ||
+    data.credentials?.IdToken ||
+    data.id_token;
 
-  if (!data.client_id || !data.id_token) {
-    // Fall back to authentication_token if id_token not present
-    const token = data.id_token || data.authentication_token;
-    const clientId = data.client_id || data.id || data.user_id;
-    if (!token || !clientId) {
-      throw new Error(`iAqualink login: unexpected response shape. Keys: ${Object.keys(data).join(', ')}`);
-    }
-    return { clientId, idToken: token };
+  const clientId =
+    data.cognitoPool?.appClientId ||
+    data.client_id ||
+    data.id;
+
+  if (!idToken || !clientId) {
+    throw new Error(
+      `iAqualink login: could not extract tokens. Keys: ${Object.keys(data).join(', ')}` +
+      (data.userPoolOAuth ? ` | userPoolOAuth keys: ${Object.keys(data.userPoolOAuth).join(', ')}` : '') +
+      (data.cognitoPool   ? ` | cognitoPool keys: ${Object.keys(data.cognitoPool).join(', ')}` : '')
+    );
   }
 
-  return { clientId: data.client_id, idToken: data.id_token };
+  return { clientId, idToken };
 }
 
 /**
