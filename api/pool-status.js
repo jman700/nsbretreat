@@ -106,31 +106,32 @@ export default async function handler(req, res) {
       const devData    = await deviceRequest(auth, 'get_devices');
       const devScreen  = devData.devices_screen || [];
       const auxStates  = Array.isArray(devScreen) ? parseDevicesScreen(devScreen) : {};
-      // Debug — remove once light state confirmed working
-      console.log('[pool-status] auxStates:', JSON.stringify(auxStates));
 
       // Air Blower (spa jets) — aux_1
       if (AUX_JETS in auxStates) {
         status.spa_jets = parseInt(auxStates[AUX_JETS], 10) > 0 ? 'on' : 'off';
       }
 
-      // Pool Light — aux_2; state value = Jandy ColorLogic index (1–14)
+      // Pool Light — aux_2; state = 1 means on (color not reported by RS-4 API),
+      // state >= 2 means a specific ColorLogic index is active and readable.
       if (AUX_LIGHT in auxStates) {
         const lightVal = parseInt(auxStates[AUX_LIGHT], 10);
         status.pool_light = lightVal > 0 ? 'on' : 'off';
-        if (lightVal >= 1) {
+        if (lightVal >= 2) {
           const colorMap = {
-             1: 'alpine_white',  2: 'sky_blue',    3: 'cobalt_blue',  4: 'caribbean_blue',
-             5: 'spring_green',  6: 'emerald_green', 7: 'emerald_rose', 8: 'magenta',
-             9: 'violet',       10: 'slow_splash',  11: 'fast_splash', 12: 'america',
+             2: 'sky_blue',      3: 'cobalt_blue',    4: 'caribbean_blue',
+             5: 'spring_green',  6: 'emerald_green',  7: 'emerald_rose',  8: 'magenta',
+             9: 'violet',       10: 'slow_splash',   11: 'fast_splash',  12: 'america',
             13: 'fat_tuesday',  14: 'disco_tech',
           };
-          status.pool_light_color = colorMap[lightVal] || 'alpine_white';
+          status.pool_light_color = colorMap[lightVal] || null;
+        } else {
+          // state = 1: light is on but active color/mode not exposed by API
+          status.pool_light_color = null;
         }
       }
     } catch (devErr) {
-      console.error('[pool-status] get_devices failed:', devErr.message, devErr.cause?.message || '');
-      status._devices_error = devErr.message; // visible in API response for debugging
+      console.error('[pool-status] get_devices failed:', devErr.message);
     }
 
     return res.status(200).json(status);

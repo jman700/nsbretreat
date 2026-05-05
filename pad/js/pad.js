@@ -143,11 +143,13 @@
     // Pool light
     updateToggle(btnPoolLight, s.pool_light);
 
-    // Color swatches — enabled only when light is on
+    // Color swatches — enabled only when light is on.
+    // Active color: use API value if known, otherwise fall back to last color we sent.
     var lightOn = s.pool_light === 'on';
+    var activeColor = s.pool_light_color || (lightOn ? localStorage.getItem('nsb_light_color') : null);
     colorSwatches.forEach(function(sw) {
       sw.classList.toggle('disabled', !lightOn);
-      sw.classList.toggle('active', lightOn && sw.dataset.color === s.pool_light_color);
+      sw.classList.toggle('active', lightOn && !!activeColor && sw.dataset.color === activeColor);
     });
 
     // Setpoint slider
@@ -274,7 +276,9 @@
       sendCommand('pool_light_color', color,
         function() {
           state.pool_light_color = color;
-          showToast(color.charAt(0).toUpperCase() + color.slice(1) + ' selected', 1500);
+          localStorage.setItem('nsb_light_color', color);
+          var label = sw.getAttribute('title') || color;
+          showToast(label + ' selected', 1500);
         },
         function() {
           // Revert
