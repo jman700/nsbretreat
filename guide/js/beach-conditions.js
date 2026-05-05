@@ -185,7 +185,7 @@
 
     var lbl = document.createElement('div');
     lbl.className = 'bc-section-label';
-    lbl.textContent = '5-Day Forecast';
+    lbl.textContent = '7-Day Forecast';
     wrap.appendChild(lbl);
 
     var strip = document.createElement('div');
