@@ -1,5 +1,5 @@
 /* translations-guide.js — i18n strings for guide/index.html */
-const GUIDE_TRANSLATIONS = {
+var GUIDE_TRANSLATIONS = {
 
   en: {
     /* Tabs */
