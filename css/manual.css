@@ -1767,22 +1767,40 @@ html.dark .pb-privacy-note { color: rgba(255,255,255,0.28); }
   align-items: center;
   justify-content: space-between;
   padding: 0 0.5rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 .pb-icon-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.12);
+  min-width: 64px;
+  height: auto;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.08);
   border: 1.5px solid rgba(0,0,0,0.1);
   color: var(--charcoal);
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 4px;
   transition: background 0.15s;
 }
-.pb-icon-btn:hover { background: rgba(0,0,0,0.18); }
+.pb-icon-btn:hover { background: rgba(0,0,0,0.15); }
+.pb-btn-label {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  opacity: 0.72;
+  line-height: 1;
+  pointer-events: none;
+}
+/* Modes row (strip, future toggles) */
+.pb-modes-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
 .pb-capture-btn {
   width: 68px;
   height: 68px;
