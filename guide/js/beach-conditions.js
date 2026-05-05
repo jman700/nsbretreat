@@ -31,7 +31,7 @@
 
   function renderError(container) {
     container.innerHTML =
-      '<p class="bc-error">Unable to load conditions right now. Check <a href="https://www.volusia.org/services/public-protection/beach-safety/beachcams-and-daily-safety-report.stml" target="_blank" rel="noopener">beach flag &amp; cams</a> or the <a href="https://www.youtube.com/watch?v=kB2PZC-ow68" target="_blank" rel="noopener">live NSB beach cam</a>.</p>';
+      '<p class="bc-error">Unable to load conditions right now. Try again in a moment.</p>';
   }
 
   function renderConditions(container, wx, marine) {
@@ -76,10 +76,6 @@
           '<span class="bc-value bc-value-sm">' + updatedAt + '</span>' +
           '<span class="bc-sub">local time</span>' +
         '</div>' +
-      '</div>' +
-      '<div class="bc-links">' +
-        '<a class="bc-flag-link" href="https://www.volusia.org/services/public-protection/beach-safety/beachcams-and-daily-safety-report.stml" target="_blank" rel="noopener" data-i18n="beach_flag_link">Beach Flag &amp; Cams →</a>' +
-        '<a class="bc-flag-link" href="https://www.youtube.com/watch?v=kB2PZC-ow68" target="_blank" rel="noopener">Live NSB Beach Cam →</a>' +
       '</div>';
 
     // Re-run i18n on new elements if available
