@@ -365,12 +365,14 @@
     var sx   = (vw - size) / 2;
     var sy   = (vh - size) / 2;
 
-    // Capture at full resolution
-    var capSize = Math.max(size, STRIP_PHOTO);
+    // Capture at native video resolution (no upscaling — preserves sharpness)
+    var capSize = size;
     var tmp = document.createElement('canvas');
     tmp.width  = capSize;
     tmp.height = capSize;
     var ctx = tmp.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
 
     if (facing === 'user') {
       ctx.save();
@@ -385,14 +387,20 @@
     var currentIdx  = stripShotIdx;
     var currentSlot = document.getElementById('pb-sslot-' + currentIdx);
 
-    // Show captured preview in this slot
+    // Show captured preview in this slot — size to physical pixels for sharpness
     if (currentSlot) {
-      var preview = document.createElement('canvas');
+      var dprPrev   = window.devicePixelRatio || 1;
+      var prevPx    = Math.round(currentSlot.offsetWidth * dprPrev);
+      prevPx        = Math.max(prevPx, 600); // minimum for quality
+      var preview   = document.createElement('canvas');
       preview.className = 'pb-sslot-photo';
-      preview.width  = 400;
-      preview.height = 400;
-      preview.getContext('2d').drawImage(tmp, 0, 0, 400, 400);
-      preview.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;z-index:2;';
+      preview.width  = prevPx;
+      preview.height = prevPx;
+      var prevCtx   = preview.getContext('2d');
+      prevCtx.imageSmoothingEnabled = true;
+      prevCtx.imageSmoothingQuality = 'high';
+      prevCtx.drawImage(tmp, 0, 0, prevPx, prevPx);
+      preview.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;';
       var lbl = currentSlot.querySelector('.pb-sslot-label');
       if (lbl) lbl.textContent = '✓';
       currentSlot.classList.remove('pb-sslot-active', 'pb-sslot-pending');
@@ -420,12 +428,12 @@
     var dpr = window.devicePixelRatio || 1;
     STRIP_W      = Math.min(Math.round(window.innerWidth * dpr), 1080);
     var scale    = STRIP_W / 900;
-    // Photos ~15% smaller than before; all gutters (side margin, gap, top/bottom pad) equal
+    // Photos ~74% of strip width; side margins generous; photos close together
     STRIP_PHOTO  = Math.round(STRIP_W * 0.74);
     STRIP_MARGIN = Math.round((STRIP_W - STRIP_PHOTO) / 2);  // ~13% each side
-    STRIP_GAP    = STRIP_MARGIN;   // gap between photos = side margin
-    STRIP_VPAD   = STRIP_MARGIN;   // top & bottom padding = side margin
-    STRIP_BRAND  = Math.round(108 * scale);
+    STRIP_GAP    = Math.round(STRIP_MARGIN * 0.25);           // tight gap between photos
+    STRIP_VPAD   = Math.round(STRIP_MARGIN * 0.55);           // moderate top/bottom pad
+    STRIP_BRAND  = Math.round(180 * scale);                   // prominent footer
 
     var STRIP_H = STRIP_VPAD
                 + STRIP_PHOTO + STRIP_GAP
@@ -437,50 +445,51 @@
     canvas.width  = STRIP_W;
     canvas.height = STRIP_H;
     var ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
 
-    // Background (warm light gray — matches strip viewfinder bg)
+    // Background (warm light gray)
     ctx.fillStyle = '#f0ede8';
     ctx.fillRect(0, 0, STRIP_W, STRIP_H);
 
     // Draw 3 square photos
     for (var i = 0; i < 3; i++) {
       var photoY = STRIP_VPAD + i * (STRIP_PHOTO + STRIP_GAP);
-      // Photo
       ctx.drawImage(
         stripShots[i], 0, 0, stripShots[i].width, stripShots[i].height,
         STRIP_MARGIN, photoY, STRIP_PHOTO, STRIP_PHOTO
       );
-      // Thin black border around each photo
-      ctx.strokeStyle = '#1a1a1a';
-      ctx.lineWidth   = 2.5;
-      ctx.strokeRect(STRIP_MARGIN + 1, photoY + 1, STRIP_PHOTO - 2, STRIP_PHOTO - 2);
+      // Thin border around each photo
+      ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+      ctx.lineWidth   = Math.round(1.5 * scale);
+      ctx.strokeRect(STRIP_MARGIN + 0.5, photoY + 0.5, STRIP_PHOTO - 1, STRIP_PHOTO - 1);
     }
 
-    // Brand footer (white background)
+    // Brand footer
     var brandY = STRIP_H - STRIP_BRAND;
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, brandY, STRIP_W, STRIP_BRAND);
 
-    // Thin separator line
-    ctx.fillStyle = 'rgba(0,0,0,0.07)';
-    ctx.fillRect(0, brandY, STRIP_W, 1);
+    // Warm accent bar at top of brand footer
+    ctx.fillStyle = '#b8967e';
+    ctx.fillRect(0, brandY, STRIP_W, Math.round(4 * scale));
 
     ctx.textAlign = 'center';
 
-    // "The NSB Retreat"
+    // "The NSB Retreat" — larger, medium weight
     ctx.fillStyle = '#111111';
-    ctx.font      = '480 ' + Math.round(40 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
-    ctx.fillText('The NSB Retreat', STRIP_W / 2, brandY + Math.round(50 * scale));
+    ctx.font = '500 ' + Math.round(46 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
+    ctx.fillText('The NSB Retreat', STRIP_W / 2, brandY + Math.round(68 * scale));
 
-    // "New Smyrna Beach, FL"
-    ctx.fillStyle = '#666666';
-    ctx.font      = '300 italic ' + Math.round(24 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
-    ctx.fillText('New Smyrna Beach, FL', STRIP_W / 2, brandY + Math.round(78 * scale));
+    // "New Smyrna Beach, FL" — italic, relaxed
+    ctx.fillStyle = '#777777';
+    ctx.font = '300 italic ' + Math.round(27 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
+    ctx.fillText('New Smyrna Beach, FL', STRIP_W / 2, brandY + Math.round(106 * scale));
 
-    // "@thensbretreat"
-    ctx.fillStyle = '#999999';
-    ctx.font      = '300 ' + Math.round(22 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
-    ctx.fillText('@thensbretreat', STRIP_W / 2, brandY + Math.round(98 * scale));
+    // "@thensbretreat" — lighter
+    ctx.fillStyle = '#aaaaaa';
+    ctx.font = '300 ' + Math.round(23 * scale) + 'px "Helvetica Neue", Arial, sans-serif';
+    ctx.fillText('@thensbretreat', STRIP_W / 2, brandY + Math.round(140 * scale));
 
     canvas.toBlob(function (blob) {
       var btn = document.getElementById('pb-capture-btn');
