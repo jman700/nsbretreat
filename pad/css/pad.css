@@ -833,6 +833,12 @@ a.emg-card:hover {
 
 /* Dark mode intentionally disabled — kiosk always uses light theme */
 
+/* ── Kiosk lockdown — no outbound links ── */
+/* Hide beach cam / flag links injected by beach-conditions.js */
+.bc-action-card,
+.bc-links,
+.bc-flag-link { display: none !important; }
+
 /* ── Responsive ── */
 
 /* Portrait iPad — primary target. Most iPads in portrait are 768–1024 CSS px wide.
