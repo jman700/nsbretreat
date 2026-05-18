@@ -319,7 +319,9 @@
   });
 
   // ── Spa Heater Timer (Supabase-backed, durable across all clients) ─────────
-  var cdInterval = null;
+  var cdInterval        = null;
+  var heaterStopPending = false;   // true while stop command is in-flight
+  var heaterStopTimer   = null;    // safety timeout to clear the flag
 
   function fmtCountdown(ms) {
     if (ms <= 0) return '0:00:00';
@@ -388,12 +390,20 @@
     });
   }
 
-  // Clear timer from Supabase, then send off commands
+  // Soft-expire timer in Supabase, then send off commands
   function doHeaterOff() {
+    // Set pending flag so polls don't flip the UI back while command is in-flight
+    heaterStopPending = true;
+    clearTimeout(heaterStopTimer);
+    // Safety: clear flag after 60 s regardless (prevents permanent stuck state)
+    heaterStopTimer = setTimeout(function() { heaterStopPending = false; }, 60000);
+
     showHeaterOff();
-    // 1. Clear timer in Supabase
+    // 1. Soft-expire timer in Supabase (end_time=0, not a hard delete).
+    //    This prevents pool-status from auto-creating a new 3-hr timer while
+    //    the hardware is still reporting 'on' (command propagation delay).
     fetch('/api/spa-timer', { method: 'DELETE' })
-      .catch(function(e) { console.error('spa-timer DELETE failed:', e); });
+      .catch(function(e) { console.error('spa-timer soft-expire failed:', e); });
     // 2. Send hardware commands
     sendCommand('spa_heater', 'off');
     sendCommand('spa_mode', 'off');  // set_spa_pump off — best effort
@@ -404,6 +414,18 @@
   // page refresh.  The 30-second re-sync causes at most a 1–2 s tick correction.
   function updateHeaterFromAPI(isOnline, heaterState, endTime) {
     if (!isOnline) return;
+    // If stop was just pressed, ignore 'on' state until hardware confirms off.
+    // This prevents the poll from flipping the UI back while the command is in-flight.
+    if (heaterStopPending) {
+      if (heaterState === 'off') {
+        // Hardware confirmed off — clear the flag and settle on off
+        heaterStopPending = false;
+        clearTimeout(heaterStopTimer);
+        showHeaterOff();
+      }
+      // Still 'on' — keep showing the stopped UI, don't override
+      return;
+    }
     if (heaterState === 'on') {
       showHeaterOn(endTime);
     } else {

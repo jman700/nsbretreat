@@ -15,9 +15,18 @@ export default async function handler(req, res) {
 
   const sb = getSupabase();
 
-  // ── DELETE — clear timer ───────────────────────────────────────────────────
+  // ── DELETE — soft-expire timer ────────────────────────────────────────────
+  // Upsert end_time=0 instead of hard-deleting. This prevents pool-status.js
+  // from treating the missing row as "heater on without a timer" and
+  // auto-creating a new 3-hr timer during the few seconds between the stop
+  // button press and the hardware confirming off.
+  // pool-status.js handles end_time=0 via the timerExpired+heater_on branch
+  // (sends another off command) or heater_off+timerRow branch (cleans up row).
   if (req.method === 'DELETE') {
-    const { error } = await sb.from('spa_timer').delete().eq('id', ROW_ID);
+    const { error } = await sb.from('spa_timer').upsert(
+      { id: ROW_ID, end_time: 0, started_at: 0, source: 'stop' },
+      { onConflict: 'id' }
+    );
     if (error) return res.status(500).json({ error: error.message });
     return res.status(200).json({ success: true });
   }
