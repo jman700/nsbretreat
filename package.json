@@ -1,5 +1,8 @@
 {
   "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
   "dependencies": {
     "sharp": "^0.34.5",
     "@supabase/supabase-js": "^2.105.3"

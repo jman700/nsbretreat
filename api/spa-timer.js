@@ -15,16 +15,17 @@ export default async function handler(req, res) {
 
   const sb = getSupabase();
 
-  // ── DELETE — soft-expire timer ────────────────────────────────────────────
-  // Upsert end_time=0 instead of hard-deleting. This prevents pool-status.js
-  // from treating the missing row as "heater on without a timer" and
-  // auto-creating a new 3-hr timer during the few seconds between the stop
-  // button press and the hardware confirming off.
-  // pool-status.js handles end_time=0 via the timerExpired+heater_on branch
-  // (sends another off command) or heater_off+timerRow branch (cleans up row).
+  // ── DELETE — soft-expire timer (manual Stop button) ───────────────────────
+  // Set state='shutting_off' and end_time=0 instead of hard-deleting the row.
+  // The reconcile state machine (api/_pool.js, handleShuttingOff) then verifies
+  // the hardware actually turned off on subsequent polls/cron runs: it re-issues
+  // set_spa_heater while the heater still reports 'on', and only settles to
+  // 'idle' once it confirms off. Keeping the row (vs. deleting) prevents the
+  // idle branch from misreading a still-'on' heater as an external Jandy turn-on
+  // and auto-creating a fresh 3-hr timer during command propagation.
   if (req.method === 'DELETE') {
     const { error } = await sb.from('spa_timer').upsert(
-      { id: ROW_ID, end_time: 0, started_at: 0, source: 'stop' },
+      { id: ROW_ID, end_time: 0, started_at: 0, source: 'stop', state: 'shutting_off' },
       { onConflict: 'id' }
     );
     if (error) return res.status(500).json({ error: error.message });
@@ -42,7 +43,7 @@ export default async function handler(req, res) {
     const end_time = now + Math.round(h * 3600 * 1000);
 
     const { error } = await sb.from('spa_timer').upsert(
-      { id: ROW_ID, end_time, started_at: now, source },
+      { id: ROW_ID, end_time, started_at: now, source, state: 'active', shutoff_attempts: 0, spa_mode_since: 0, alerted: false },
       { onConflict: 'id' }
     );
     if (error) return res.status(500).json({ error: error.message });
