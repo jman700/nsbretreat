@@ -76,8 +76,42 @@ async function handleShuttingOff(ctx) {
   return { status, action: 'retry_shutoff', anomaly, detail };
 }
 
-// Replaced with real body in Task 6.
-async function handleIdle(ctx) { return ok(ctx.status); }
+async function handleIdle(ctx) {
+  const { status, now, store, iaqua, source } = ctx;
+  const found = snapshot(ctx);
+  const heaterOn = status.spa_heater === 'on';
+  const spaPumpOn = status.spa_pump === 'on';
+
+  if (heaterOn) {
+    // turned on via the Jandy app with no timer — adopt it as a 3hr session
+    const end_time = now + AUTO_TIMER_HRS * 3600 * 1000;
+    if (!spaPumpOn) await iaqua.command('set_spa_pump');
+    await store.saveState({ state: 'active', end_time, started_at: now, source: 'iaqualink', shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+    setTimerFields(status, end_time, now);
+    await store.log({ source, found, action: 'created_auto_timer', success: true, detail: '' });
+    return { status, action: 'created_auto_timer', anomaly: false, detail: '' };
+  }
+
+  if (spaPumpOn) {
+    // stuck in spa mode with heater off — revert after the grace period
+    const since = (ctx.row.spa_mode_since && ctx.row.spa_mode_since > 0) ? ctx.row.spa_mode_since : now;
+    if (now - since >= GRACE_MS) {
+      await fullShutdown(status, iaqua);
+      await store.saveState({ state: 'idle', spa_mode_since: 0 });
+      setTimerFields(status, 0, now);
+      await store.log({ source, found, action: 'reverted_spa_mode', success: true, detail: '' });
+      return { status, action: 'reverted_spa_mode', anomaly: false, detail: '' };
+    }
+    if (!ctx.row.spa_mode_since) await store.saveState({ spa_mode_since: since });
+    setTimerFields(status, 0, now);
+    return ok(status);
+  }
+
+  // fully idle — clear any stale grace marker
+  if (ctx.row.spa_mode_since) await store.saveState({ spa_mode_since: 0 });
+  setTimerFields(status, 0, now);
+  return ok(status);
+}
 
 export async function reconcile({ status, now, store, iaqua, source = 'cron', row }) {
   row = row || await store.getState();

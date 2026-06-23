@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { reconcile, fullShutdown, AUTO_TIMER_HRS } from './_pool.js';
+import { GRACE_MS as GRACE_MS_TEST } from './_pool.js';
 
 // ── shared fakes ──
 export function makeFakeStore(row) {
@@ -101,5 +102,56 @@ test('shutting_off + heater still on, second retry (1→2) → anomaly at thresh
   assert.equal(r.anomaly, true);
   assert.match(r.detail, /still on after 2/);
   assert.equal(store._state().shutoff_attempts, 2);
+  assert.equal(store._logs()[0].success, false);
+});
+
+test('idle + heater on (external Jandy turn-on) → create 3hr timer + ensure spa mode', async () => {
+  const now = 5_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on', spa_pump: 'off' }), now, store, iaqua });
+  assert.equal(r.action, 'created_auto_timer');
+  assert.equal(store._state().state, 'active');
+  assert.equal(store._state().end_time, now + AUTO_TIMER_HRS * 3600 * 1000);
+  assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_pump']);
+});
+
+test('idle + stuck spa mode, within grace → record spa_mode_since, no command', async () => {
+  const now = 5_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'off', spa_pump: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'none');
+  assert.equal(iaqua._calls().length, 0);
+  assert.equal(store._state().spa_mode_since, now);
+});
+
+test('idle + stuck spa mode, past 30-min grace → revert to pool mode + jets off', async () => {
+  const now = 5_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: now - GRACE_MS_TEST - 1, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'off', spa_pump: 'on', spa_jets: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'reverted_spa_mode');
+  assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_pump', 'set_aux_1']);
+  assert.equal(store._state().spa_mode_since, 0);
+});
+
+test('idle + fully off → clears any stale spa_mode_since, no action', async () => {
+  const now = 5_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 123, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus(), now, store, iaqua });
+  assert.equal(r.action, 'none');
+  assert.equal(store._state().spa_mode_since, 0);
+});
+
+test('command failure during shutdown → anomaly + failed log', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'active', end_time: now - 1, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+  const iaqua = { _calls: () => [], async command() { throw new Error('iAqualink 500'); } };
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on' }), now, store, iaqua, source: 'cron' });
+  assert.equal(r.anomaly, true);
+  assert.equal(r.action, 'command_error');
+  assert.match(r.detail, /iAqualink 500/);
   assert.equal(store._logs()[0].success, false);
 });
