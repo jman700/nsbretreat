@@ -126,3 +126,74 @@ export async function reconcile({ status, now, store, iaqua, source = 'cron', ro
     return { status, action: 'command_error', anomaly: true, detail: err.message };
   }
 }
+
+const FIELD_MAP = {
+  pool_temp: 'pool_temp', spa_temp: 'spa_temp', spa_heater: 'spa_heater', pool_heater: 'pool_heater',
+  pool_pump: 'pool_pump', spa_pump: 'spa_pump', pool_set_point: 'pool_set_point', spa_set_point: 'spa_set_point',
+};
+
+export function parseHomeScreen(homeScreenArray) {
+  const raw = {};
+  for (const item of homeScreenArray) { const k = Object.keys(item)[0]; raw[k] = item[k]; }
+
+  const result = {
+    online: true, pool_temp: null, spa_temp: null,
+    spa_heater: 'off', spa_pump: 'off', pool_pump: 'off',
+    pool_light: 'off', pool_light_color: 'white', spa_jets: 'off',
+    spa_set_point: 102, _raw: raw,
+  };
+
+  for (const [rawKey, val] of Object.entries(raw)) {
+    const mapped = FIELD_MAP[rawKey];
+    if (!mapped) continue;
+    if (['pool_temp', 'spa_temp', 'spa_set_point', 'pool_set_point'].includes(mapped)) {
+      result[mapped] = parseInt(val, 10) || null;
+    } else {
+      const n = parseInt(val, 10);
+      result[mapped] = (val === '1' || val === 'true' || val === 'on' || (!isNaN(n) && n > 0)) ? 'on' : 'off';
+    }
+  }
+  return result;
+}
+
+export function parseDevicesScreen(devicesScreenArray) {
+  const states = {};
+  for (const item of devicesScreenArray) {
+    const key = Object.keys(item)[0];
+    if (!key || !key.startsWith('aux_')) continue;
+    const fields = item[key];
+    const stateObj = Array.isArray(fields) ? fields.find(f => f.state !== undefined) : null;
+    if (stateObj) states[key] = stateObj.state;
+  }
+  return states;
+}
+
+const AUX_JETS = 'aux_1';
+const AUX_LIGHT = 'aux_2';
+const LIGHT_COLOR_MAP = {
+  2: 'sky_blue', 3: 'cobalt_blue', 4: 'caribbean_blue', 5: 'spring_green', 6: 'emerald_green',
+  7: 'emerald_rose', 8: 'magenta', 9: 'violet', 10: 'slow_splash', 11: 'fast_splash',
+  12: 'america', 13: 'fat_tuesday', 14: 'disco_tech',
+};
+
+export async function fetchStatus(iaqua) {
+  const data = await iaqua.command('get_home');
+  const homeScreen = data.home_screen || data.data || [];
+  if (!Array.isArray(homeScreen)) return { online: false, _raw: data };
+
+  const status = parseHomeScreen(homeScreen);
+  try {
+    const devData = await iaqua.command('get_devices');
+    const devScreen = devData.devices_screen || [];
+    const aux = Array.isArray(devScreen) ? parseDevicesScreen(devScreen) : {};
+    if (AUX_JETS in aux) status.spa_jets = parseInt(aux[AUX_JETS], 10) > 0 ? 'on' : 'off';
+    if (AUX_LIGHT in aux) {
+      const v = parseInt(aux[AUX_LIGHT], 10);
+      status.pool_light = v > 0 ? 'on' : 'off';
+      status.pool_light_color = v >= 2 ? (LIGHT_COLOR_MAP[v] || null) : null;
+    }
+  } catch (e) {
+    console.error('[fetchStatus] get_devices failed:', e.message);
+  }
+  return status;
+}

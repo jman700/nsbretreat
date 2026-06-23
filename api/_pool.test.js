@@ -155,3 +155,43 @@ test('command failure during shutdown → anomaly + failed log', async () => {
   assert.match(r.detail, /iAqualink 500/);
   assert.equal(store._logs()[0].success, false);
 });
+
+import { parseHomeScreen, parseDevicesScreen } from './_pool.js';
+
+test('parseHomeScreen normalizes heater, spa_pump, and temps', () => {
+  const home = [{ spa_heater: '1' }, { spa_pump: '1' }, { pool_temp: '80' }, { spa_temp: '102' }, { spa_set_point: '102' }];
+  const s = parseHomeScreen(home);
+  assert.equal(s.spa_heater, 'on');
+  assert.equal(s.spa_pump, 'on');
+  assert.equal(s.pool_temp, 80);
+  assert.equal(s.spa_temp, 102);
+  assert.equal(s.online, true);
+});
+
+test('parseHomeScreen defaults spa_pump to off when absent', () => {
+  const s = parseHomeScreen([{ spa_heater: '0' }]);
+  assert.equal(s.spa_pump, 'off');
+});
+
+test('parseDevicesScreen flattens aux states', () => {
+  const dev = [{ aux_1: [{ state: '1' }, { label: 'Air Blower' }] }, { aux_2: [{ state: '0' }] }];
+  const m = parseDevicesScreen(dev);
+  assert.equal(m.aux_1, '1');
+  assert.equal(m.aux_2, '0');
+});
+
+test('fetchStatus reads heater/pump from get_home and jets from get_devices', async () => {
+  const iaqua = {
+    async command(cmd) {
+      if (cmd === 'get_home')    return { home_screen: [{ spa_heater: '1' }, { spa_pump: '1' }, { pool_temp: '79' }] };
+      if (cmd === 'get_devices') return { devices_screen: [{ aux_1: [{ state: '1' }] }, { aux_2: [{ state: '0' }] }] };
+      return {};
+    },
+  };
+  const { fetchStatus } = await import('./_pool.js');
+  const s = await fetchStatus(iaqua);
+  assert.equal(s.spa_heater, 'on');
+  assert.equal(s.spa_pump, 'on');
+  assert.equal(s.spa_jets, 'on');
+  assert.equal(s.pool_light, 'off');
+});
