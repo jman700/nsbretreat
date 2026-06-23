@@ -195,3 +195,48 @@ test('fetchStatus reads heater/pump from get_home and jets from get_devices', as
   assert.equal(s.spa_jets, 'on');
   assert.equal(s.pool_light, 'off');
 });
+
+test('runHealthCheck emails once on a new anomaly and sets alerted', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'shutting_off', end_time: 0, shutoff_attempts: 1, spa_mode_since: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const sent = [];
+  const { runHealthCheck } = await import('./_pool.js');
+  const out = await runHealthCheck({
+    store, iaqua, now,
+    sendAlert: async (s, t) => sent.push({ s, t }),
+    fetchStatusFn: async () => ({ spa_heater: 'on', spa_pump: 'off', spa_jets: 'off' }),
+  });
+  assert.equal(out.anomaly, true);
+  assert.equal(sent.length, 1);
+  assert.equal(store._state().alerted, true);
+});
+
+test('runHealthCheck does not re-alert when already alerted', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'shutting_off', end_time: 0, shutoff_attempts: 2, spa_mode_since: 0, alerted: true });
+  const iaqua = makeFakeIaqua();
+  const sent = [];
+  const { runHealthCheck } = await import('./_pool.js');
+  await runHealthCheck({
+    store, iaqua, now,
+    sendAlert: async (s, t) => sent.push({ s, t }),
+    fetchStatusFn: async () => ({ spa_heater: 'on', spa_pump: 'off', spa_jets: 'off' }),
+  });
+  assert.equal(sent.length, 0);
+});
+
+test('runHealthCheck stays silent on a healthy system', async () => {
+  const now = 1000;
+  const store = makeFakeStore({ id: 1, state: 'active', end_time: now + 60000, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const sent = [];
+  const { runHealthCheck } = await import('./_pool.js');
+  const out = await runHealthCheck({
+    store, iaqua, now,
+    sendAlert: async (s, t) => sent.push({ s, t }),
+    fetchStatusFn: async () => ({ spa_heater: 'on', spa_pump: 'on', spa_jets: 'off' }),
+  });
+  assert.equal(out.action, 'none');
+  assert.equal(sent.length, 0);
+});

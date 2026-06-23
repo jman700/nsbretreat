@@ -197,3 +197,22 @@ export async function fetchStatus(iaqua) {
   }
   return status;
 }
+
+// Orchestrates one health check: read prior state, fetch live status, reconcile, alert once per episode.
+// fetchStatusFn is injectable for tests; defaults to the real fetchStatus.
+export async function runHealthCheck({ store, iaqua, now, sendAlert, source = 'cron', fetchStatusFn = fetchStatus }) {
+  const prior = await store.getState();
+  const status = await fetchStatusFn(iaqua);
+  const result = await reconcile({ status, now, store, iaqua, source, row: prior });
+
+  if (result.anomaly && !prior.alerted) {
+    await sendAlert(
+      'NSB Retreat — pool health check needs attention',
+      `Action: ${result.action}\n${result.detail}\n` +
+      `heater=${status.spa_heater} spa_pump=${status.spa_pump} jets=${status.spa_jets}\n` +
+      `See pool_health_log in Supabase for details.`,
+    );
+    await store.saveState({ alerted: true });
+  }
+  return { action: result.action, anomaly: result.anomaly };
+}
