@@ -52,8 +52,31 @@ async function handleActive(ctx) {
   return { status, action: 'expired_shutoff', anomaly: false, detail: '' };
 }
 
-// Replaced with real bodies in Tasks 5 and 6.
-async function handleShuttingOff(ctx) { return ok(ctx.status); }
+async function handleShuttingOff(ctx) {
+  const { status, now, store, iaqua, source } = ctx;
+  const found = snapshot(ctx);
+
+  if (status.spa_heater !== 'on') {
+    // hardware confirmed off — clear any lingering pump/jets, settle to idle
+    await fullShutdown(status, iaqua);
+    await store.saveState({ state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+    setTimerFields(status, 0, now);
+    await store.log({ source, found, action: 'shutoff_confirmed', success: true, detail: '' });
+    return { status, action: 'shutoff_confirmed', anomaly: false, detail: '' };
+  }
+
+  // still on — re-issue heater off and count the attempt
+  await iaqua.command('set_spa_heater');
+  const attempts = (ctx.row.shutoff_attempts || 0) + 1;
+  await store.saveState({ shutoff_attempts: attempts });
+  const anomaly = attempts >= SHUTOFF_ALERT_THRESHOLD;
+  const detail = anomaly ? `Spa heater still on after ${attempts} shut-off attempts` : '';
+  setTimerFields(status, 0, now);
+  await store.log({ source, found, action: 'retry_shutoff', success: !anomaly, detail });
+  return { status, action: 'retry_shutoff', anomaly, detail };
+}
+
+// Replaced with real body in Task 6.
 async function handleIdle(ctx) { return ok(ctx.status); }
 
 export async function reconcile({ status, now, store, iaqua, source = 'cron', row }) {

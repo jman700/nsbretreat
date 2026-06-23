@@ -68,3 +68,38 @@ test('active + heater off before expiry → early-end shutdown to idle', async (
   assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_pump']);
   assert.equal(store._state().state, 'idle');
 });
+
+test('shutting_off + heater confirmed off → idle, clears lingering pump, resets flags', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'shutting_off', end_time: 0, shutoff_attempts: 2, spa_mode_since: 0, alerted: true });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'off', spa_pump: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'shutoff_confirmed');
+  assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_pump']);
+  assert.equal(store._state().state, 'idle');
+  assert.equal(store._state().shutoff_attempts, 0);
+  assert.equal(store._state().alerted, false);
+});
+
+test('shutting_off + heater still on, first retry (0→1) → no anomaly', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'shutting_off', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'retry_shutoff');
+  assert.equal(r.anomaly, false);
+  assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_heater']);
+  assert.equal(store._state().shutoff_attempts, 1);
+});
+
+test('shutting_off + heater still on, second retry (1→2) → anomaly at threshold', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'shutting_off', end_time: 0, shutoff_attempts: 1, spa_mode_since: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'retry_shutoff');
+  assert.equal(r.anomaly, true);
+  assert.match(r.detail, /still on after 2/);
+  assert.equal(store._state().shutoff_attempts, 2);
+  assert.equal(store._logs()[0].success, false);
+});
