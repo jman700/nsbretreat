@@ -1,7 +1,7 @@
 // api/guest-token.js
 // GET /api/guest-token?token=TOKEN — validate a guest access token (public endpoint).
 
-import { getSupabase } from './_supabase.js';
+import { getAnonSupabase } from './_supabase.js';
 
 export async function validateToken(token, sb) {
   if (!token) return { valid: false, reason: 'not_found' };
@@ -19,6 +19,11 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'no-store');
-  const result = await validateToken(req.query.token, getSupabase());
-  return res.status(200).json(result);
+  try {
+    const result = await validateToken(req.query.token, getAnonSupabase());
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error('[guest-token]', err.message);
+    return res.status(500).json({ valid: false, reason: 'error' });
+  }
 }
