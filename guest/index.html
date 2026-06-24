@@ -701,6 +701,9 @@
         document.getElementById('gate-spinner').style.display = 'none';
         document.getElementById('gate-title').textContent = 'This link is no longer active.';
         document.getElementById('gate-sub').textContent = 'Contact your host if you believe this is an error.';
+        // Disconnect QR observer since content will never be shown
+        var qrObs = window.__guestQrObserver;
+        if (qrObs) { qrObs.disconnect(); window.__guestQrObserver = null; }
       }
     })();
   </script>
@@ -716,6 +719,7 @@
           observer.disconnect();
         }
       });
+      window.__guestQrObserver = observer;
       observer.observe(document.getElementById('guest-content'), { attributes: true, attributeFilter: ['style'] });
     })();
   </script>
