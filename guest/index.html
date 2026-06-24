@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>NSB Retreat — House Guide</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/pad/css/pad.css">
+  <style>
+    #guest-gate {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #f9ece8;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+    }
+    .gate-inner { text-align: center; padding: 2rem; }
+    .gate-title {
+      font-size: 1.5rem; font-weight: 400; color: #2d2926;
+      letter-spacing: 0.02em; margin-bottom: 0.5rem;
+    }
+    .gate-sub { font-size: 0.9rem; color: #6b6460; font-family: 'Inter', sans-serif; }
+    .gate-spinner {
+      width: 32px; height: 32px; margin: 0 auto 1.25rem;
+      border: 3px solid #d4c4b0; border-top-color: #b8967e;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- Gate overlay: visible while validating or on expired/invalid token -->
+  <div id="guest-gate">
+    <div class="gate-inner">
+      <div class="gate-spinner" id="gate-spinner"></div>
+      <p class="gate-title" id="gate-title">NSB Retreat</p>
+      <p class="gate-sub" id="gate-sub"></p>
+    </div>
+  </div>
+
+  <div id="guest-content" style="display:none">
+
+    <!-- ── Nav ── -->
+    <nav class="pad-nav" id="pad-nav">
+      <div class="pad-nav-inner" id="pad-tabs">
+        <span class="pad-logo">NSB Retreat</span>
+        <a href="#pool"       class="pad-tab active">Pool &amp; Spa</a>
+        <a href="#beach"      class="pad-tab">Beach</a>
+        <a href="#wifi"       class="pad-tab">WiFi &amp; Tech</a>
+        <a href="#checkin"    class="pad-tab">Check-In</a>
+        <a href="#rules"      class="pad-tab">House Rules</a>
+        <a href="#local"      class="pad-tab">Local Guide</a>
+        <a href="#emergency"  class="pad-tab">Emergency</a>
+      </div>
+    </nav>
+
+    <main class="pad-main">
+
+      <!-- ── 1. Pool & Spa Controls ── -->
+      <section class="pad-section" id="pool">
+        <h2 class="pad-section-title">Pool &amp; Spa Controls</h2>
+
+        <div class="pool-widget" id="pool-widget">
+          <div class="pool-status-header">
+            <h3 class="pool-widget-title">Live Controls</h3>
+            <span class="pool-online-badge offline" id="pool-badge">Loading…</span>
+          </div>
+
+          <!-- Temp display -->
+          <div class="pool-temps">
+            <div class="temp-card">
+              <span class="temp-label">Pool Temp</span>
+              <span class="temp-value" id="pool-temp-val"><span class="temp-loading">–</span></span>
+            </div>
+            <div class="temp-card">
+              <span class="temp-label">Spa Temp</span>
+              <span class="temp-value" id="spa-temp-val"><span class="temp-loading">–</span></span>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="pool-controls">
+
+            <!-- Spa Heater + Spa Mode with auto-off timer -->
+            <div class="pool-control-row heater-row">
+              <div class="control-label">
+                Spa Heater
+                <span class="control-sub" id="heater-sub">Select a duration to start</span>
+              </div>
+              <div class="heater-controls">
+                <div id="heater-off-ui" class="heater-dur-btns">
+                  <button class="heater-dur-btn" data-hours="1" disabled>1 hr</button>
+                  <button class="heater-dur-btn" data-hours="2" disabled>2 hr</button>
+                  <button class="heater-dur-btn" data-hours="3" disabled>3 hr</button>
+                </div>
+                <div id="heater-on-ui" class="heater-on-controls" style="display:none">
+                  <span class="heater-countdown" id="heater-countdown">–</span>
+                  <button class="heater-stop-btn" id="heater-stop-btn" disabled>Stop</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spa Setpoint -->
+            <div class="pool-control-row setpoint-row">
+              <div class="setpoint-header">
+                <div class="control-label">
+                  Spa Temperature
+                  <span class="control-sub">Set target temperature (98–104°F)</span>
+                </div>
+                <span class="setpoint-display" id="setpoint-display">102°F</span>
+              </div>
+              <input type="range" class="pool-slider" id="slider-spa-setpoint"
+                min="98" max="104" step="1" value="102" disabled>
+            </div>
+
+            <!-- Spa Jets -->
+            <div class="pool-control-row" id="row-spa-jets" style="display:none">
+              <div class="control-label">
+                Spa Jets
+                <span class="control-sub">Air blower / jets</span>
+              </div>
+              <button class="pool-toggle" id="btn-spa-jets" data-command="spa_jets" data-state="off" disabled>Off</button>
+            </div>
+
+            <!-- Pool Light -->
+            <div class="pool-control-row">
+              <div class="control-label">
+                Pool Light
+                <span class="control-sub">Main pool light</span>
+              </div>
+              <button class="pool-toggle" id="btn-pool-light" data-command="pool_light" data-state="off" disabled>Off</button>
+            </div>
+
+            <!-- Pool Light Colors -->
+            <div class="pool-control-row" style="flex-direction:column; align-items:flex-start; gap:0.5rem">
+              <div class="control-label">
+                Light Color
+                <span class="control-sub">Tap a color — light must be on</span>
+              </div>
+              <div class="light-colors" id="light-colors">
+                <button class="color-swatch swatch-alpine-white   disabled" data-color="alpine_white"   title="Alpine White"          aria-label="Alpine White"></button>
+                <button class="color-swatch swatch-sky-blue       disabled" data-color="sky_blue"       title="Sky Blue"              aria-label="Sky Blue"></button>
+                <button class="color-swatch swatch-cobalt-blue    disabled" data-color="cobalt_blue"    title="Cobalt Blue"           aria-label="Cobalt Blue"></button>
+                <button class="color-swatch swatch-caribbean-blue disabled" data-color="caribbean_blue" title="Caribbean Blue"        aria-label="Caribbean Blue"></button>
+                <button class="color-swatch swatch-spring-green   disabled" data-color="spring_green"   title="Spring Green"          aria-label="Spring Green"></button>
+                <button class="color-swatch swatch-emerald-green  disabled" data-color="emerald_green"  title="Emerald Green"         aria-label="Emerald Green"></button>
+                <button class="color-swatch swatch-emerald-rose   disabled" data-color="emerald_rose"   title="Emerald Rose"          aria-label="Emerald Rose"></button>
+                <button class="color-swatch swatch-magenta        disabled" data-color="magenta"        title="Magenta"               aria-label="Magenta"></button>
+                <button class="color-swatch swatch-violet         disabled" data-color="violet"         title="Violet"                aria-label="Violet"></button>
+                <button class="color-swatch swatch-slow-splash    disabled" data-color="slow_splash"    title="Slow Color Splash"     aria-label="Slow Color Splash"></button>
+                <button class="color-swatch swatch-fast-splash    disabled" data-color="fast_splash"    title="Fast Color Splash"     aria-label="Fast Color Splash"></button>
+                <button class="color-swatch swatch-america        disabled" data-color="america"        title="America The Beautiful" aria-label="America The Beautiful"></button>
+                <button class="color-swatch swatch-fat-tuesday    disabled" data-color="fat_tuesday"    title="Fat Tuesday"           aria-label="Fat Tuesday"></button>
+                <button class="color-swatch swatch-disco-tech     disabled" data-color="disco_tech"     title="Disco Tech"            aria-label="Disco Tech"></button>
+              </div>
+            </div>
+
+            <!-- Pool Pump (read-only) -->
+            <div class="pool-control-row">
+              <div class="control-label">
+                Pool Pump
+                <span class="control-sub">Read-only</span>
+              </div>
+              <span class="pool-pump-status" id="pool-pump-status">–</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 2. Beach Conditions ── -->
+      <section class="pad-section" id="beach">
+        <h2 class="pad-section-title">Current Beach Conditions</h2>
+        <div class="beach-cond-widget" id="beach-cond-widget"></div>
+      </section>
+
+      <!-- ── 3. WiFi & Tech ── -->
+      <section class="pad-section" id="wifi">
+        <h2 class="pad-section-title">WiFi &amp; Tech</h2>
+
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="info-label">WiFi Network</span>
+            <span class="info-value" id="pad-wifi-name">NSB Retreat</span>
+          </div>
+          <div class="info-card copyable" id="pad-wifi-pass-card">
+            <span class="info-label">WiFi Password</span>
+            <span class="info-value" id="pad-wifi-pass">seashells815!</span>
+            <span class="info-hint">Tap to copy</span>
+          </div>
+        </div>
+
+        <div class="wifi-qr-wrap">
+          <div id="wifi-qr"></div>
+          <p class="wifi-qr-label">Scan to connect</p>
+        </div>
+
+        <div class="acc-list">
+          <div class="acc-item">
+            <button class="acc-trigger">Smart TVs &amp; Streaming</button>
+            <div class="acc-body">
+              <p>Every bedroom and living space has a Smart TV. Netflix, Hulu, YouTube TV, and more are available to download. <strong>Sign in with your own account.</strong> Please sign out before you check out.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">Pool &amp; Spa Controls (Tablet)</button>
+            <div class="acc-body">
+              <p>The hot tub, bubbles, and pool/spa lights are also controllable from the <strong>tablet mounted on the wall in the kitchen</strong>. Tap <strong>Pool &amp; Spa</strong> in the menu for live controls and full instructions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 4. Check-In ── -->
+      <section class="pad-section" id="checkin">
+        <h2 class="pad-section-title">Check-In</h2>
+
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="info-label">Check-In</span>
+            <span class="info-value">4:00 PM</span>
+            <span class="info-hint">Code in your booking app</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">Check-Out</span>
+            <span class="info-value">10:00 AM</span>
+            <span class="info-hint">See checkout instructions</span>
+          </div>
+        </div>
+
+        <div class="acc-list">
+          <div class="acc-item">
+            <button class="acc-trigger">Door Lock &amp; Entry</button>
+            <div class="acc-body">
+              <p>Your key is the <strong>black smart lock</strong> on the front door — no physical key needed.</p>
+              <ul style="margin-top:0.75rem">
+                <li><strong>To unlock:</strong> Press the house icon (bottom left), enter your code, and the door will unlock.</li>
+                <li><strong>To lock:</strong> Press the lock icon (bottom right) when leaving.</li>
+              </ul>
+              <p style="margin-top:0.75rem">Your door code will be sent in the messages section of your <strong>Airbnb or VRBO booking app</strong> prior to arrival.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">Parking</button>
+            <div class="acc-body">
+              <p>Park in the <strong>right garage spot, driveway, or front yard grass</strong>. Watch for the water meter near the grass area.</p>
+              <p style="margin-top:0.75rem"><strong>Street parking is prohibited</strong> and may result in fines or towing.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">Upon Arrival</button>
+            <div class="acc-body">
+              <p>Please <strong>inspect the home</strong> when you arrive and notify us immediately if anything needs attention. Document any pre-existing damage with photos and send via text or booking app.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">How to Heat the Hot Tub</button>
+            <div class="acc-body">
+              <ol class="steps-list">
+                <li><span class="step-num">1</span><div class="step-body">Touch the tablet screen to wake it, then <strong>slide your finger upward from the bottom</strong> to unlock.</div></li>
+                <li><span class="step-num">2</span><div class="step-body">Tap <strong>"815 NSB Pool System"</strong> to open controls.</div></li>
+                <li><span class="step-num">3</span><div class="step-body">Select the <strong>"OneTouch Scenes"</strong> tab and toggle on <strong>"Spa Mode."</strong></div></li>
+                <li><span class="step-num">4</span><div class="step-body">Allow approximately <strong>30 minutes</strong> to reach <strong>102°F</strong>. Or — use the live controls on the Pool &amp; Spa tab.</div></li>
+              </ol>
+              <p style="margin-top:0.875rem; font-size:0.875rem"><strong>Important:</strong> Under Devices, "Spa Mode" must be toggled on — not just "Spa Heater."</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">Pool Sliding Door Alarm (Child Safety)</button>
+            <div class="acc-body">
+              <p>The sliding glass doors to the pool have a legally required audible alarm — a <strong>grey rectangular box</strong> to the left of the door.</p>
+              <ul style="margin-top:0.75rem">
+                <li><strong>To exit:</strong> Press the mute button before opening the door.</li>
+                <li><strong>To re-enter:</strong> Press the small button on the outside of the door frame before opening.</li>
+                <li>The mute lasts <strong>10–15 seconds.</strong></li>
+                <li>If your group is adults only, you may disable the alarm using the black switch on the left side. <strong>Do not disable if children are present.</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 5. House Rules ── -->
+      <section class="pad-section" id="rules">
+        <h2 class="pad-section-title">House Rules</h2>
+        <div class="acc-list">
+          <div class="acc-item">
+            <button class="acc-trigger">Quiet hours outside: 10 PM – 9 AM</button>
+            <div class="acc-body">
+              <p>Please be mindful of neighbors. Quiet hours apply to outdoor spaces — pool area, patio, and yard.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">Max occupancy: 16 guests</button>
+            <div class="acc-body">
+              <p>The property is permitted for a maximum of 16 guests at any time, including day visitors.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">No street parking</button>
+            <div class="acc-body">
+              <p>Use the driveway, right garage spot, or front yard grass only. Street parking may result in fines or towing.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">No glass outside</button>
+            <div class="acc-body">
+              <p>Broken glass on outdoor surfaces is nearly impossible to fully clear and poses a serious injury risk — especially in and around the pool.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">No smoking on the property</button>
+            <div class="acc-body">
+              <p>If you need to smoke, please step off the property and dispose of cigarette butts responsibly. Thank you for your understanding.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">Pets require a $395 fee</button>
+            <div class="acc-body">
+              <p>Pets must be pre-approved before arrival. Please clean up after your pet at all times.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">No parties or events without approval</button>
+            <div class="acc-body">
+              <p>Parties or events require prior written approval from the host.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">No unauthorized overnight guests</button>
+            <div class="acc-body">
+              <p>Overnight guests must not exceed the booked headcount. No unregistered guests permitted to stay the night.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">No open-flame candles indoors</button>
+            <div class="acc-body">
+              <p>Scented, pillar, tea lights, and similar candles are a fire hazard. Birthday candles are fine. Battery-powered candles are always welcome.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">Report any damage immediately</button>
+            <div class="acc-body">
+              <p>Accidents happen — please notify Antonio right away rather than after checkout. Call or text (407) 506-6654.</p>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-trigger">Trash pickup: Monday &amp; Thursday mornings</button>
+            <div class="acc-body">
+              <p>Please roll bins to the curb by 7 AM and return them the same day.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 6. Local Guide ── -->
+      <section class="pad-section" id="local">
+        <h2 class="pad-section-title">Local Guide</h2>
+        <div class="local-filter-tabs">
+          <button class="filter-btn active" data-filter="eat">Eat</button>
+          <button class="filter-btn" data-filter="drink">Drink</button>
+          <button class="filter-btn" data-filter="see">See</button>
+          <button class="filter-btn" data-filter="do">Do</button>
+          <button class="filter-btn" data-filter="coffee">Coffee</button>
+          <button class="filter-btn" data-filter="essentials">Essentials</button>
+          <button class="filter-btn" data-filter="">All</button>
+        </div>
+
+        <div class="local-guide-cards" id="local-guide-cards">
+
+          <div class="place-card" data-category="eat">
+            <img src="../assets/photos/local-breakers.jpg" alt="The Breakers" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Casual · On the Beach</span>
+              <h3>The Breakers</h3>
+              <p>Beachfront dining with burgers, seafood, and ocean views. Possibly the best burger in Central Florida.</p>
+              <p class="place-address">359 Flagler Ave</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="eat">
+            <img src="../assets/photos/local-garlic.jpg" alt="The Garlic" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Casual · Lively</span>
+              <h3>The Garlic</h3>
+              <p>Rustic Italian with lush garden seating, wood-fired pizza, and an extensive wine list.</p>
+              <p class="place-address">604 N Dixie Fwy</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="eat">
+            <img src="../assets/photos/local-outriggers.jpg" alt="Outriggers" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Casual · Waterfront</span>
+              <h3>Outriggers Tiki Bar &amp; Grille</h3>
+              <p>Waterfront tiki bar with marina views, seafood, and tropical cocktails. Perfect sunset spot.</p>
+              <p class="place-address">2900 N Causeway</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="eat">
+            <img src="../assets/photos/local-spott.jpg" alt="The Spott" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Elevated Dining</span>
+              <h3>The Spott</h3>
+              <p>Fresh fish, Black Angus steaks, and a speakeasy bar upstairs. Reserve in advance — highly recommended.</p>
+              <p class="place-address">609 Flagler Ave</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="see">
+            <img src="../assets/photos/flagler.jpg" alt="Flagler Avenue" loading="lazy">
+            <div class="place-card-body">
+              <span class="place-tag">Shopping · Beach Access</span>
+              <h3>Flagler Avenue</h3>
+              <p>The heart of NSB — local shops, restaurants, festivals, and direct beach access.</p>
+              <p class="place-address">Flagler Ave, New Smyrna Beach</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="see">
+            <img src="../assets/photos/dunes.jpg" alt="Smyrna Dunes Park" loading="lazy">
+            <div class="place-card-body">
+              <span class="place-tag">Nature · Dog Friendly</span>
+              <h3>Smyrna Dunes Park</h3>
+              <p>184-acre park with a boardwalk, nature trails, wildlife observation, and stunning Ponce Inlet views.</p>
+              <p class="place-address">2995 N Peninsula Ave</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="see">
+            <img src="../assets/photos/canal.jpg" alt="Canal Street" loading="lazy">
+            <div class="place-card-body">
+              <span class="place-tag">Historic · Culture</span>
+              <h3>Canal Street Historic District</h3>
+              <p>Across the causeway — art galleries, local eateries, historic architecture, and community events.</p>
+              <p class="place-address">Canal St, New Smyrna Beach</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="drink">
+            <img src="../assets/photos/local-flagler-tavern.jpg" alt="Flagler Tavern" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Bar · Nightlife</span>
+              <h3>Flagler Tavern</h3>
+              <p>Known for its vibrant nightlife, extensive drink menu, and live entertainment.</p>
+              <p class="place-address">208 Flagler Ave</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="drink">
+            <img src="../assets/photos/local-traders.jpg" alt="Traders Sports Bar" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Sports Bar · Casual</span>
+              <h3>Traders Sports Bar</h3>
+              <p>A lively sports bar with a wide selection of beers, cocktails, and pub food.</p>
+              <p class="place-address">115 Canal St</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="drink">
+            <img src="../assets/photos/local-ciao-bella.jpg" alt="Ciao Bella" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Italian · Martini Bar</span>
+              <h3>Ciao Bella Italian Restaurant</h3>
+              <p>This Italian restaurant has an extensive martini and wine selection.</p>
+              <p class="place-address">301 Canal St</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="drink">
+            <img src="../assets/photos/local-toni-joes.jpg" alt="Toni &amp; Joe's Patio" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Beachfront Bar · Live Music</span>
+              <h3>Toni &amp; Joe's Patio</h3>
+              <p>This beachfront bar offers a lively atmosphere with live music and a diverse selection of drinks.</p>
+              <p class="place-address">301 S Atlantic Ave</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="do">
+            <img src="../assets/photos/local-surfing.jpg" alt="Surf Lessons" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Water Sport · All Levels</span>
+              <h3>Surf Lessons</h3>
+              <p>NSB is one of Florida's best surf spots. Local schools offer beginner-friendly lessons right on the beach.</p>
+              <p class="place-address">Various locations on the beach</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="do">
+            <img src="../assets/photos/dunes.jpg" alt="Smyrna Dunes Park" loading="lazy">
+            <div class="place-card-body">
+              <span class="place-tag">Nature · Active</span>
+              <h3>Smyrna Dunes Park</h3>
+              <p>Walk or bike the 1.5-mile boardwalk through dunes, maritime hammock, and around Ponce Inlet. Dog-friendly.</p>
+              <p class="place-address">2995 N Peninsula Ave</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="do">
+            <img src="../assets/photos/local-kayak.jpg" alt="Kayaking &amp; Paddleboard" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Water Sport · Rental</span>
+              <h3>Kayaking &amp; Paddleboarding</h3>
+              <p>Rent kayaks or SUPs from several local outfitters and explore the Indian River Lagoon or inshore waterways.</p>
+              <p class="place-address">Various Intracoastal locations</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="coffee">
+            <img src="../assets/photos/local-luma.jpg" alt="Luma" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Café · Outdoor · Beachy</span>
+              <h3>Luma</h3>
+              <p>Beautiful outdoor, beachy, bohemian vibe with coffee, teas, juices, food, and even beers &amp; wines. A must-visit to relax and unwind.</p>
+              <p class="place-address">309 Flagler Ave</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="coffee">
+            <img src="../assets/photos/local-third-wave.jpg" alt="Third Wave Café" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Artisanal Coffee · Outdoor Dining</span>
+              <h3>Third Wave Café</h3>
+              <p>Artisanal coffee and an extensive wine selection in a cozy atmosphere, attached to a restaurant with exceptional food and a beautiful outdoor venue.</p>
+              <p class="place-address">114 Canal St</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="coffee">
+            <img src="../assets/photos/local-island-roasters.jpg" alt="Island Roasters Coffee Co." loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Coffee Roaster · Specialty</span>
+              <h3>Island Roasters Coffee Co.</h3>
+              <p>Freshly roasted coffee beans and specialty drinks in a relaxed setting. Their beans are available at many restaurants and cafés in the area.</p>
+              <p class="place-address">319 Flagler Ave</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="coffee">
+            <img src="../assets/photos/local-bakers-table.jpg" alt="The Bakers Table" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Café · Bakery</span>
+              <h3>The Bakers Table</h3>
+              <p>A café and bakery known for freshly baked goods and excellent coffee. A bit further away but worth the trip.</p>
+              <p class="place-address">761 E Third Ave, New Smyrna Beach</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="coffee">
+            <img src="../assets/photos/local-hub-canal.jpg" alt="The Hub on Canal" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Gallery · Café · Canal Street</span>
+              <h3>The Hub on Canal</h3>
+              <p>A community-focused art gallery and coffee shop offering artisanal coffee across the causeway in the historic Canal Street area.</p>
+              <p class="place-address">132 Canal St</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="coffee">
+            <img src="../assets/photos/local-wake-up.jpg" alt="Wake Up Café" loading="lazy" onerror="this.style.display='none'">
+            <div class="place-card-body">
+              <span class="place-tag">Café · Local Favorite</span>
+              <h3>Wake Up Café</h3>
+              <p>A local favorite known for its cozy atmosphere and superb coffee selection, including specialty brews and espresso drinks.</p>
+              <p class="place-address">Canal St, New Smyrna Beach</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="essentials">
+            <div class="place-card-body">
+              <span class="place-tag">Grocery · 1.2 mi</span>
+              <h3>Publix Super Market</h3>
+              <p>Full grocery, fresh seafood, bakery, and pharmacy.</p>
+              <p class="place-address">1021 N Dixie Fwy</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="essentials">
+            <div class="place-card-body">
+              <span class="place-tag">Pharmacy · 0.8 mi</span>
+              <h3>Walgreens</h3>
+              <p>Pharmacy, OTC meds, snacks, and late hours.</p>
+              <p class="place-address">1703 S Dixie Fwy</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="essentials">
+            <div class="place-card-body">
+              <span class="place-tag">Pharmacy · 1.5 mi</span>
+              <h3>CVS Pharmacy</h3>
+              <p>Pharmacy and health essentials.</p>
+              <p class="place-address">1401 N Dixie Fwy</p>
+            </div>
+          </div>
+
+          <div class="place-card" data-category="essentials">
+            <div class="place-card-body">
+              <span class="place-tag">Grocery · 5 mi</span>
+              <h3>Walmart Supercenter</h3>
+              <p>Groceries, household goods, beach gear, and more.</p>
+              <p class="place-address">2700 S Ridgewood Ave, Edgewater</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── 7. Emergency ── -->
+      <section class="pad-section" id="emergency">
+        <h2 class="pad-section-title">Emergency &amp; Safety</h2>
+        <p style="color:var(--charcoal-light,#666); font-size:0.9rem; margin:0 0 1.25rem">Reference numbers and locations for emergencies.</p>
+        <div class="emg-grid">
+
+          <div class="emg-card emg-card-red">
+            <span class="emg-number">911</span>
+            <span class="emg-label">Fire / Police / Medical</span>
+          </div>
+
+          <div class="emg-card">
+            <span class="emg-number">(800) 222-1222</span>
+            <span class="emg-label">Poison Control — 24/7</span>
+          </div>
+
+          <div class="emg-card">
+            <span class="emg-number emg-number-sm">AdventHealth ER</span>
+            <span class="emg-label">~3.5 miles · 401 Palmetto St</span>
+          </div>
+
+          <div class="emg-card">
+            <span class="emg-number emg-number-sm">Urgent Care NSB</span>
+            <span class="emg-label">~3 miles · Primecare Medical</span>
+          </div>
+
+          <div class="emg-card">
+            <span class="emg-number emg-number-sm">(386) 736-5999</span>
+            <span class="emg-label">Volusia County Sheriff — non-emergency</span>
+          </div>
+
+          <div class="emg-card">
+            <span class="emg-number">(407) 506-6654</span>
+            <span class="emg-label">Antonio (Host) — call or text</span>
+          </div>
+
+          <div class="emg-card emg-card-util">
+            <span class="emg-number emg-number-sm">Circuit Breaker</span>
+            <span class="emg-label">Garage — left wall</span>
+          </div>
+
+          <div class="emg-card emg-card-util">
+            <span class="emg-number emg-number-sm">Water Main Shutoff</span>
+            <span class="emg-label">Right side of home — lever near corner of porch by palm tree</span>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Toasts -->
+    <div class="pool-toast" id="pool-toast"></div>
+    <div class="copy-toast" id="copy-toast">Copied!</div>
+
+  </div><!-- #guest-content -->
+
+  <script src="/js/config.js"></script>
+  <script src="/pad/js/pad.js"></script>
+  <script src="/guide/js/beach-conditions.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    (function () {
+      var parts = window.location.pathname.split('/').filter(Boolean);
+      var token = parts[parts.length - 1];
+
+      if (!token || token === 'guest') {
+        showExpired();
+        return;
+      }
+
+      fetch('/api/guest-token?token=' + encodeURIComponent(token))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data.valid) {
+            document.getElementById('guest-gate').style.display = 'none';
+            document.getElementById('guest-content').style.display = '';
+          } else {
+            showExpired();
+          }
+        })
+        .catch(function () {
+          document.getElementById('gate-title').textContent = 'Unable to verify access';
+          document.getElementById('gate-sub').textContent = 'Please check your connection and try again.';
+          document.getElementById('gate-spinner').style.display = 'none';
+        });
+
+      function showExpired() {
+        document.getElementById('gate-spinner').style.display = 'none';
+        document.getElementById('gate-title').textContent = 'This link is no longer active.';
+        document.getElementById('gate-sub').textContent = 'Contact your host if you believe this is an error.';
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var qrEl = document.getElementById('wifi-qr');
+      if (!qrEl || typeof QRCode === 'undefined') return;
+      var observer = new MutationObserver(function () {
+        if (document.getElementById('guest-content').style.display !== 'none') {
+          var ssid = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info.wifi_name : 'NSB Retreat';
+          var pass = (typeof CONFIG !== 'undefined' && CONFIG.quick_info) ? CONFIG.quick_info.wifi_password : '';
+          new QRCode(qrEl, { text: 'WIFI:T:WPA;S:' + ssid + ';P:' + pass + ';;', width: 160, height: 160, colorDark: '#2d2926', colorLight: '#f9ece8' });
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.getElementById('guest-content'), { attributes: true, attributeFilter: ['style'] });
+    })();
+  </script>
+</body>
+</html>
