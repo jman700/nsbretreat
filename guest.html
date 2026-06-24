@@ -10,7 +10,25 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/pad/css/pad.css">
   <style>
+    :root {
+      --sand:             #0a1f38;
+      --blush:            #0f2a47;
+      --tan:              #1e4060;
+      --charcoal:         #e8f4fd;
+      --charcoal-light:   #7ab3cc;
+      --charcoal-lighter: #4a7a9b;
+      --accent:           #4db6e8;
+      --white:            #122d4f;
+      --shadow:           0 2px 12px rgba(0,0,0,0.35);
+    }
     html, body { background: #0a1f38 !important; }
+    .pad-nav {
+      background: rgba(10,31,56,0.97) !important;
+      border-bottom: 1px solid rgba(77,182,232,0.18) !important;
+    }
+    .pad-nav .pad-logo,
+    .pad-tab { color: #e8f4fd !important; }
+    .pad-tab.active { color: #4db6e8 !important; }
     #guest-gate {
       position: fixed; inset: 0; z-index: 9999;
       background: #0a1f38;
