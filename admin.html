@@ -207,6 +207,46 @@
       color: var(--charcoal); outline: none; transition: border-color 0.15s;
     }
     .gl-input-sm:focus { border-color: var(--accent); }
+    /* ── Photo Booth gallery ── */
+    .pb-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+    .btn-pb-refresh {
+      background: rgba(107,100,96,0.1); color: var(--charcoal-light);
+      border: 1px solid rgba(107,100,96,0.25); border-radius: var(--radius-sm);
+      padding: 0.4rem 0.875rem; font-size: 0.75rem; font-family: var(--font-sans);
+      text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer;
+    }
+    .btn-pb-refresh:hover { background: rgba(107,100,96,0.18); }
+    .pb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.75rem;
+    }
+    .pb-thumb-card {
+      background: var(--white); border-radius: var(--radius-sm);
+      box-shadow: var(--shadow); overflow: hidden; position: relative;
+      display: flex; flex-direction: column;
+    }
+    .pb-thumb-link { display: block; aspect-ratio: 3/4; overflow: hidden; }
+    .pb-thumb-link img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.2s; display: block;
+    }
+    .pb-thumb-link:hover img { transform: scale(1.04); }
+    .pb-thumb-footer {
+      padding: 0.4rem 0.5rem; display: flex; align-items: center;
+      justify-content: space-between; gap: 0.25rem;
+    }
+    .pb-thumb-date { font-size: 0.68rem; color: var(--charcoal-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pb-thumb-actions { display: flex; gap: 0.25rem; flex-shrink: 0; }
+    .btn-pb-dl, .btn-pb-del {
+      border: none; cursor: pointer; border-radius: 4px;
+      padding: 0.25rem 0.4rem; font-size: 0.68rem; font-family: var(--font-sans);
+    }
+    .btn-pb-dl { background: rgba(184,150,126,0.12); color: var(--accent); }
+    .btn-pb-dl:hover { background: rgba(184,150,126,0.22); }
+    .btn-pb-del { background: rgba(220,53,69,0.08); color: #b91c1c; }
+    .btn-pb-del:hover { background: rgba(220,53,69,0.18); }
+
     .gl-copy-flash {
       position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
       background: var(--charcoal); color: var(--white);
@@ -302,6 +342,20 @@
     <div id="gl-list"><div class="dash-loading">Loading&hellip;</div></div>
     <div class="gl-copy-flash" id="gl-copy-flash">Link copied!</div>
 
+    <!-- Photo Booth -->
+    <div class="dash-section">
+      <h2 class="dash-section-title">Photo Booth</h2>
+    </div>
+    <div class="pb-toolbar">
+      <p class="dash-count" id="pb-count" style="margin:0"></p>
+      <button class="btn-pb-refresh" onclick="loadPhotobooth()">Refresh</button>
+    </div>
+    <div id="pb-grid" class="pb-grid"><div class="dash-loading">Loading&hellip;</div></div>
+    <div class="dash-empty" id="pb-empty">
+      <p>&#9675;</p>
+      <p>No photos yet. Photos appear here as guests take them.</p>
+    </div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -328,6 +382,7 @@
       loadFeedback();
       loadGuestbook();
       loadTokens();
+      loadPhotobooth();
     }
 
     document.getElementById('login-form').addEventListener('submit', async function (e) {
@@ -509,6 +564,54 @@
       var _a = await sb.from('guest_tokens').delete().eq('id', id);
       if (_a.error) { alert('Error: ' + _a.error.message); return; }
       loadTokens();
+    }
+
+    var PHOTO_BOOTH_URL = 'https://xittuxwilxmzzawjdivd.supabase.co/storage/v1/object/public/photo-booth/';
+
+    async function loadPhotobooth() {
+      var grid = document.getElementById('pb-grid');
+      var empty = document.getElementById('pb-empty');
+      var count = document.getElementById('pb-count');
+      grid.innerHTML = '<div class="dash-loading">Loading&hellip;</div>';
+      empty.classList.remove('show');
+
+      var { data, error } = await sb.storage.from('photo-booth').list('', {
+        limit: 500, offset: 0, sortBy: { column: 'created_at', order: 'desc' }
+      });
+
+      if (error) { grid.innerHTML = '<p style="color:#b91c1c;font-size:0.875rem">Error loading photos: ' + esc(error.message) + '</p>'; return; }
+
+      var files = (data || []).filter(function(f) { return f.name !== '.emptyFolderPlaceholder'; });
+
+      count.textContent = files.length + ' photo' + (files.length === 1 ? '' : 's');
+
+      if (!files.length) {
+        grid.innerHTML = '';
+        empty.classList.add('show');
+        return;
+      }
+
+      grid.innerHTML = files.map(function(f) {
+        var url = PHOTO_BOOTH_URL + encodeURIComponent(f.name);
+        var ts = f.name.match(/booth-(\d+)\.jpg/);
+        var label = ts ? new Date(parseInt(ts[1])).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' }) : f.name;
+        var safe = esc(f.name).replace(/'/g, '&#39;');
+        return '<div class="pb-thumb-card">'
+          + '<a class="pb-thumb-link" href="' + url + '" target="_blank" rel="noopener"><img src="' + url + '" loading="lazy" alt="Photo booth photo"></a>'
+          + '<div class="pb-thumb-footer">'
+          + '<span class="pb-thumb-date">' + label + '</span>'
+          + '<div class="pb-thumb-actions">'
+          + '<a class="btn-pb-dl" href="' + url + '" download="nsbretreat-photo.jpg" target="_blank">Save</a>'
+          + '<button class="btn-pb-del" onclick="deletePhoto(\'' + safe + '\')">Del</button>'
+          + '</div></div></div>';
+      }).join('');
+    }
+
+    async function deletePhoto(filename) {
+      if (!confirm('Delete this photo? This cannot be undone.')) return;
+      var { error } = await sb.storage.from('photo-booth').remove([filename]);
+      if (error) { alert('Error: ' + error.message); return; }
+      loadPhotobooth();
     }
 
     function copyLink(token) {
