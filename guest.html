@@ -673,10 +673,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     (function () {
-      var parts = window.location.pathname.split('/').filter(Boolean);
-      var token = parts[parts.length - 1];
+      var token = new URLSearchParams(window.location.search).get('t');
 
-      if (!token || token === 'guest') {
+      if (!token) {
         showExpired();
         return;
       }

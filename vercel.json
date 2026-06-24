@@ -1,10 +1,8 @@
 {
   "cleanUrls": true,
-  "functions": {
-    "guest/[token].js": {
-      "includeFiles": "_guestpage.html"
-    }
-  },
+  "redirects": [
+    { "source": "/guest/:token", "destination": "/guest?t=:token", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/api/ical",         "destination": "/api/ical.js" },
     { "source": "/api/ical-vrbo",    "destination": "/api/ical-vrbo.js" }

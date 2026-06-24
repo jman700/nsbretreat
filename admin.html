@@ -451,7 +451,7 @@
         var expStr = new Date(r.expires_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
         var safeToken = escAttr(r.token);
         var safeExpiry = escAttr(r.expires_at);
-        var url = 'https://nsbretreat.com/guest/' + safeToken;
+        var url = 'https://nsbretreat.com/guest?t=' + safeToken;
         return '<tr class="' + (expired ? 'gl-expired' : '') + '">'
           + '<td><strong style="font-size:0.875rem">' + esc(r.label) + '</strong></td>'
           + '<td><span class="' + (expired ? 'gl-exp-past' : 'gl-exp-ok') + '">' + expStr + (expired ? ' (expired)' : '') + '</span>'
@@ -512,7 +512,7 @@
     }
 
     function copyLink(token) {
-      var url = 'https://nsbretreat.com/guest/' + token;
+      var url = 'https://nsbretreat.com/guest?t=' + token;
       navigator.clipboard.writeText(url).then(function() {
         var flash = document.getElementById('gl-copy-flash');
         flash.classList.add('show');
