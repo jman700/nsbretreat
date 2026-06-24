@@ -450,6 +450,7 @@
         var expired = new Date(r.expires_at).getTime() <= now;
         var expStr = new Date(r.expires_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
         var safeToken = escAttr(r.token);
+        var safeExpiry = escAttr(r.expires_at);
         var url = 'https://nsbretreat.com/guest/' + safeToken;
         return '<tr class="' + (expired ? 'gl-expired' : '') + '">'
           + '<td><strong style="font-size:0.875rem">' + esc(r.label) + '</strong></td>'
@@ -462,7 +463,7 @@
           + '<td><span class="gl-url-text">' + url + '</span></td>'
           + '<td><div class="gl-actions">'
           + '<button class="btn-gl btn-gl-copy" onclick="copyLink(\'' + safeToken + '\')">Copy</button>'
-          + '<button class="btn-gl btn-gl-edit" onclick="editExpiry(\'' + r.id + '\',\'' + r.expires_at + '\')">Edit</button>'
+          + '<button class="btn-gl btn-gl-edit" onclick="editExpiry(\'' + r.id + '\',\'' + safeExpiry + '\')">Edit</button>'
           + '<button class="btn-gl btn-gl-del" onclick="deleteToken(\'' + r.id + '\')">Delete</button>'
           + '</div></td>'
           + '</tr>';

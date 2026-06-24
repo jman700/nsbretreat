@@ -121,9 +121,10 @@ AIRBNB_ICAL_URL=https://www.airbnb.com/calendar/ical/YOUR_LISTING_ID.ics?s=YOUR_
 # VRBO iCal feed (optional — remove if you don't list on VRBO)
 VRBO_ICAL_URL=https://www.vrbo.com/icalendar/...
 
-# Supabase (for guestbook + photo booth — see Step 8)
+# Supabase (for guestbook + photo booth + guest access links — see Step 8)
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_ANON_KEY=your-anon-key  # required for /api/guest-token public endpoint
 
 # iAqualink pool controller (OPTIONAL — only if you have a Pentair/iAqualink pool system)
 IAQUALINK_EMAIL=youremail@example.com
