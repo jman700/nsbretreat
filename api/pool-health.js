@@ -7,6 +7,9 @@ import { makePoolStore } from './_store.js';
 import { runHealthCheck } from './_pool.js';
 import { makeMailer } from './_email.js';
 
+// KILL SWITCH — set to false to re-enable pool health checks
+const CONTROLS_DISABLED = true;
+
 export default async function handler(req, res) {
   if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -14,6 +17,7 @@ export default async function handler(req, res) {
   if ((req.headers['x-cron-secret'] || '') !== process.env.POOL_HEALTH_SECRET) {
     return res.status(401).json({ error: 'unauthorized' });
   }
+  if (CONTROLS_DISABLED) return res.status(200).json({ ok: true, disabled: true });
 
   try {
     const auth = await authenticate();

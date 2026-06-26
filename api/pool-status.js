@@ -6,10 +6,14 @@ import { getSupabase } from './_supabase.js';
 import { makePoolStore } from './_store.js';
 import { fetchStatus, reconcile } from './_pool.js';
 
+// KILL SWITCH — set to false to re-enable pool controls
+const CONTROLS_DISABLED = true;
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'no-store');
+  if (CONTROLS_DISABLED) return res.status(200).json({ online: false, disabled: true });
 
   try {
     const auth = await authenticate();
