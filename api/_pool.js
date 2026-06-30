@@ -3,6 +3,7 @@
 
 export const AUTO_TIMER_HRS = 3;
 export const GRACE_MS = 30 * 60 * 1000;
+export const SHUTOFF_TIMEOUT_MS = 5 * 60 * 1000;
 export const SHUTOFF_ALERT_THRESHOLD = 2;
 
 const ok = (status) => ({ status, action: 'none', anomaly: false, detail: '' });
@@ -46,7 +47,7 @@ async function handleActive(ctx) {
 
   // expired
   await fullShutdown(status, iaqua);
-  await store.saveState({ state: 'shutting_off', shutoff_attempts: 1 });
+  await store.saveState({ state: 'shutting_off', shutoff_attempts: 1, shutting_off_since: now, early_end_count: 0 });
   setTimerFields(status, 0, now);
   await store.log({ source, found, action: 'expired_shutoff', success: true, detail: '' });
   return { status, action: 'expired_shutoff', anomaly: false, detail: '' };
@@ -59,13 +60,22 @@ async function handleShuttingOff(ctx) {
   if (status.spa_heater !== 'on') {
     // hardware confirmed off — clear any lingering pump/jets, settle to idle
     await fullShutdown(status, iaqua);
-    await store.saveState({ state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+    await store.saveState({ state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, shutting_off_since: 0, early_end_count: 0, alerted: false });
     setTimerFields(status, 0, now);
     await store.log({ source, found, action: 'shutoff_confirmed', success: true, detail: '' });
     return { status, action: 'shutoff_confirmed', anomaly: false, detail: '' };
   }
 
-  // still on — re-issue heater off and count the attempt
+  // heater still on after timeout — assume external restart, reset to idle
+  const since = ctx.row.shutting_off_since || 0;
+  if (since > 0 && now - since > SHUTOFF_TIMEOUT_MS) {
+    await store.saveState({ state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, shutting_off_since: 0, early_end_count: 0, alerted: false });
+    setTimerFields(status, 0, now);
+    await store.log({ source, found, action: 'shutoff_timeout_reset', success: true, detail: 'Heater on after timeout — resetting to idle for re-adoption' });
+    return { status, action: 'shutoff_timeout_reset', anomaly: false, detail: '' };
+  }
+
+  // still on and within timeout — re-issue heater off and count the attempt
   await iaqua.command('set_spa_heater');
   const attempts = (ctx.row.shutoff_attempts || 0) + 1;
   await store.saveState({ shutoff_attempts: attempts });

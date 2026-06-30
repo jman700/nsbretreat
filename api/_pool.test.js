@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { reconcile, fullShutdown, AUTO_TIMER_HRS } from './_pool.js';
+import { reconcile, fullShutdown, AUTO_TIMER_HRS, SHUTOFF_TIMEOUT_MS } from './_pool.js';
 import { GRACE_MS as GRACE_MS_TEST } from './_pool.js';
 
 // ── shared fakes ──
@@ -239,4 +239,34 @@ test('runHealthCheck stays silent on a healthy system', async () => {
   });
   assert.equal(out.action, 'none');
   assert.equal(sent.length, 0);
+});
+
+test('shutting_off + heater on past 5-min timeout → reset to idle, no hardware command', async () => {
+  const now = 5_000_000;
+  const store = makeFakeStore({
+    id: 1, state: 'shutting_off', end_time: 0,
+    shutoff_attempts: 2, spa_mode_since: 0,
+    shutting_off_since: now - SHUTOFF_TIMEOUT_MS - 1,
+    early_end_count: 0, alerted: false,
+  });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'shutoff_timeout_reset');
+  assert.equal(iaqua._calls().length, 0);
+  assert.equal(store._state().state, 'idle');
+  assert.equal(store._state().shutting_off_since, 0);
+});
+
+test('shutting_off + heater on within 5-min timeout → retry as before', async () => {
+  const now = 5_000_000;
+  const store = makeFakeStore({
+    id: 1, state: 'shutting_off', end_time: 0,
+    shutoff_attempts: 0, spa_mode_since: 0,
+    shutting_off_since: now - 60_000,
+    early_end_count: 0, alerted: false,
+  });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'retry_shutoff');
+  assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_heater']);
 });
