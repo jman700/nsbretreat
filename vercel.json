@@ -6,5 +6,8 @@
   "rewrites": [
     { "source": "/api/ical",         "destination": "/api/ical.js" },
     { "source": "/api/ical-vrbo",    "destination": "/api/ical-vrbo.js" }
+  ],
+  "crons": [
+    { "path": "/api/pool-health", "schedule": "* * * * *" }
   ]
 }
