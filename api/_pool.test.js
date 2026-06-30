@@ -277,6 +277,8 @@ test('shutting_off + heater on past 5-min timeout → reset to idle, no hardware
   assert.equal(iaqua._calls().length, 0);
   assert.equal(store._state().state, 'idle');
   assert.equal(store._state().shutting_off_since, 0);
+  assert.equal(store._logs().length, 1);
+  assert.equal(store._logs()[0].action, 'shutoff_timeout_reset');
 });
 
 test('shutting_off + heater on within 5-min timeout → retry as before', async () => {

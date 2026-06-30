@@ -6,7 +6,7 @@ import { getSupabase } from './_supabase.js';
 
 const ROW_ID = 1;
 
-// KILL SWITCH — set to false to re-enable spa timer
+// KILL SWITCH — set to true to disable spa timer controls
 const CONTROLS_DISABLED = false;
 
 export default async function handler(req, res) {

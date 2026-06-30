@@ -8,7 +8,7 @@ export function makePoolStore(sb) {
       if (data) return data;
       const def = {
         id: ROW_ID, end_time: 0, started_at: 0, source: 'init',
-        state: 'idle', shutoff_attempts: 0, spa_mode_since: 0, alerted: false,
+        state: 'idle', shutoff_attempts: 0, spa_mode_since: 0, shutting_off_since: 0, early_end_count: 0, alerted: false,
       };
       await sb.from('spa_timer').upsert(def, { onConflict: 'id' });
       return def;
