@@ -7,7 +7,7 @@ import { makePoolStore } from './_store.js';
 import { fetchStatus, reconcile } from './_pool.js';
 
 // KILL SWITCH — set to false to re-enable pool controls
-const CONTROLS_DISABLED = true;
+const CONTROLS_DISABLED = false;
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });

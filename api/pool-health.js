@@ -8,7 +8,7 @@ import { runHealthCheck } from './_pool.js';
 import { makeMailer } from './_email.js';
 
 // KILL SWITCH — set to false to re-enable pool health checks
-const CONTROLS_DISABLED = true;
+const CONTROLS_DISABLED = false;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST' && req.method !== 'GET') {

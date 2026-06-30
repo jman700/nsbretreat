@@ -84,7 +84,7 @@ function translateCommand(command, value) {
 }
 
 // KILL SWITCH — set to false to re-enable pool commands
-const CONTROLS_DISABLED = true;
+const CONTROLS_DISABLED = false;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

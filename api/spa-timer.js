@@ -7,7 +7,7 @@ import { getSupabase } from './_supabase.js';
 const ROW_ID = 1;
 
 // KILL SWITCH — set to false to re-enable spa timer
-const CONTROLS_DISABLED = true;
+const CONTROLS_DISABLED = false;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
