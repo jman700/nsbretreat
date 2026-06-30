@@ -36,10 +36,22 @@ async function handleActive(ctx) {
   const heaterOn = status.spa_heater === 'on';
 
   if (now < ctx.row.end_time) {
-    if (heaterOn) { setTimerFields(status, ctx.row.end_time, now); return ok(status); }
-    // heater off before expiry — guest ended early; ensure pool mode
+    if (heaterOn) {
+      if ((ctx.row.early_end_count || 0) > 0) await store.saveState({ early_end_count: 0 });
+      setTimerFields(status, ctx.row.end_time, now);
+      return ok(status);
+    }
+    // heater off — require 2 consecutive readings before shutting down
+    const count = (ctx.row.early_end_count || 0) + 1;
+    if (count < 2) {
+      await store.saveState({ early_end_count: count });
+      setTimerFields(status, ctx.row.end_time, now);
+      await store.log({ source, found, action: 'early_end_pending', success: true, detail: `off reading ${count}/2` });
+      return { status, action: 'early_end_pending', anomaly: false, detail: '' };
+    }
+    // confirmed off on 2nd consecutive reading — shut down
     await fullShutdown(status, iaqua);
-    await store.saveState({ state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+    await store.saveState({ state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, shutting_off_since: 0, early_end_count: 0, alerted: false });
     setTimerFields(status, 0, now);
     await store.log({ source, found, action: 'early_end_shutoff', success: true, detail: '' });
     return { status, action: 'early_end_shutoff', anomaly: false, detail: '' };
@@ -96,7 +108,7 @@ async function handleIdle(ctx) {
     // turned on via the Jandy app with no timer — adopt it as a 3hr session
     const end_time = now + AUTO_TIMER_HRS * 3600 * 1000;
     if (!spaPumpOn) await iaqua.command('set_spa_pump');
-    await store.saveState({ state: 'active', end_time, started_at: now, source: 'iaqualink', shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+    await store.saveState({ state: 'active', end_time, started_at: now, source: 'iaqualink', shutoff_attempts: 0, spa_mode_since: 0, shutting_off_since: 0, early_end_count: 0, alerted: false });
     setTimerFields(status, end_time, now);
     await store.log({ source, found, action: 'created_auto_timer', success: true, detail: '' });
     return { status, action: 'created_auto_timer', anomaly: false, detail: '' };

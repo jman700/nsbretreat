@@ -60,14 +60,36 @@ test('active + expired → full shutdown, state shutting_off, attempts 1, logged
   assert.equal(store._logs()[0].found.heater, 'on');
 });
 
-test('active + heater off before expiry → early-end shutdown to idle', async () => {
+test('active + heater off before expiry, first reading → early_end_pending, no shutdown', async () => {
   const now = 100000;
-  const store = makeFakeStore({ id: 1, state: 'active', end_time: now + 60000, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+  const store = makeFakeStore({ id: 1, state: 'active', end_time: now + 60000, shutoff_attempts: 0, spa_mode_since: 0, early_end_count: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'off', spa_pump: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'early_end_pending');
+  assert.equal(iaqua._calls().length, 0);
+  assert.equal(store._state().state, 'active');
+  assert.equal(store._state().early_end_count, 1);
+});
+
+test('active + heater off before expiry, second reading → early_end_shutoff, transitions to idle', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'active', end_time: now + 60000, shutoff_attempts: 0, spa_mode_since: 0, early_end_count: 1, alerted: false });
   const iaqua = makeFakeIaqua();
   const r = await reconcile({ status: baseStatus({ spa_heater: 'off', spa_pump: 'on' }), now, store, iaqua });
   assert.equal(r.action, 'early_end_shutoff');
   assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_pump']);
   assert.equal(store._state().state, 'idle');
+  assert.equal(store._state().early_end_count, 0);
+});
+
+test('active + heater comes back on → resets early_end_count to 0', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'active', end_time: now + 60000, shutoff_attempts: 0, spa_mode_since: 0, early_end_count: 1, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'none');
+  assert.equal(iaqua._calls().length, 0);
+  assert.equal(store._state().early_end_count, 0);
 });
 
 test('shutting_off + heater confirmed off → idle, clears lingering pump, resets flags', async () => {
