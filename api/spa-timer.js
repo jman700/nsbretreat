@@ -29,7 +29,7 @@ export default async function handler(req, res) {
   // and auto-creating a fresh 3-hr timer during command propagation.
   if (req.method === 'DELETE') {
     const { error } = await sb.from('spa_timer').upsert(
-      { id: ROW_ID, end_time: 0, started_at: 0, source: 'stop', state: 'shutting_off' },
+      { id: ROW_ID, end_time: 0, started_at: 0, source: 'stop', state: 'shutting_off', shutting_off_since: Date.now(), early_end_count: 0 },
       { onConflict: 'id' }
     );
     if (error) return res.status(500).json({ error: error.message });
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
     const end_time = now + Math.round(h * 3600 * 1000);
 
     const { error } = await sb.from('spa_timer').upsert(
-      { id: ROW_ID, end_time, started_at: now, source, state: 'active', shutoff_attempts: 0, spa_mode_since: 0, alerted: false },
+      { id: ROW_ID, end_time, started_at: now, source, state: 'active', shutoff_attempts: 0, spa_mode_since: 0, shutting_off_since: 0, early_end_count: 0, alerted: false },
       { onConflict: 'id' }
     );
     if (error) return res.status(500).json({ error: error.message });
