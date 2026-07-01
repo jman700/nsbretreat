@@ -30,13 +30,14 @@ export function makeHeaterStore(sb) {
   return {
     // The single open heating episode, or null.
     async getOpenSession() {
-      const { data } = await sb
+      const { data, error } = await sb
         .from('heater_sessions')
         .select('*')
         .eq('is_active', true)
         .order('started_at', { ascending: false })
         .limit(1)
         .maybeSingle();
+      if (error) console.error('[store] getOpenSession failed:', error.message);
       return data || null;
     },
     async openSession({ heater_type, at, source }) {

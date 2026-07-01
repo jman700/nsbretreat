@@ -13,8 +13,11 @@ create table if not exists public.heater_sessions (
   created_at       timestamptz default now()
 );
 
-create index if not exists heater_sessions_active_idx  on public.heater_sessions (is_active) where is_active;
-create index if not exists heater_sessions_started_idx on public.heater_sessions (started_at);
+-- Unique partial index: enforces at most one open session at a time (the burner
+-- heats pool OR spa, never both), and makes the single-open-row read spiral-proof
+-- even if a getOpenSession read transiently fails.
+create unique index if not exists heater_sessions_active_idx  on public.heater_sessions (is_active) where is_active;
+create index        if not exists heater_sessions_started_idx on public.heater_sessions (started_at);
 
 alter table public.heater_sessions enable row level security;
 drop policy if exists "admin read heater sessions" on public.heater_sessions;
