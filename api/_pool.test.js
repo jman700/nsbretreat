@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { reconcile, fullShutdown, AUTO_TIMER_HRS, SHUTOFF_TIMEOUT_MS } from './_pool.js';
+import { reconcile, fullShutdown, AUTO_TIMER_HRS, SHUTOFF_TIMEOUT_MS, SPA_MAX_RUNTIME_MS } from './_pool.js';
 import { GRACE_MS as GRACE_MS_TEST } from './_pool.js';
 
 // ── shared fakes ──
@@ -308,4 +308,60 @@ test('runHealthCheck returns the fetched status and prior row', async () => {
   assert.equal(out.status.spa_heater, 'on');
   assert.equal(out.status.online, true);
   assert.equal(out.prior.source, 'pad');
+});
+
+// ── Runtime-cap safety backstop ──
+test('idle + spa heater stuck on past runtime cap → safety shutoff + notify', async () => {
+  const now = 10_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, heater_on_since: now - SPA_MAX_RUNTIME_MS - 1, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on', spa_pump: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'runtime_cap_shutoff');
+  assert.equal(r.safetyNotify, true);
+  assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_heater', 'set_spa_pump']);
+  assert.equal(store._state().state, 'shutting_off');
+  assert.equal(store._state().heater_on_since, 0);
+  assert.equal(store._logs()[0].action, 'runtime_cap_shutoff');
+});
+
+test('idle + spa heater on within runtime cap → adopts timer, records heater_on_since', async () => {
+  const now = 10_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on', spa_pump: 'off' }), now, store, iaqua });
+  assert.equal(r.action, 'created_auto_timer');
+  assert.equal(store._state().heater_on_since, now);
+});
+
+test('active + heater on (covered by timer) → runtime cap does not fire even when on-time is long', async () => {
+  const now = 10_000_000;
+  const store = makeFakeStore({ id: 1, state: 'active', end_time: now + 60000, shutoff_attempts: 0, spa_mode_since: 0, heater_on_since: now - SPA_MAX_RUNTIME_MS - 1, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on' }), now, store, iaqua });
+  assert.equal(r.action, 'none');
+  assert.equal(iaqua._calls().length, 0);
+});
+
+test('spa heater off → clears heater_on_since', async () => {
+  const now = 10_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, heater_on_since: 123, alerted: false });
+  const iaqua = makeFakeIaqua();
+  await reconcile({ status: baseStatus({ spa_heater: 'off' }), now, store, iaqua });
+  assert.equal(store._state().heater_on_since, 0);
+});
+
+test('runHealthCheck emails the safety recipient on runtime_cap_shutoff', async () => {
+  const now = 10_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, heater_on_since: now - SPA_MAX_RUNTIME_MS - 1, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const sent = [];
+  const { runHealthCheck } = await import('./_pool.js');
+  const out = await runHealthCheck({
+    store, iaqua, now,
+    sendAlert: async (s, t, to) => sent.push({ s, t, to }),
+    fetchStatusFn: async () => ({ online: true, spa_heater: 'on', pool_heater: 'off', spa_pump: 'on', spa_jets: 'off' }),
+  });
+  assert.equal(out.action, 'runtime_cap_shutoff');
+  assert.equal(sent.length, 1);
+  assert.equal(store._state().alerted, true);
 });

@@ -5,6 +5,12 @@ export const AUTO_TIMER_HRS = 3;
 export const GRACE_MS = 30 * 60 * 1000;
 export const SHUTOFF_TIMEOUT_MS = 5 * 60 * 1000;
 export const SHUTOFF_ALERT_THRESHOLD = 2;
+// Absolute safety backstop: if the spa heater is physically on while the state
+// machine is NOT tracking it as an active session (state stuck at 'idle') for
+// this long, force it off and raise a safety alert. Independent of the timer
+// bookkeeping, so it catches the "heater on, no timer set" runaway even when the
+// normal 3-hour auto-timer path has failed.
+export const SPA_MAX_RUNTIME_MS = 60 * 60 * 1000;
 
 const ok = (status) => ({ status, action: 'none', anomaly: false, detail: '' });
 
@@ -135,10 +141,48 @@ async function handleIdle(ctx) {
   return ok(status);
 }
 
+// Safety backstop, independent of the timer state machine. Tracks how long the
+// spa heater has been continuously on and force-shuts it off (with a safety
+// alert) if it stays on while the state is stuck at 'idle' — i.e. the heater is
+// running but no active session is tracking it. Returns a reconcile result when
+// it acts, otherwise null so the normal handlers run.
+async function enforceHeaterSafety(ctx) {
+  const { status, now, store, row, iaqua, source } = ctx;
+
+  // Heater off: clear the on-since marker so the next on-episode starts fresh.
+  if (status.spa_heater !== 'on') {
+    if (row.heater_on_since) { await store.saveState({ heater_on_since: 0 }); row.heater_on_since = 0; }
+    return null;
+  }
+
+  // Heater on: stamp when the continuous on-episode began.
+  if (!row.heater_on_since) { await store.saveState({ heater_on_since: now }); row.heater_on_since = now; }
+
+  // Only the 'idle' state means "heater on but nothing is tracking it". 'active'
+  // is owned by the timer (handleActive) and 'shutting_off' by handleShuttingOff.
+  if (row.state === 'idle' && (now - row.heater_on_since) >= SPA_MAX_RUNTIME_MS) {
+    const found = snapshot(ctx);
+    await fullShutdown(status, iaqua);
+    await store.saveState({
+      state: 'shutting_off', end_time: 0, shutoff_attempts: 1,
+      shutting_off_since: now, early_end_count: 0, heater_on_since: 0,
+    });
+    setTimerFields(status, 0, now);
+    const mins = Math.round((now - row.heater_on_since) / 60000);
+    const detail = `Spa heater on ${mins} min with no active timer — safety shutoff.`;
+    await store.log({ source, found, action: 'runtime_cap_shutoff', success: true, detail });
+    return { status, action: 'runtime_cap_shutoff', anomaly: true, detail, safetyNotify: true };
+  }
+
+  return null;
+}
+
 export async function reconcile({ status, now, store, iaqua, source = 'cron', row }) {
   row = row || await store.getState();
   const ctx = { status, now, store, iaqua, source, row };
   try {
+    const safety = await enforceHeaterSafety(ctx);
+    if (safety) return safety;
     if (row.state === 'active')       return await handleActive(ctx);
     if (row.state === 'shutting_off') return await handleShuttingOff(ctx);
     return await handleIdle(ctx);
@@ -227,12 +271,20 @@ export async function runHealthCheck({ store, iaqua, now, sendAlert, source = 'c
   const status = await fetchStatusFn(iaqua);
   const result = await reconcile({ status, now, store, iaqua, source, row: prior });
 
-  if (result.anomaly && !prior.alerted) {
+  // Alert once per episode on any heater problem — the won't-shut-off anomaly or
+  // the runtime-cap safety shutoff. Safety alerts go to SAFETY_ALERT_TO
+  // (antonio@jetsetusa.com), falling back to the default recipient.
+  if ((result.anomaly || result.safetyNotify) && !prior.alerted) {
+    const to = process.env.SAFETY_ALERT_TO || process.env.ALERT_EMAIL_TO;
+    const subject = result.safetyNotify
+      ? 'NSB Retreat — spa heater safety shutoff'
+      : 'NSB Retreat — pool health check needs attention';
     await sendAlert(
-      'NSB Retreat — pool health check needs attention',
+      subject,
       `Action: ${result.action}\n${result.detail}\n` +
       `heater=${status.spa_heater} spa_pump=${status.spa_pump} jets=${status.spa_jets}\n` +
-      `See pool_health_log in Supabase for details.`,
+      `See the Heater Health Log in the admin panel for details.`,
+      to,
     );
     await store.saveState({ alerted: true });
   }

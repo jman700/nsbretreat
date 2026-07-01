@@ -2,7 +2,9 @@
 // fetchImpl is injectable for tests; defaults to global fetch.
 export function makeMailer(fetchImpl = fetch) {
   return {
-    async sendAlert(subject, text) {
+    // `to` overrides the default recipient (ALERT_EMAIL_TO) — used to route
+    // heater safety alerts to SAFETY_ALERT_TO.
+    async sendAlert(subject, text, to) {
       const key = process.env.RESEND_API_KEY;
       if (!key) { console.error('[email] RESEND_API_KEY not set — skipping alert'); return; }
       try {
@@ -11,7 +13,7 @@ export function makeMailer(fetchImpl = fetch) {
           headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             from: process.env.ALERT_EMAIL_FROM,
-            to:   process.env.ALERT_EMAIL_TO,
+            to:   to || process.env.ALERT_EMAIL_TO,
             subject,
             text,
           }),
