@@ -277,8 +277,21 @@ test('shutting_off + heater on past 5-min timeout → reset to idle, no hardware
   assert.equal(iaqua._calls().length, 0);
   assert.equal(store._state().state, 'idle');
   assert.equal(store._state().shutting_off_since, 0);
+  // Re-stamped so the runtime-cap backstop starts a fresh window and does not
+  // immediately kill a heater the guest just restarted (re-adopted next tick).
+  assert.equal(store._state().heater_on_since, now);
   assert.equal(store._logs().length, 1);
   assert.equal(store._logs()[0].action, 'shutoff_timeout_reset');
+});
+
+test('after shutoff_timeout_reset, a heater-on idle tick re-adopts (no false safety shutoff)', async () => {
+  // Mirrors the post-reset state: idle, heater on, heater_on_since just stamped.
+  const now = 5_000_000;
+  const store = makeFakeStore({ id: 1, state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, heater_on_since: now, early_end_count: 0, alerted: false });
+  const iaqua = makeFakeIaqua();
+  const r = await reconcile({ status: baseStatus({ spa_heater: 'on', spa_pump: 'off' }), now, store, iaqua });
+  assert.equal(r.action, 'created_auto_timer');   // re-adopted, NOT runtime_cap_shutoff
+  assert.equal(store._state().state, 'active');
 });
 
 test('shutting_off + heater on within 5-min timeout → retry as before', async () => {

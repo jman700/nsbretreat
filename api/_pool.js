@@ -84,10 +84,14 @@ async function handleShuttingOff(ctx) {
     return { status, action: 'shutoff_confirmed', anomaly: false, detail: '' };
   }
 
-  // heater still on after timeout — assume external restart, reset to idle
+  // heater still on after timeout — assume external restart, reset to idle.
+  // Re-stamp heater_on_since so this reset starts a fresh observation window:
+  // handleIdle re-adopts the heater as a new session on the next tick, and the
+  // runtime-cap backstop must not immediately fire on the (now-stale) original
+  // on-time and kill a session the guest just restarted.
   const since = ctx.row.shutting_off_since || 0;
   if (since > 0 && now - since > SHUTOFF_TIMEOUT_MS) {
-    await store.saveState({ state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, shutting_off_since: 0, early_end_count: 0, alerted: false });
+    await store.saveState({ state: 'idle', end_time: 0, shutoff_attempts: 0, spa_mode_since: 0, shutting_off_since: 0, early_end_count: 0, heater_on_since: now, alerted: false });
     setTimerFields(status, 0, now);
     await store.log({ source, found, action: 'shutoff_timeout_reset', success: true, detail: 'Heater on after timeout — resetting to idle for re-adoption' });
     return { status, action: 'shutoff_timeout_reset', anomaly: false, detail: '' };
@@ -141,11 +145,18 @@ async function handleIdle(ctx) {
   return ok(status);
 }
 
-// Safety backstop, independent of the timer state machine. Tracks how long the
-// spa heater has been continuously on and force-shuts it off (with a safety
-// alert) if it stays on while the state is stuck at 'idle' — i.e. the heater is
-// running but no active session is tracking it. Returns a reconcile result when
-// it acts, otherwise null so the normal handlers run.
+// Safety backstop for the spa heater. Tracks how long the spa heater has been
+// continuously on (heater_on_since) and force-shuts it off (with a safety alert)
+// if it stays on while the state is stuck at 'idle' — i.e. the heater is running
+// but no session is tracking it (the "heater on, no timer set" runaway).
+//
+// Scope: this only covers the SPA and only the 'idle' state. 'active' is owned by
+// the timer (handleActive) and 'shutting_off' by handleShuttingOff, so a heater
+// on under a valid — or even a corrupted far-future — active timer is NOT caught
+// here; the spa-timer API caps timers at 12h (api/spa-timer.js) which bounds that.
+// The pool heater is intentionally excluded: it is a paid, legitimately long
+// amenity and is tracked separately in heater_sessions. Returns a reconcile
+// result when it acts, otherwise null so the normal handlers run.
 async function enforceHeaterSafety(ctx) {
   const { status, now, store, row, iaqua, source } = ctx;
 
@@ -158,9 +169,12 @@ async function enforceHeaterSafety(ctx) {
   // Heater on: stamp when the continuous on-episode began.
   if (!row.heater_on_since) { await store.saveState({ heater_on_since: now }); row.heater_on_since = now; }
 
+  // Capture before any mutation so the elapsed calc never depends on ordering.
+  const onSince = row.heater_on_since;
+
   // Only the 'idle' state means "heater on but nothing is tracking it". 'active'
   // is owned by the timer (handleActive) and 'shutting_off' by handleShuttingOff.
-  if (row.state === 'idle' && (now - row.heater_on_since) >= SPA_MAX_RUNTIME_MS) {
+  if (row.state === 'idle' && (now - onSince) >= SPA_MAX_RUNTIME_MS) {
     const found = snapshot(ctx);
     await fullShutdown(status, iaqua);
     await store.saveState({
@@ -168,7 +182,7 @@ async function enforceHeaterSafety(ctx) {
       shutting_off_since: now, early_end_count: 0, heater_on_since: 0,
     });
     setTimerFields(status, 0, now);
-    const mins = Math.round((now - row.heater_on_since) / 60000);
+    const mins = Math.round((now - onSince) / 60000);
     const detail = `Spa heater on ${mins} min with no active timer — safety shutoff.`;
     await store.log({ source, found, action: 'runtime_cap_shutoff', success: true, detail });
     return { status, action: 'runtime_cap_shutoff', anomaly: true, detail, safetyNotify: true };

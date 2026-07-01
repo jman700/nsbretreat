@@ -15,10 +15,11 @@ export function makePoolStore(sb) {
       return def;
     },
     async saveState(patch) {
-      await sb.from('spa_timer').upsert(
+      const { error } = await sb.from('spa_timer').upsert(
         { id: ROW_ID, ...patch, updated_at: new Date().toISOString() },
         { onConflict: 'id' },
       );
+      if (error) console.error('[store] saveState failed:', error.message);
     },
     async log(entry) {
       const { error } = await sb.from('pool_health_log').insert(entry);
