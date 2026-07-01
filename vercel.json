@@ -9,5 +9,9 @@
   ],
   "crons": [
     { "path": "/api/pool-health", "schedule": "* * * * *" }
-  ]
+  ],
+  "functions": {
+    "api/pool-health.js": { "maxDuration": 60 },
+    "api/pool-status.js": { "maxDuration": 30 }
+  }
 }
