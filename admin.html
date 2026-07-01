@@ -370,6 +370,8 @@
     <div class="heat-scroll"><div id="heat-monthly"><div class="dash-loading">Loading&hellip;</div></div></div>
     <h3 class="heat-subtitle">Recent Sessions</h3>
     <div class="heat-scroll"><div id="heat-sessions"><div class="dash-loading">Loading&hellip;</div></div></div>
+    <h3 class="heat-subtitle">Heater Health &amp; Safety Log</h3>
+    <div class="heat-scroll"><div id="heat-log"><div class="dash-loading">Loading&hellip;</div></div></div>
 
     <!-- Photo Booth -->
     <div class="dash-section">
@@ -426,6 +428,49 @@
       renderHeatCards(sessions, billMap);
       renderHeatMonthly(sessions, billMap);
       renderHeatSessions(sessions);
+      loadHeatLog();
+    }
+
+    // Friendly labels for reconcile actions logged to pool_health_log.
+    var HEAT_LOG_LABELS = {
+      runtime_cap_shutoff: 'Safety shutoff (ran too long)',
+      expired_shutoff:     'Timer expired — shut off',
+      early_end_shutoff:   'Ended early — shut off',
+      early_end_pending:   'Heater-off reading (pending)',
+      retry_shutoff:       'Retrying shutoff',
+      shutoff_confirmed:   'Shutoff confirmed',
+      shutoff_timeout_reset: 'Shutoff timed out — reset',
+      created_auto_timer:  'Adopted external turn-on (3h timer)',
+      reverted_spa_mode:   'Reverted stuck spa mode',
+      command_error:       'Command error',
+    };
+    // Events that represent a safety intervention or failure — highlighted.
+    var HEAT_LOG_ALERT = { runtime_cap_shutoff: true, command_error: true };
+
+    async function loadHeatLog() {
+      var _a = await sb.from('pool_health_log').select('*').order('created_at', { ascending: false }).limit(50);
+      var el = document.getElementById('heat-log');
+      if (_a.error) { el.innerHTML = '<p style="color:#b91c1c;font-size:0.85rem">Failed to load health log.</p>'; return; }
+      var rows = _a.data || [];
+      if (rows.length === 0) { el.innerHTML = '<p class="dash-count">No health events logged yet.</p>'; return; }
+      var body = rows.map(function (r) {
+        var when = new Date(r.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+        var label = HEAT_LOG_LABELS[r.action] || r.action;
+        var alert = HEAT_LOG_ALERT[r.action] || r.success === false;
+        var statusCell = r.success === false
+          ? '<span style="color:#b91c1c;font-weight:600">Failed</span>'
+          : '<span style="color:#2c7a2c">OK</span>';
+        var actionCell = alert ? '<strong style="color:#b45309">' + label + '</strong>' : label;
+        return '<tr>' +
+          '<td>' + when + '</td>' +
+          '<td>' + actionCell + '</td>' +
+          '<td style="white-space:normal">' + (r.detail || '') + '</td>' +
+          '<td>' + statusCell + '</td>' +
+          '</tr>';
+      }).join('');
+      el.innerHTML =
+        '<table class="heat-table"><thead><tr><th>Time</th><th>Event</th><th>Detail</th><th>Status</th></tr></thead><tbody>' +
+        body + '</tbody></table>';
     }
 
     // Aggregate one month's sessions + optional bill into usage & cost numbers.
