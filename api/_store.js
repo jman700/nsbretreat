@@ -25,3 +25,36 @@ export function makePoolStore(sb) {
     },
   };
 }
+
+export function makeHeaterStore(sb) {
+  return {
+    // The single open heating episode, or null.
+    async getOpenSession() {
+      const { data } = await sb
+        .from('heater_sessions')
+        .select('*')
+        .eq('is_active', true)
+        .order('started_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      return data || null;
+    },
+    async openSession({ heater_type, at, source }) {
+      const { error } = await sb.from('heater_sessions').insert({
+        heater_type, started_at: at, last_seen_at: at, source, is_active: true,
+      });
+      if (error) console.error('[store] openSession failed:', error.message);
+    },
+    async touchSession(id, at) {
+      const { error } = await sb.from('heater_sessions').update({ last_seen_at: at }).eq('id', id);
+      if (error) console.error('[store] touchSession failed:', error.message);
+    },
+    async closeSession(session, endedAt) {
+      const duration = Math.max(0, Math.round((endedAt - session.started_at) / 1000));
+      const { error } = await sb.from('heater_sessions')
+        .update({ ended_at: endedAt, duration_seconds: duration, is_active: false })
+        .eq('id', session.id);
+      if (error) console.error('[store] closeSession failed:', error.message);
+    },
+  };
+}
