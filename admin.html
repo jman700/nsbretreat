@@ -255,6 +255,25 @@
       transition: opacity 0.2s;
     }
     .gl-copy-flash.show { opacity: 1; }
+
+    /* ── Pool & Spa Heating ── */
+    .heat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.875rem; margin-top: 0.875rem; }
+    .heat-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.1rem 1.25rem; }
+    .heat-card-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--charcoal-light); }
+    .heat-card-value { font-family: var(--font-serif); font-size: 1.7rem; margin-top: 0.25rem; }
+    .heat-card-sub { font-size: 0.72rem; color: var(--charcoal-light); margin-top: 0.15rem; }
+    .heat-subtitle { font-family: var(--font-serif); font-size: 1.05rem; margin: 1.75rem 0 0.6rem; }
+    .heat-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); font-size: 0.82rem; }
+    .heat-table th, .heat-table td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--sand); white-space: nowrap; }
+    .heat-table th { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--charcoal-light); background: var(--blush); }
+    .heat-table tr:last-child td { border-bottom: none; }
+    .heat-badge { display: inline-block; padding: 0.12rem 0.5rem; border-radius: 999px; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .heat-badge.spa { background: #e7d3c8; color: #7a4a2c; }
+    .heat-badge.pool { background: #cfe0e8; color: #2c5a72; }
+    .heat-bill-input { width: 5.5rem; border: 1.5px solid var(--tan); border-radius: var(--radius-sm); padding: 0.3rem 0.45rem; font-family: var(--font-sans); font-size: 0.8rem; color: var(--charcoal); background: var(--white); }
+    .heat-bill-input:focus { outline: none; border-color: var(--accent); }
+    .heat-live { color: var(--accent); font-weight: 600; }
+    .heat-scroll { overflow-x: auto; }
   </style>
 </head>
 <body>
@@ -342,6 +361,16 @@
     <div id="gl-list"><div class="dash-loading">Loading&hellip;</div></div>
     <div class="gl-copy-flash" id="gl-copy-flash">Link copied!</div>
 
+    <!-- Pool & Spa Heating -->
+    <div class="dash-section">
+      <h2 class="dash-section-title">Pool &amp; Spa Heating</h2>
+    </div>
+    <div class="heat-cards" id="heat-cards"><div class="dash-loading">Loading&hellip;</div></div>
+    <h3 class="heat-subtitle">Monthly Usage &amp; Cost</h3>
+    <div class="heat-scroll"><div id="heat-monthly"><div class="dash-loading">Loading&hellip;</div></div></div>
+    <h3 class="heat-subtitle">Recent Sessions</h3>
+    <div class="heat-scroll"><div id="heat-sessions"><div class="dash-loading">Loading&hellip;</div></div></div>
+
     <!-- Photo Booth -->
     <div class="dash-section">
       <h2 class="dash-section-title">Photo Booth</h2>
@@ -365,6 +394,160 @@
       'sb_publishable_AxzdizEiC3FOPYdzS3lPWA_H1aH9hSV'
     );
 
+    // ── Pool & Spa Heating ──────────────────────────────────────────────
+    function heatMonthKey(ms) {
+      var d = new Date(ms);
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    }
+    function heatFmtDuration(sec) {
+      sec = Math.max(0, Math.round(sec));
+      var h = Math.floor(sec / 3600);
+      var m = Math.floor((sec % 3600) / 60);
+      if (h > 0) return h + 'h ' + m + 'm';
+      if (m > 0) return m + 'm';
+      return sec + 's';
+    }
+    function heatFmtHrs(sec) { return (sec / 3600).toFixed(1); }
+    function heatFmtTime(ms) {
+      return new Date(ms).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    }
+    function heatSessionSeconds(s) {
+      if (s.duration_seconds != null) return s.duration_seconds;
+      return Math.max(0, Math.round((Date.now() - s.started_at) / 1000)); // in-progress
+    }
+
+    async function loadHeating() {
+      var sess = await sb.from('heater_sessions').select('*').order('started_at', { ascending: false });
+      var bills = await sb.from('heating_bills').select('*');
+      if (sess.error) { document.getElementById('heat-cards').innerHTML = '<p style="color:#b91c1c;font-size:0.85rem">Failed to load heating data.</p>'; return; }
+      var sessions = sess.data || [];
+      var billMap = {};
+      (bills.data || []).forEach(function (b) { billMap[b.period_month] = b; });
+      renderHeatCards(sessions, billMap);
+      renderHeatMonthly(sessions, billMap);
+      renderHeatSessions(sessions);
+    }
+
+    // Aggregate one month's sessions + optional bill into usage & cost numbers.
+    function heatComputeMonth(sessions, bill) {
+      var poolSec = 0, spaSec = 0;
+      sessions.forEach(function (s) {
+        var d = heatSessionSeconds(s);
+        if (s.heater_type === 'pool') poolSec += d; else if (s.heater_type === 'spa') spaSec += d;
+      });
+      var totalSec = poolSec + spaSec;
+      var totalHrs = totalSec / 3600;
+      var out = { poolSec: poolSec, spaSec: spaSec, totalSec: totalSec, totalHrs: totalHrs,
+                  thermsPerHr: null, costPerHr: null, estCost: null, poolCost: null, spaCost: null };
+      if (bill && bill.therms > 0 && totalHrs > 0) {
+        var net = Math.max(0, bill.therms - (bill.baseline_therms || 0));
+        var costPerTherm = bill.cost_usd / bill.therms;
+        out.thermsPerHr = net / totalHrs;
+        out.costPerHr = out.thermsPerHr * costPerTherm;
+        out.estCost = totalHrs * out.costPerHr;
+        out.poolCost = totalSec > 0 ? (poolSec / totalSec) * out.estCost : 0;
+        out.spaCost = totalSec > 0 ? (spaSec / totalSec) * out.estCost : 0;
+      }
+      return out;
+    }
+
+    function renderHeatCards(sessions, billMap) {
+      var key = heatMonthKey(Date.now());
+      var thisMonth = sessions.filter(function (s) { return heatMonthKey(s.started_at) === key; });
+      var m = heatComputeMonth(thisMonth, billMap[key]);
+      var active = sessions.find(function (s) { return s.is_active; });
+      var cost = m.estCost != null ? '$' + m.estCost.toFixed(2) : '—';
+      var costSub = m.estCost != null ? 'from this month’s bill' : 'add a bill below';
+      var activeHtml = active
+        ? '<span class="heat-live">' + (active.heater_type === 'spa' ? 'Spa' : 'Pool') + ' heating now</span>'
+        : 'Idle';
+      document.getElementById('heat-cards').innerHTML =
+        heatCard('Pool heat (this month)', heatFmtHrs(m.poolSec) + ' h', '') +
+        heatCard('Spa heat (this month)', heatFmtHrs(m.spaSec) + ' h', '') +
+        heatCard('Total heat (this month)', heatFmtHrs(m.totalSec) + ' h', activeHtml) +
+        heatCard('Est. cost (this month)', cost, costSub);
+    }
+    function heatCard(label, value, sub) {
+      return '<div class="heat-card"><div class="heat-card-label">' + label + '</div>' +
+             '<div class="heat-card-value">' + value + '</div>' +
+             (sub ? '<div class="heat-card-sub">' + sub + '</div>' : '') + '</div>';
+    }
+
+    function renderHeatMonthly(sessions, billMap) {
+      // Union of months that have sessions or a bill, newest first.
+      var months = {};
+      sessions.forEach(function (s) { months[heatMonthKey(s.started_at)] = true; });
+      Object.keys(billMap).forEach(function (k) { months[k] = true; });
+      var keys = Object.keys(months).sort().reverse();
+      if (keys.length === 0) { document.getElementById('heat-monthly').innerHTML = '<p class="dash-count">No usage recorded yet.</p>'; return; }
+
+      var rows = keys.map(function (key) {
+        var monthSessions = sessions.filter(function (s) { return heatMonthKey(s.started_at) === key; });
+        var bill = billMap[key] || { therms: '', cost_usd: '', baseline_therms: 0 };
+        var m = heatComputeMonth(monthSessions, billMap[key]);
+        var label = new Date(key + '-01T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        return '<tr>' +
+          '<td>' + label + '</td>' +
+          '<td>' + heatFmtHrs(m.poolSec) + '</td>' +
+          '<td>' + heatFmtHrs(m.spaSec) + '</td>' +
+          '<td>' + heatFmtHrs(m.totalSec) + '</td>' +
+          '<td><input class="heat-bill-input" id="bill-therms-' + key + '" type="number" step="0.1" placeholder="—" value="' + (bill.therms === '' ? '' : bill.therms) + '"></td>' +
+          '<td><input class="heat-bill-input" id="bill-cost-' + key + '" type="number" step="0.01" placeholder="—" value="' + (bill.cost_usd === '' ? '' : bill.cost_usd) + '"></td>' +
+          '<td><input class="heat-bill-input" id="bill-base-' + key + '" type="number" step="0.1" value="' + (bill.baseline_therms || 0) + '"></td>' +
+          '<td>' + (m.thermsPerHr != null ? m.thermsPerHr.toFixed(2) : '—') + '</td>' +
+          '<td>' + (m.costPerHr != null ? '$' + m.costPerHr.toFixed(2) : '—') + '</td>' +
+          '<td><button class="btn-primary" style="margin:0;padding:0.35rem 0.7rem;font-size:0.72rem" onclick="saveHeatBill(\'' + key + '\')">Save</button></td>' +
+          '</tr>';
+      }).join('');
+
+      document.getElementById('heat-monthly').innerHTML =
+        '<table class="heat-table"><thead><tr>' +
+        '<th>Month</th><th>Pool h</th><th>Spa h</th><th>Total h</th>' +
+        '<th>Therms</th><th>Cost $</th><th>Base therms</th><th>Therms/h</th><th>$/h</th><th></th>' +
+        '</tr></thead><tbody>' + rows + '</tbody></table>';
+    }
+
+    async function saveHeatBill(month) {
+      var therms = parseFloat(document.getElementById('bill-therms-' + month).value) || 0;
+      var cost = parseFloat(document.getElementById('bill-cost-' + month).value) || 0;
+      var baseline = parseFloat(document.getElementById('bill-base-' + month).value) || 0;
+      var _a = await sb.from('heating_bills').upsert(
+        { period_month: month, therms: therms, cost_usd: cost, baseline_therms: baseline, updated_at: new Date().toISOString() },
+        { onConflict: 'period_month' }
+      );
+      if (_a.error) { alert('Failed to save bill: ' + _a.error.message); return; }
+      loadHeating();
+    }
+
+    var heatShowAll = false;
+    function toggleHeatSessions() { heatShowAll = !heatShowAll; loadHeating(); }
+    function renderHeatSessions(sessions) {
+      if (sessions.length === 0) { document.getElementById('heat-sessions').innerHTML = '<p class="dash-count">No sessions yet.</p>'; return; }
+      var LIMIT = 50;
+      var shown = heatShowAll ? sessions : sessions.slice(0, LIMIT);
+      var rows = shown.map(function (s) {
+        var badge = '<span class="heat-badge ' + s.heater_type + '">' + s.heater_type + '</span>';
+        var end = s.is_active ? '<span class="heat-live">in progress</span>' : heatFmtTime(s.ended_at);
+        var dur = s.is_active ? '<span class="heat-live">' + heatFmtDuration(heatSessionSeconds(s)) + '</span>' : heatFmtDuration(s.duration_seconds || 0);
+        return '<tr>' +
+          '<td>' + badge + '</td>' +
+          '<td>' + heatFmtTime(s.started_at) + '</td>' +
+          '<td>' + end + '</td>' +
+          '<td>' + dur + '</td>' +
+          '<td>' + (s.source || 'external') + '</td>' +
+          '</tr>';
+      }).join('');
+      var more = '';
+      if (sessions.length > LIMIT) {
+        more = heatShowAll
+          ? '<button class="btn-pb-refresh" style="margin-top:0.6rem" onclick="toggleHeatSessions()">Show latest 50</button>'
+          : '<button class="btn-pb-refresh" style="margin-top:0.6rem" onclick="toggleHeatSessions()">Show all ' + sessions.length + ' sessions</button>';
+      }
+      document.getElementById('heat-sessions').innerHTML =
+        '<table class="heat-table"><thead><tr><th>Type</th><th>Started</th><th>Ended</th><th>Duration</th><th>Source</th></tr></thead><tbody>' +
+        rows + '</tbody></table>' + more;
+    }
+
     sb.auth.onAuthStateChange(function (event, session) {
       if (session) { showDashboard(); } else { showLogin(); }
     });
@@ -375,6 +558,7 @@
       document.getElementById('btn-logout').style.display = 'none';
     }
 
+    var heatTimer = null;
     function showDashboard() {
       document.getElementById('login-wrap').style.display = 'none';
       document.getElementById('dashboard').classList.add('visible');
@@ -383,6 +567,9 @@
       loadGuestbook();
       loadTokens();
       loadPhotobooth();
+      loadHeating();
+      if (heatTimer) clearInterval(heatTimer);
+      heatTimer = setInterval(loadHeating, 60000);
     }
 
     document.getElementById('login-form').addEventListener('submit', async function (e) {
