@@ -35,13 +35,15 @@ Migration: `supabase/migrations/005_heater_usage.sql`
 |--------|------|-------|
 | `id` | `bigint generated always as identity primary key` | |
 | `heater_type` | `text` | `'pool'` or `'spa'` |
-| `started_at` | `timestamptz` | first cron run that observed it on |
-| `last_seen_at` | `timestamptz` | most recent run confirming still on (heartbeat) |
-| `ended_at` | `timestamptz` null | set on close = `last_seen_at` |
+| `started_at` | `bigint` | Unix ms — first cron run that observed it on |
+| `last_seen_at` | `bigint` | Unix ms — most recent run confirming still on (heartbeat) |
+| `ended_at` | `bigint` null | Unix ms — set on close = `last_seen_at` |
 | `duration_seconds` | `integer` null | filled on close |
 | `source` | `text` | best-effort: `'pad'` or `'external'` |
 | `is_active` | `boolean default true` | true while open |
-| `created_at` | `timestamptz default now()` | |
+| `created_at` | `timestamptz default now()` | row-insert wall clock, for reference |
+
+Timestamps are stored as **bigint Unix-ms**, matching the existing `spa_timer` convention (`end_time`, `started_at`, `shutting_off_since` are all bigint). This keeps the sessionizer pure integer math — identical to `_pool.js` — and consistent across the pool codebase. Monthly grouping happens in the admin-panel JS (metrics are computed at read-time regardless), so no server-side `date_trunc` is needed.
 
 Index: `create index on public.heater_sessions (is_active) where is_active;` (fast lookup of the single open session) and `create index on public.heater_sessions (started_at);` (monthly rollups).
 
