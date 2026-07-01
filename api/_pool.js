@@ -236,5 +236,5 @@ export async function runHealthCheck({ store, iaqua, now, sendAlert, source = 'c
     );
     await store.saveState({ alerted: true });
   }
-  return { action: result.action, anomaly: result.anomaly };
+  return { action: result.action, anomaly: result.anomaly, status, prior };
 }

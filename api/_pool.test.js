@@ -294,3 +294,18 @@ test('shutting_off + heater on within 5-min timeout → retry as before', async 
   assert.equal(r.action, 'retry_shutoff');
   assert.deepEqual(iaqua._calls().map(c => c.cmd), ['set_spa_heater']);
 });
+
+test('runHealthCheck returns the fetched status and prior row', async () => {
+  const now = 100000;
+  const store = makeFakeStore({ id: 1, state: 'active', end_time: now + 60000, shutoff_attempts: 0, spa_mode_since: 0, alerted: false, source: 'pad' });
+  const iaqua = makeFakeIaqua();
+  const { runHealthCheck } = await import('./_pool.js');
+  const out = await runHealthCheck({
+    store, iaqua, now,
+    sendAlert: async () => {},
+    fetchStatusFn: async () => ({ online: true, spa_heater: 'on', pool_heater: 'off', spa_pump: 'on', spa_jets: 'off' }),
+  });
+  assert.equal(out.status.spa_heater, 'on');
+  assert.equal(out.status.online, true);
+  assert.equal(out.prior.source, 'pad');
+});
