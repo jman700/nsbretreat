@@ -15,10 +15,14 @@ export function makePoolStore(sb) {
       return def;
     },
     async saveState(patch) {
-      const { error } = await sb.from('spa_timer').upsert(
-        { id: ROW_ID, ...patch, updated_at: new Date().toISOString() },
-        { onConflict: 'id' },
-      );
+      // UPDATE (not upsert): a partial upsert re-inserts and sends NULL for any
+      // omitted column, which fails against spa_timer's NOT NULL end_time (the
+      // table was created by hand without a default). UPDATE only touches the
+      // patched columns and never nulls the rest. getState() guarantees the row
+      // exists before any save, so a plain UPDATE is safe.
+      const { error } = await sb.from('spa_timer')
+        .update({ ...patch, updated_at: new Date().toISOString() })
+        .eq('id', ROW_ID);
       if (error) console.error('[store] saveState failed:', error.message);
     },
     async log(entry) {
