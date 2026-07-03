@@ -274,6 +274,9 @@
     .heat-bill-input:focus { outline: none; border-color: var(--accent); }
     .heat-live { color: var(--accent); font-weight: 600; }
     .heat-scroll { overflow-x: auto; }
+    .heat-pager { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 0.75rem; }
+    .heat-pager-info { font-size: 0.78rem; color: var(--charcoal-light); white-space: nowrap; }
+    .btn-pb-refresh:disabled { opacity: 0.4; cursor: not-allowed; }
 
     /* ── Google sign-in ── */
     .login-divider { display: flex; align-items: center; gap: 0.75rem; margin: 1.25rem 0 1rem; color: var(--charcoal-light); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; }
@@ -581,12 +584,19 @@
       loadHeating();
     }
 
-    var heatShowAll = false;
-    function toggleHeatSessions() { heatShowAll = !heatShowAll; loadHeating(); }
+    var heatPage = 0;
+    var HEAT_PAGE_SIZE = 25;
+    var heatSessionsCache = [];
+    function heatSessionsGo(delta) { heatPage += delta; renderHeatSessions(heatSessionsCache); }
     function renderHeatSessions(sessions) {
-      if (sessions.length === 0) { document.getElementById('heat-sessions').innerHTML = '<p class="dash-count">No sessions yet.</p>'; return; }
-      var LIMIT = 50;
-      var shown = heatShowAll ? sessions : sessions.slice(0, LIMIT);
+      heatSessionsCache = sessions;
+      var el = document.getElementById('heat-sessions');
+      if (sessions.length === 0) { el.innerHTML = '<p class="dash-count">No sessions yet.</p>'; return; }
+      var pageCount = Math.ceil(sessions.length / HEAT_PAGE_SIZE);
+      if (heatPage > pageCount - 1) heatPage = pageCount - 1;
+      if (heatPage < 0) heatPage = 0;
+      var start = heatPage * HEAT_PAGE_SIZE;
+      var shown = sessions.slice(start, start + HEAT_PAGE_SIZE);
       var rows = shown.map(function (s) {
         var badge = '<span class="heat-badge ' + s.heater_type + '">' + s.heater_type + '</span>';
         var end = s.is_active ? '<span class="heat-live">in progress</span>' : heatFmtTime(s.ended_at);
@@ -599,15 +609,17 @@
           '<td>' + (s.source || 'external') + '</td>' +
           '</tr>';
       }).join('');
-      var more = '';
-      if (sessions.length > LIMIT) {
-        more = heatShowAll
-          ? '<button class="btn-pb-refresh" style="margin-top:0.6rem" onclick="toggleHeatSessions()">Show latest 50</button>'
-          : '<button class="btn-pb-refresh" style="margin-top:0.6rem" onclick="toggleHeatSessions()">Show all ' + sessions.length + ' sessions</button>';
+      var pager = '';
+      if (pageCount > 1) {
+        pager = '<div class="heat-pager">' +
+          '<button class="btn-pb-refresh"' + (heatPage === 0 ? ' disabled' : '') + ' onclick="heatSessionsGo(-1)">&larr; Prev</button>' +
+          '<span class="heat-pager-info">Page ' + (heatPage + 1) + ' of ' + pageCount + ' &middot; ' + sessions.length + ' sessions</span>' +
+          '<button class="btn-pb-refresh"' + (heatPage >= pageCount - 1 ? ' disabled' : '') + ' onclick="heatSessionsGo(1)">Next &rarr;</button>' +
+          '</div>';
       }
-      document.getElementById('heat-sessions').innerHTML =
+      el.innerHTML =
         '<table class="heat-table"><thead><tr><th>Type</th><th>Started</th><th>Ended</th><th>Duration</th><th>Source</th></tr></thead><tbody>' +
-        rows + '</tbody></table>' + more;
+        rows + '</tbody></table>' + pager;
     }
 
     async function signInWithGoogle() {
