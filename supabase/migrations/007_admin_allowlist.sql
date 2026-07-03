@@ -27,11 +27,8 @@ as $$
 $$;
 
 -- ── Rewrite admin policies to require is_admin(). Anon policies are left intact. ──
-
--- recommendations
-drop policy if exists "admin full access" on public.recommendations;
-create policy "admin full access" on public.recommendations
-  for all to authenticated using (public.is_admin()) with check (public.is_admin());
+-- NOTE: the `recommendations` table (migration 001) was never applied to this
+-- database, so it is intentionally omitted here.
 
 -- guest_tokens (admin policy only; "anon select" for guest-link validation stays)
 drop policy if exists "authenticated full" on public.guest_tokens;
