@@ -41,7 +41,16 @@ export default async function handler(req, res) {
       }
     }
 
-    return res.status(200).json({ ok: true, action: out.action, anomaly: out.anomaly });
+    // TEMP DIAGNOSTIC — inspect the row reconcile saw vs the row after it wrote.
+    let after = null;
+    try { after = await store.getState(); } catch (e) { after = { readError: e.message }; }
+    const prior = out.prior || {};
+    return res.status(200).json({
+      ok: true, action: out.action, anomaly: out.anomaly, now,
+      prior: { state: prior.state, end_time: prior.end_time, started_at: prior.started_at, heater_on_since: prior.heater_on_since, shutting_off_since: prior.shutting_off_since },
+      after: { state: after.state, end_time: after.end_time, shutting_off_since: after.shutting_off_since, readError: after.readError },
+      liveHeater: out.status ? out.status.spa_heater : null,
+    });
   } catch (err) {
     console.error('[pool-health]', err.message);
     try { await makeMailer().sendAlert('NSB Retreat — pool health check error', err.message); } catch {}
