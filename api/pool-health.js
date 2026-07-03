@@ -41,15 +41,22 @@ export default async function handler(req, res) {
       }
     }
 
-    // TEMP DIAGNOSTIC — inspect the row reconcile saw vs the row after it wrote.
-    let after = null;
-    try { after = await store.getState(); } catch (e) { after = { readError: e.message }; }
+    // TEMP DIAGNOSTIC — probe an explicit write and surface any error.
+    let writeProbe = null, after2 = null;
+    try {
+      const { data, error } = await sb.from('spa_timer')
+        .upsert({ id: 1, state: 'shutting_off', shutoff_attempts: 1, shutting_off_since: Date.now(), early_end_count: 0, updated_at: new Date().toISOString() }, { onConflict: 'id' })
+        .select();
+      writeProbe = error
+        ? { message: error.message, code: error.code, details: error.details, hint: error.hint }
+        : { ok: true, rowsReturned: (data || []).length };
+    } catch (e) { writeProbe = { threw: e.message }; }
+    try { const a = await store.getState(); after2 = { state: a.state }; } catch (e) { after2 = { readError: e.message }; }
     const prior = out.prior || {};
     return res.status(200).json({
-      ok: true, action: out.action, anomaly: out.anomaly, now,
-      prior: { state: prior.state, end_time: prior.end_time, started_at: prior.started_at, heater_on_since: prior.heater_on_since, shutting_off_since: prior.shutting_off_since },
-      after: { state: after.state, end_time: after.end_time, shutting_off_since: after.shutting_off_since, readError: after.readError },
-      liveHeater: out.status ? out.status.spa_heater : null,
+      ok: true, action: out.action, now,
+      prior: { state: prior.state, end_time: prior.end_time },
+      writeProbe, after2, liveHeater: out.status ? out.status.spa_heater : null,
     });
   } catch (err) {
     console.error('[pool-health]', err.message);
