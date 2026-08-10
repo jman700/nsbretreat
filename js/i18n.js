@@ -42,6 +42,10 @@ const I18N = {
       const v = t[el.dataset.i18nAria];
       if (v !== undefined) el.setAttribute('aria-label', v);
     });
+    // Lets other scripts (js/motion.js's hero word-mask reveal) re-run
+    // whenever translated text lands in the DOM, on load and on every
+    // language switch alike.
+    document.dispatchEvent(new CustomEvent('i18n:applied'));
   },
 
   _updateUI() {

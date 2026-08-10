@@ -30,6 +30,18 @@
 
   --radius-full: 100px;
   --nav-h: 64px;
+
+  /* ── Motion system ──────────────────────────────────────────────────────
+     One easing + duration vocabulary for the whole site, so every transition
+     below reads as one designed system instead of a pile of one-off values.
+     --ease-out is the house curve (fast off the line, long gentle settle);
+     --ease-spring adds a slight overshoot, reserved for elements that ENTER
+     the screen as physical objects, never for plain opacity fades. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 0.28s;
+  --dur-mid: 0.55s;
+  --dur-slow: 0.9s;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -38,6 +50,9 @@ html {
   scroll-behavior: smooth;
   overflow-x: hidden;
   max-width: 100%;
+  /* Anchor jumps (nav links, "House Guide" back-links, etc.) land under the
+     fixed nav instead of behind it. */
+  scroll-padding-top: 90px;
 }
 
 body {
@@ -132,14 +147,66 @@ section { padding: var(--section-pad-y) 0; }
   margin-bottom: 1.5rem;
 }
 
+/* ── Scroll reveal ──────────────────────────────────────────────────────────
+   Elements tagged [data-reveal] fade+rise as they enter the viewport; js/motion.js
+   adds .is-revealed via IntersectionObserver. Content stays fully visible if JS
+   never runs or the guest prefers reduced motion (see the block at the bottom
+   of this file), so nothing depends on the animation to be readable. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+  will-change: opacity, transform;
+}
+[data-reveal].is-revealed { opacity: 1; transform: none; }
+/* Stagger children of a revealed row (highlight cards, amenity groups, etc.) */
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-out);
+}
+[data-reveal-stagger].is-revealed > * { opacity: 1; transform: none; }
+[data-reveal-stagger].is-revealed > *:nth-child(1) { transition-delay: 0.00s; }
+[data-reveal-stagger].is-revealed > *:nth-child(2) { transition-delay: 0.07s; }
+[data-reveal-stagger].is-revealed > *:nth-child(3) { transition-delay: 0.14s; }
+[data-reveal-stagger].is-revealed > *:nth-child(4) { transition-delay: 0.21s; }
+[data-reveal-stagger].is-revealed > *:nth-child(5) { transition-delay: 0.28s; }
+[data-reveal-stagger].is-revealed > *:nth-child(6) { transition-delay: 0.35s; }
+[data-reveal-stagger].is-revealed > *:nth-child(n+7) { transition-delay: 0.42s; }
+
+/* ── Section title rule ─────────────────────────────────────────────────────
+   A hairline draws itself out from the centre under each section title as its
+   section enters view — purely decorative, so it rides on an ::after of a
+   wrapper that's already being revealed rather than adding markup per title. */
+[data-reveal] .section-title::after,
+[data-reveal-stagger] .section-title::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 1px;
+  margin: 0.85rem auto 0;
+  background: var(--accent);
+  opacity: 0.55;
+  transition: width 1.1s var(--ease-out) 0.18s;
+}
+[data-reveal].is-revealed .section-title::after,
+[data-reveal-stagger].is-revealed .section-title::after { width: 64px; }
+
 /* ── Nav ── */
 .site-nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: var(--z-nav);
-  background: rgba(249,236,232,0.95);
+  /* Sand, not blush — blush sits almost flush with the page's own white/blush
+     sections, so the nav dissolved into whatever was scrolled underneath it.
+     Sand is a clear tonal step down, and the standing shadow (not just the
+     deeper one added by .scrolled) keeps a visible edge even on the one
+     section (Amenities) that happens to share the tone. */
+  background: rgba(232, 221, 208, 0.96);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--tan);
+  box-shadow: 0 1px 3px rgba(45,41,38,0.06);
   transition: box-shadow var(--transition);
 }
 .site-nav.scrolled { box-shadow: var(--shadow); }
@@ -281,9 +348,14 @@ section { padding: var(--section-pad-y) 0; }
   text-align: center;
   overflow: hidden;
 }
+/* Over-tall so js/motion.js can drift it against scroll (parallax) without
+   ever exposing an edge; will-change keeps the transform on the compositor
+   so the drift stays smooth on a phone. */
 .hero-bg {
   position: absolute;
-  inset: 0;
+  inset: -12% 0;
+  overflow: hidden;
+  will-change: transform;
 }
 .hero-img {
   width: 100%;
@@ -291,6 +363,14 @@ section { padding: var(--section-pad-y) 0; }
   object-fit: cover;
   object-position: center;
 }
+/* Ken Burns — a slow, almost-imperceptible drift that keeps the hero alive
+   even before the guest starts scrolling. */
+@keyframes heroDrift {
+  0%   { transform: scale(1.06) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.13) translate3d(-1.2%, -1%, 0); }
+  100% { transform: scale(1.06) translate3d(0, 0, 0); }
+}
+.hero-img { animation: heroDrift 32s ease-in-out infinite; }
 .hero-bg::after {
   content: '';
   position: absolute;
@@ -303,6 +383,14 @@ section { padding: var(--section-pad-y) 0; }
   color: var(--white);
   padding: 0 1.5rem;
 }
+/* Hero content rises in on load, one beat after another. */
+@keyframes heroRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.hero-content > * { animation: heroRise var(--dur-slow) var(--ease-out) both; }
+.hero-content > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.15s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.25s; }
+.hero-content > *:nth-child(4) { animation-delay: 0.35s; }
+.hero-content > *:nth-child(5) { animation-delay: 0.45s; }
 .hero-eyebrow {
   font-size: 0.8rem;
   letter-spacing: 0.2em;
@@ -314,6 +402,37 @@ section { padding: var(--section-pad-y) 0; }
   font-size: clamp(2.5rem, 8vw, 5rem);
   font-weight: 400;
   margin-bottom: 1rem;
+  /* The word masks below are the only motion on the title — its own block-level
+     heroRise (inherited from .hero-content > *) is switched off so the two
+     don't fight. */
+  animation: none !important;
+  opacity: 1 !important;
+}
+/* ── Hero title word-mask reveal ──────────────────────────────────────────
+   js/motion.js wraps the title's words in .hero-word masks so the property
+   name rises word by word out from behind a clipping edge — the moment that
+   sets the tone for the page. Masked per WORD, not per rendered line: line
+   breaks depend on viewport width and would need re-measuring on resize,
+   while inline-block word masks wrap exactly like text does at any width.
+   If JS never runs the plain text (and the manual <br> line break already in
+   the markup) is exactly what's left on screen — nothing is hidden by CSS
+   alone. */
+.hero-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* Descenders (g, y, p) would be clipped by the mask without this. */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.hero-word > span {
+  display: inline-block;
+  animation: heroWord 1.05s var(--ease-out) both;
+  animation-delay: calc(0.16s + var(--i, 0) * 0.075s);
+}
+@keyframes heroWord {
+  from { opacity: 0; transform: translateY(105%); }
+  to   { opacity: 1; transform: none; }
 }
 .hero-sub {
   font-size: 1rem;
@@ -987,3 +1106,27 @@ section { padding: var(--section-pad-y) 0; }
   .guide-lang-btn { font-size: 0.68rem; padding: 0.25rem 0.5rem; }
 }
 .jump-top svg { width: 18px; height: 18px; }
+
+/* Hover-driven flourishes are gated to devices that actually hover. On a
+   phone, :hover latches on tap and leaves elements stuck mid-transform until
+   the next tap elsewhere — the single most common way "premium" motion turns
+   into a bug on mobile. */
+@media (hover: none) {
+  .gallery-track img:hover { opacity: 1; transform: none; }
+}
+/* Comfortable tap targets + no lingering blue tap flash on touch devices. */
+@media (hover: none) {
+  a, button { -webkit-tap-highlight-color: rgba(45,41,38,0.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-reveal], [data-reveal-stagger] > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [data-reveal] .section-title::after,
+  [data-reveal-stagger] .section-title::after { width: 64px !important; transition: none !important; }
+  .hero-img { animation: none !important; }
+  .hero-content > *, .hero-word > span { animation: none !important; opacity: 1 !important; transform: none !important; }
+  /* Parallax is applied inline by js/motion.js; this makes the site's own
+     reduced-motion check belt-and-braces rather than the only guard. */
+  .hero-bg { transform: none !important; }
+}

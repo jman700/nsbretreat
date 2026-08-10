@@ -48,7 +48,7 @@
 
   <main class="manual-main">
 
-    <section class="manual-section" id="quick">
+    <section class="manual-section" id="quick" data-reveal>
       <div class="section-title-row">
         <h2 class="manual-section-title" data-i18n="quick_title">Quick Info</h2>
         <button class="share-btn" id="share-guide-btn" aria-label="Share guide">
@@ -56,7 +56,7 @@
           <span data-i18n="share_btn">Share Guide</span>
         </button>
       </div>
-      <div class="quick-grid">
+      <div class="quick-grid" data-reveal-stagger>
         <a class="quick-card quick-card-link" href="tel:4075066654" id="host-phone-card">
           <span class="quick-label" data-i18n="quick_host_label">Antonio (Host)</span>
           <span class="quick-value">(407) 506-6654</span>
@@ -106,17 +106,17 @@
       <div class="toast" id="copy-toast">Copied!</div>
     </section>
 
-    <section class="manual-section" id="conditions">
+    <section class="manual-section" id="conditions" data-reveal>
       <h2 class="manual-section-title" data-i18n="beach_cond_title">Current Beach Conditions</h2>
       <div class="beach-cond-widget" id="beach-cond-widget">
         <!-- populated by beach-conditions.js -->
       </div>
     </section>
 
-    <section class="manual-section" id="emergency">
+    <section class="manual-section" id="emergency" data-reveal>
       <h2 class="manual-section-title" data-i18n="emergency_title">Emergency &amp; Safety</h2>
       <p class="emergency-intro" data-i18n="emergency_intro">Save these contacts before you need them.</p>
-      <div class="emergency-grid">
+      <div class="emergency-grid" data-reveal-stagger>
 
         <!-- 911 -->
         <a class="emg-card emg-card-red emg-card-link" href="tel:911">
@@ -175,7 +175,7 @@
       </div>
     </section>
 
-    <section class="manual-section" id="house">
+    <section class="manual-section" id="house" data-reveal>
       <h2 class="manual-section-title" data-i18n="house_title">The House</h2>
 
       <!-- House Rules -->
@@ -436,9 +436,9 @@
 
     </section>
 
-    <section class="manual-section" id="around">
+    <section class="manual-section" id="around" data-reveal>
       <h2 class="manual-section-title" data-i18n="around_title">Getting Around</h2>
-      <div class="around-cards">
+      <div class="around-cards" data-reveal-stagger>
         <div class="around-card">
           <div class="around-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5L8.5 9H5m6.5 8.5L15 6l2.5 5.5H11"/></svg>
@@ -477,7 +477,7 @@
       </div>
     </section>
 
-    <section class="manual-section" id="hottub">
+    <section class="manual-section" id="hottub" data-reveal>
       <h2 class="manual-section-title" data-i18n="hottub_title">Hot Tub</h2>
 
       <!-- Live spa status widget — shown only when heater is active -->
@@ -550,7 +550,7 @@
       <p style="margin-top:1.25rem; font-size:0.85rem; color:var(--charcoal-light)"><span data-i18n="hottub_contact">Questions? Call or text Antonio:</span> <a href="tel:4075066654" style="color:var(--accent)">(407) 506-6654</a></p>
     </section>
 
-    <section class="manual-section" id="local">
+    <section class="manual-section" id="local" data-reveal>
       <h2 class="manual-section-title" data-i18n="local_title">Local Guide</h2>
       <div class="local-filter-tabs">
         <button class="filter-btn active" data-filter="eat" data-i18n="local_filter_eat">Eat</button>
@@ -807,10 +807,10 @@
       </div>
     </section>
 
-    <section class="manual-section" id="events">
+    <section class="manual-section" id="events" data-reveal>
       <h2 class="manual-section-title">Weekly &amp; Monthly Events</h2>
       <p style="color:var(--charcoal-light); font-size:0.9rem; margin-bottom:1.5rem">NSB has a rich calendar of recurring community events — here are some worth planning around.</p>
-      <div class="events-grid">
+      <div class="events-grid" data-reveal-stagger>
 
         <div class="event-card">
           <div class="event-header">
@@ -874,7 +874,7 @@
       </div>
     </section>
 
-    <section class="manual-section" id="beach">
+    <section class="manual-section" id="beach" data-reveal>
       <h2 class="manual-section-title" data-i18n="beach_title">Beach Rules &amp; Tips</h2>
 
       <div class="accordion">
@@ -955,7 +955,7 @@
       </div>
     </section>
 
-    <section class="manual-section" id="checkout">
+    <section class="manual-section" id="checkout" data-reveal>
       <h2 class="manual-section-title" data-i18n="checkout_title">Checkout</h2>
       <p style="color:var(--charcoal-light); font-size:0.9rem; margin-bottom:1.5rem" data-i18n-html="checkout_intro">Check-out is at <strong>10:00 AM</strong>. Before you leave, please take care of the following:</p>
       <ul class="checkout-list">
@@ -971,9 +971,10 @@
       <p style="margin-top:1.25rem; font-size:0.875rem; color:var(--charcoal-light)" data-i18n="checkout_thanks">Thank you for being a great guest! We hope you had a wonderful stay.</p>
     </section>
 
-    <section class="manual-section" id="reviews">
+    <section class="manual-section" id="reviews" data-reveal>
       <h2 class="manual-section-title" data-i18n="reviews_title">Thank You</h2>
       <div class="review-thank-you">
+        <img src="../assets/photos/hosts.jpg" alt="Antonio and Yani" class="review-thank-you-photo" loading="lazy">
         <p data-i18n="reviews_p1">It has been our absolute pleasure hosting you at The New Smyrna Beach Retreat. We hope you made lasting memories, soaked up the sun, and felt right at home from the moment you arrived.</p>
         <p data-i18n="reviews_p2">If you enjoyed your stay, we would be so grateful if you could take a moment to leave us a review. Reviews mean the world to us and help future guests feel confident in choosing our home for their own special escape.</p>
         <p class="review-sign" data-i18n="reviews_sign">With warmth,</p>
@@ -986,7 +987,7 @@
     </section>
 
     <!-- ── Photo Booth ── -->
-    <section class="manual-section" id="photo-booth">
+    <section class="manual-section" id="photo-booth" data-reveal>
       <h2 class="manual-section-title">Photo Booth</h2>
 
       <div id="pb-section">
@@ -1101,7 +1102,7 @@
       </div>
     </section>
 
-    <section class="manual-section" id="guestbook">
+    <section class="manual-section" id="guestbook" data-reveal>
       <h2 class="manual-section-title">Guestbook</h2>
       <p class="gb-intro">Leave a note for future guests! Share a highlight from your stay, a tip about the area, or just a warm hello.</p>
 
@@ -1140,7 +1141,7 @@
       </div>
     </section>
 
-    <section class="manual-section" id="recommendations">
+    <section class="manual-section" id="recommendations" data-reveal>
       <h2 class="manual-section-title" data-i18n="feedback_title">Share Your Feedback</h2>
       <p style="color:var(--charcoal-light); font-size:0.9rem" data-i18n="feedback_desc">Have a suggestion or something we could improve? We read every note and genuinely appreciate the input.</p>
 
@@ -1225,6 +1226,7 @@
   <script src="../js/config.js"></script>
   <script src="js/translations-guide.js"></script>
   <script src="../js/i18n.js"></script>
+  <script src="../js/motion.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="js/manual.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
