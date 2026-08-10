@@ -109,10 +109,10 @@ const TRANSLATIONS = {
     hosts_questions: 'Questions?',
 
     /* Reviews */
-    reviews_badge: '5.0  ·  51 Reviews  ·  Guest Favorite',
+    reviews_badge: '5.0  ·  60+ Reviews  ·  Guest Favorite',
     reviews_title: 'What Our Guests Are Saying',
     reviews_sub: 'Top 1% of homes on Airbnb',
-    reviews_all: 'Read all 51 reviews on Airbnb ↗',
+    reviews_all: 'Read all 60+ reviews on Airbnb ↗',
 
     /* FAQ */
     faq_label: 'Got Questions?',
@@ -256,10 +256,10 @@ const TRANSLATIONS = {
     hosts_questions: '¿Preguntas?',
 
     /* Reviews */
-    reviews_badge: '5.0  ·  51 Reseñas  ·  Favorito de Huéspedes',
+    reviews_badge: '5.0  ·  60+ Reseñas  ·  Favorito de Huéspedes',
     reviews_title: 'Lo Que Dicen Nuestros Huéspedes',
     reviews_sub: 'Top 1% de casas en Airbnb',
-    reviews_all: 'Leer las 51 reseñas en Airbnb ↗',
+    reviews_all: 'Leer las 60+ reseñas en Airbnb ↗',
 
     /* FAQ */
     faq_label: '¿Tienes Preguntas?',
@@ -403,10 +403,10 @@ const TRANSLATIONS = {
     hosts_questions: 'Dúvidas?',
 
     /* Reviews */
-    reviews_badge: '5.0  ·  51 Avaliações  ·  Favorito dos Hóspedes',
+    reviews_badge: '5.0  ·  60+ Avaliações  ·  Favorito dos Hóspedes',
     reviews_title: 'O Que Nossos Hóspedes Dizem',
     reviews_sub: 'Top 1% das casas no Airbnb',
-    reviews_all: 'Ler todas as 51 avaliações no Airbnb ↗',
+    reviews_all: 'Ler todas as 60+ avaliações no Airbnb ↗',
 
     /* FAQ */
     faq_label: 'Tem Dúvidas?',
@@ -550,10 +550,10 @@ const TRANSLATIONS = {
     hosts_questions: 'Des questions ?',
 
     /* Reviews */
-    reviews_badge: '5.0  ·  51 Avis  ·  Coup de Cœur Voyageurs',
+    reviews_badge: '5.0  ·  60+ Avis  ·  Coup de Cœur Voyageurs',
     reviews_title: 'Ce Que Disent Nos Voyageurs',
     reviews_sub: 'Top 1% des hébergements sur Airbnb',
-    reviews_all: 'Lire les 51 avis sur Airbnb ↗',
+    reviews_all: 'Lire les 60+ avis sur Airbnb ↗',
 
     /* FAQ */
     faq_label: 'Des Questions ?',
@@ -697,10 +697,10 @@ const TRANSLATIONS = {
     hosts_questions: 'Fragen?',
 
     /* Reviews */
-    reviews_badge: '5.0  ·  51 Bewertungen  ·  Gästeliebling',
+    reviews_badge: '5.0  ·  60+ Bewertungen  ·  Gästeliebling',
     reviews_title: 'Was Unsere Gäste Sagen',
     reviews_sub: 'Top 1% der Unterkünfte auf Airbnb',
-    reviews_all: 'Alle 51 Bewertungen auf Airbnb lesen ↗',
+    reviews_all: 'Alle 60+ Bewertungen auf Airbnb lesen ↗',
 
     /* FAQ */
     faq_label: 'Haben Sie Fragen?',
@@ -844,10 +844,10 @@ const TRANSLATIONS = {
     hosts_questions: 'Domande?',
 
     /* Reviews */
-    reviews_badge: '5.0  ·  51 Recensioni  ·  Preferito degli Ospiti',
+    reviews_badge: '5.0  ·  60+ Recensioni  ·  Preferito degli Ospiti',
     reviews_title: 'Cosa Dicono i Nostri Ospiti',
     reviews_sub: 'Top 1% degli alloggi su Airbnb',
-    reviews_all: 'Leggi tutte le 51 recensioni su Airbnb ↗',
+    reviews_all: 'Leggi tutte le 60+ recensioni su Airbnb ↗',
 
     /* FAQ */
     faq_label: 'Hai Domande?',
