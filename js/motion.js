@@ -146,17 +146,36 @@
         var el = nums[i];
         var DURATION = 1100;
         var start = null;
+        var settled = false;
+        // The true value, rendered exactly as it will finally read. Held here so
+        // every exit path below writes an identical string.
+        var finalHTML = fmt(p.num, p.decimals) + p.unitHTML;
+        function settle() {
+          if (settled) return;
+          settled = true;
+          el.innerHTML = finalHTML;
+        }
         // easeOutExpo — quick off the line, settles gently onto the final value.
         function ease(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
         function step(ts) {
+          if (settled) return;
           if (start === null) start = ts;
           var t = Math.min(1, (ts - start) / DURATION);
+          if (t >= 1) { settle(); return; }
           el.innerHTML = fmt(p.num * ease(t), p.decimals) + p.unitHTML;
-          if (t < 1) requestAnimationFrame(step);
+          requestAnimationFrame(step);
         }
         // Only now — animation actually starting — do we drop to zero.
         el.innerHTML = fmt(0, p.decimals) + p.unitHTML;
         requestAnimationFrame(step);
+        // Safety net: requestAnimationFrame is paused whenever the tab isn't
+        // visible, so an interruption mid-count (a guest scrolls the stats into
+        // view then switches apps — routine on a phone) can strand the number
+        // at an arbitrary intermediate value, and `played` blocks any replay.
+        // A stranded number is worse than no animation: "15 Guests" on a home
+        // that sleeps 16 is a false claim about the property. This guarantees
+        // the true value lands regardless of whether rAF ever finishes.
+        setTimeout(settle, DURATION + 400);
       });
     }
 
