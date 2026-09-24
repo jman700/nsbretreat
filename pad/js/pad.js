@@ -218,7 +218,7 @@
         // Show offline badge
         if (badge) {
           badge.textContent = 'Offline';
-          badge.className = 'pool-badge offline';
+          badge.className = 'pool-online-badge offline';
         }
       });
   }

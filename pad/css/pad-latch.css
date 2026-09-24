@@ -157,3 +157,31 @@ input[type="range"].pool-slider { accent-color: var(--accent); }
 .filter-btn.active, .filter-btn:hover { background: var(--charcoal); border-color: var(--charcoal); color: #fff; }
 
 .copy-toast, .pool-toast { background: var(--charcoal); color: #fff; }
+
+/* ── Portrait: the lockup on its own row, the tabs beneath ────────────────
+ * pad.css stacks the nav into two rows in portrait so every tab is visible
+ * without scrolling. The fixed --nav-h above flattened that back to one
+ * 68px row — the lockup was clipped and the tab row hung out of the bar —
+ * so in portrait the bar sizes to its two rows again, and the page clears
+ * them (measured: 60px lockup row + 44px tab row). */
+@media (orientation: portrait) {
+  .pad-nav { height: auto; }
+  .pad-nav-inner { padding: 0 0.75rem; }
+  .pad-logo {
+    width: 100%;
+    justify-content: center;
+    padding: 0.55rem 1rem;
+    margin-right: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--tan);
+  }
+  .pad-tab {
+    min-height: 44px;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid transparent;
+  }
+  .pad-tab.active { border-bottom-color: var(--accent); }
+  .pad-tab.active::after { display: none; }
+  .pad-main { padding-top: calc(104px + 1.75rem); }
+}
