@@ -9,13 +9,20 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/pad/css/pad.css">
+  <link rel="stylesheet" href="/pad/css/pad-latch.css">
 </head>
 <body>
 
   <!-- ── Nav ── -->
   <nav class="pad-nav" id="pad-nav">
     <div class="pad-nav-inner" id="pad-tabs">
-      <span class="pad-logo">NSB Retreat</span>
+      <span class="pad-logo" aria-label="NSB Retreat">
+        <span class="pad-mark" aria-hidden="true">NSB</span>
+        <span class="pad-wordmark" aria-hidden="true">
+          <span class="pad-name">NSB Retreat</span>
+          <span class="pad-place">New Smyrna Beach, FL</span>
+        </span>
+      </span>
       <a href="#pool"       class="pad-tab active">Pool &amp; Spa</a>
       <a href="#beach"      class="pad-tab">Beach</a>
       <a href="#wifi"       class="pad-tab">WiFi &amp; Tech</a>

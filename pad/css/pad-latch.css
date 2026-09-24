@@ -1,0 +1,159 @@
+/* pad-latch.css — the iPad kiosk in the Latch look (2026-09-23)
+ *
+ * nsbretreat.com and its guide moved onto Latch with the racing-green and
+ * champagne-gold theme, the NSB monogram seal and gold-edged cards. The kiosk
+ * keeps its own markup and pool controls; this layer, loaded after pad.css,
+ * brings it into the same visual language. Re-pointing the shared variables
+ * does most of it; the rest are the few places pad.css hard-codes a colour.
+ */
+
+:root {
+  --blush: #fbf7ec;
+  --sand: #ecdfbe;
+  --tan: #c9ad6e;           /* champagne gold — every card edge */
+  --charcoal: #2d2926;
+  --charcoal-light: #5c5550;
+  --charcoal-lighter: #9a9390;
+  --white: #ffffff;
+  --accent: #006039;        /* racing green */
+  --accent-hover: #004528;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 16px rgba(45, 41, 38, 0.08);
+  --nav-h: 68px;
+}
+
+body {
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-weight: 400;
+  background: linear-gradient(180deg, #f6f0e1 0%, #efe4c9 100%) fixed;
+  color: var(--charcoal);
+}
+
+/* ── Nav: the site's lockup — seal, name, place ─────────────────────────── */
+.pad-nav {
+  height: var(--nav-h);
+  background: rgba(251, 247, 236, 0.96);
+  border-bottom: 1px solid var(--tan);
+  box-shadow: 0 1px 3px rgba(45, 41, 38, 0.05);
+}
+.pad-logo {
+  gap: 0.7rem;
+  padding: 0 1.1rem 0 0.6rem;
+  border-right: 1px solid var(--tan);
+  margin-right: 0.4rem;
+}
+.pad-mark {
+  position: relative; flex-shrink: 0;
+  width: 42px; height: 42px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--tan); background: var(--white);
+  font-family: var(--font-serif); font-size: 0.82rem; line-height: 1;
+  letter-spacing: 0.04em; padding-left: 0.04em; color: var(--accent);
+}
+.pad-mark::after {
+  content: ''; position: absolute; inset: 3px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--tan) 55%, transparent);
+}
+.pad-wordmark { display: flex; flex-direction: column; line-height: 1; }
+.pad-name { font-family: var(--font-serif); font-size: 1.4rem; letter-spacing: 0.03em; color: var(--charcoal); }
+.pad-place {
+  margin-top: 0.3rem; font-family: var(--font-sans); font-size: 0.52rem; font-weight: 600;
+  letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent);
+}
+.pad-tab {
+  font-family: var(--font-sans);
+  font-size: 0.74rem; letter-spacing: 0.1em;
+  color: var(--charcoal);
+}
+.pad-tab.active::after {
+  height: 1px; bottom: 16px; left: 0.875rem; right: 0.875rem;
+  background: var(--accent); border-radius: 0;
+}
+.pad-main { padding-top: calc(var(--nav-h) + 2rem); }
+
+/* ── Section panels and every card inside them: one gold edge ───────────── */
+.pad-section {
+  border: 1px solid var(--tan);
+  box-shadow: var(--shadow);
+}
+.pad-section-title {
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  border-bottom: 2px solid var(--accent);
+}
+.pad-subsection-title { font-family: var(--font-serif); color: var(--charcoal); }
+
+.info-card, .temp-card, .bc-card, .emg-card, .place-card, .acc-item, .pool-widget {
+  border: 1px solid var(--tan);
+  border-radius: var(--radius-sm);
+}
+.info-card, .bc-card, .emg-card, .place-card { background: var(--blush); }
+.info-card.copyable:hover { background: #f5ecd6; border-color: var(--accent); }
+a.emg-card:hover { background: #f5ecd6; }
+.info-value, .temp-value, .bc-value, .emg-number { font-family: var(--font-serif); color: var(--charcoal); }
+.info-label, .temp-label, .bc-label, .emg-label {
+  font-family: var(--font-sans); font-weight: 600; letter-spacing: 0.14em; color: var(--charcoal-lighter);
+}
+.place-tag {
+  background: rgba(0, 96, 57, 0.08); color: var(--accent);
+  border-radius: 100px; font-weight: 600; letter-spacing: 0.12em;
+}
+.place-card-body h3 { font-family: var(--font-serif); font-weight: 400; }
+
+.acc-trigger { font-family: var(--font-sans); font-weight: 500; font-size: 0.98rem; background: var(--blush); }
+.acc-trigger:hover { background: #f5ecd6; }
+
+/* Numbered steps — gold-ringed numerals, like the guide and the seal */
+.step-num {
+  background: transparent !important;
+  border: 1px solid var(--tan);
+  color: var(--accent) !important;
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+/* ── Pool & spa controls ───────────────────────────────────────────────── */
+.pool-widget { background: var(--blush); }
+.pool-widget-title { font-family: var(--font-serif); font-size: 1.3rem; }
+.pool-online-badge {
+  background: rgba(0, 96, 57, 0.08); color: var(--accent);
+  border: 1px solid rgba(0, 96, 57, 0.28); font-weight: 600;
+}
+.pool-online-badge.offline {
+  background: var(--white); color: var(--charcoal-lighter); border-color: var(--tan);
+}
+.temp-card { background: var(--white); }
+.temp-value { font-size: 2.1rem; }
+
+.pool-toggle {
+  background: var(--white);
+  border: 1px solid var(--tan);
+  color: var(--charcoal);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.pool-toggle.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.heater-dur-btn {
+  border: 1px solid var(--tan); background: var(--white); color: var(--charcoal); font-weight: 600;
+}
+.heater-dur-btn:active:not(:disabled) { background: var(--accent); border-color: var(--accent); color: #fff; }
+.heater-countdown { color: var(--accent); }
+.heater-stop-btn { background: var(--charcoal); letter-spacing: 0.06em; }
+
+.pool-pump-status { background: var(--white); border: 1px solid var(--tan); font-weight: 600; }
+input[type="range"].pool-slider { accent-color: var(--accent); }
+
+/* ── Buttons, filters, toasts ──────────────────────────────────────────── */
+.welcome-call-btn {
+  background: var(--charcoal); border-radius: var(--radius-sm);
+  letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.8rem;
+}
+.welcome-signature { font-family: 'Dancing Script', cursive; font-weight: 600; }
+.welcome-photo { border: 1px solid var(--tan); }
+
+.filter-btn { border: 1px solid var(--tan); background: var(--blush); color: var(--charcoal-light); font-weight: 500; }
+.filter-btn.active, .filter-btn:hover { background: var(--charcoal); border-color: var(--charcoal); color: #fff; }
+
+.copy-toast, .pool-toast { background: var(--charcoal); color: #fff; }
