@@ -58,3 +58,13 @@ https://www.airbnb.com/rooms/925287223019649070
 - Amenities: private pool, hot tub, covered pergola, outdoor kitchen, outdoor bar, putting green, hammock, game room (air hockey + arcade), massage chair, Margaritaville maker, beach bikes, beach gear, kids amenities
 - Pool heating available ($40/day); pet fee $395 required for pets
 - Check-in 4 PM, check-out 10 AM
+
+## Migration rules (Supabase default privileges, 2026-10-22 / 2026-10-30)
+
+New tables, functions and views get NO browser-role access by default any more. Every new migration must:
+
+- **table:** `enable row level security` + explicit minimal `grant ... to authenticated` (anon only for public-by-design data) + `grant all ... to service_role` (+ sequences).
+- **function:** `revoke execute ... from public, anon, authenticated`, then grant only what is needed; `set search_path`.
+- **view:** `with (security_invoker = on)` - re-state it on every `create or replace view`.
+
+Copy-paste template and details: `supabase/MIGRATION_RULES.md`. Enforced for migrations dated on/after 2026-10-22 by `test/migration-rules.test.js` (`node --test test/migration-rules.test.js`).
