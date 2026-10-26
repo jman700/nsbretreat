@@ -71,7 +71,7 @@ if (navToggle && navLinks) {
   var badge = document.getElementById('conditions-badge');
   var tempEl = document.getElementById('conditions-temp');
   if (!badge || !tempEl) return;
-  fetch('https://api.open-meteo.com/v1/forecast?latitude=29.026&longitude=-80.926&current=temperature_2m&temperature_unit=fahrenheit&forecast_days=1')
+  fetch('/api/forecast?src=weather') // own proxy; no third-party request from the browser
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var temp = Math.round(data.current.temperature_2m);

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@600&family=Inter:wght@300;400;500&display=swap');
+@import url('/css/fonts.css'); /* self-hosted; no Google Fonts request */
 
 :root {
   --blush: #f9ece8;

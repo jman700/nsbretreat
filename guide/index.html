@@ -12,6 +12,7 @@
   <meta name="apple-mobile-web-app-title" content="NSB Guide">
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/manual.css">
+  <link rel="stylesheet" href="/css/consent.css">
 </head>
 <body class="manual-body">
 
@@ -1220,20 +1221,22 @@
     <button class="lang-option" data-lang-option="it" role="menuitem">Italiano</button>
   </div>
 
-  <!-- Vercel Analytics (enable in Vercel dashboard → Analytics tab) -->
-  <script defer src="/_vercel/insights/script.js"></script>
+  <footer class="nsbc-footer"><a href="/privacy">Privacy notice</a><button type="button" class="nsbc-prefs" data-cookie-prefs>Cookie preferences</button></footer>
+
+  <!-- Vercel Web Analytics is loaded by js/analytics.js only after Analytics consent -->
+  <script src="/js/consent.js"></script>
 
   <script src="../js/config.js"></script>
   <script src="js/translations-guide.js"></script>
   <script src="../js/i18n.js"></script>
   <script src="../js/motion.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="/vendor/qrcodejs-1.0.0.min.js"></script>
   <script src="js/manual.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+  <script src="/vendor/fuse-7.0.0.min.js"></script>
   <script src="js/chatbot.js"></script>
   <script src="js/beach-conditions.js"></script>
   <script src="js/extras.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/vendor/supabase-js-2.118.0.min.js"></script>
   <script src="js/photobooth.js"></script>
   <script src="../js/analytics.js"></script>
   <script>

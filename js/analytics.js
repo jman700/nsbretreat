@@ -1,28 +1,73 @@
 // analytics.js — NSB Retreat Analytics
 // GA4 init + comprehensive event tracking for guide and landing pages.
-// Vercel Analytics loaded separately via <script> tag in each HTML file.
+// GA4 and Vercel Web Analytics both wait for Analytics consent (js/consent.js).
+// Google runs in BASIC consent mode: nothing is requested from Google until the
+// visitor grants Analytics, and events are never queued before that and replayed.
 
 (function () {
 
-  // ── 1. Boot GA4 ────────────────────────────────────────────────────────────
-  const gaId = typeof CONFIG !== 'undefined' && CONFIG.ga_measurement_id;
-  if (gaId && gaId !== 'G-XXXXXXXXXX') {
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
-    document.head.appendChild(s);
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    window.gtag = gtag;
-    gtag('js', new Date());
-    gtag('config', gaId, {
-      page_title:    document.title,
-      page_location: location.href,
-    });
+  function analyticsOk() {
+    return typeof window.NSBConsent !== 'undefined' && window.NSBConsent.has('analytics');
+  }
+  function marketingOk() {
+    return typeof window.NSBConsent !== 'undefined' && window.NSBConsent.has('marketing');
   }
 
-  // ── 2. Helper: fires to GA4 + Vercel Analytics ──────────────────────────────
+  // Ad click IDs need Marketing; strip them from the page URL GA sees otherwise.
+  function pageLocation() {
+    if (marketingOk()) return location.href;
+    try {
+      const u = new URL(location.href);
+      ['gclid', 'gbraid', 'wbraid', 'dclid', 'fbclid', 'msclkid', 'ttclid', 'li_fat_id'].forEach(function (k) { u.searchParams.delete(k); });
+      return u.toString();
+    } catch (e) { return location.origin + location.pathname; }
+  }
+
+  // ── 1. Boot GA4 + Vercel Web Analytics (only after Analytics consent) ──────
+  function boot() {
+    if (window.__nsbTrackersLoaded) return;
+    window.__nsbTrackersLoaded = true;
+
+    const gaId = typeof CONFIG !== 'undefined' && CONFIG.ga_measurement_id;
+    if (gaId && gaId !== 'G-XXXXXXXXXX') {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+      const ads = marketingOk() ? 'granted' : 'denied';
+      gtag('consent', 'default', {
+        analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+      });
+      gtag('consent', 'update', {
+        analytics_storage: 'granted', ad_storage: ads, ad_user_data: ads, ad_personalization: ads,
+      });
+      gtag('js', new Date());
+      gtag('config', gaId, {
+        page_title:    document.title,
+        page_location: pageLocation(),
+        allow_google_signals: marketingOk(),
+        allow_ad_personalization_signals: marketingOk(),
+      });
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+      document.head.appendChild(s);
+    }
+
+    // Vercel Web Analytics (first-party path, still analytics)
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    const v = document.createElement('script');
+    v.defer = true;
+    v.src = '/_vercel/insights/script.js';
+    document.head.appendChild(v);
+  }
+
+  if (typeof window.NSBConsent !== 'undefined') {
+    window.NSBConsent.whenGranted('analytics', boot);
+  }
+
+  // ── 2. Helper: fires to GA4 + Vercel Analytics (dropped, not queued, without consent)
   function track(eventName, params) {
+    if (!analyticsOk()) return;
     if (typeof window.gtag === 'function') {
       window.gtag('event', eventName, params || {});
     }

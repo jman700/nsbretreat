@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/pad/css/pad.css">
   <link rel="stylesheet" href="/pad/css/pad-latch.css">
+  <link rel="stylesheet" href="/css/consent.css">
 </head>
 <body>
 
@@ -637,14 +638,17 @@
 
   </main>
 
+  <footer class="nsbc-footer"><a href="/privacy">Privacy notice</a><button type="button" class="nsbc-prefs" data-cookie-prefs>Cookie preferences</button></footer>
+
   <!-- Toasts -->
   <div class="pool-toast" id="pool-toast"></div>
   <div class="copy-toast" id="copy-toast">Copied!</div>
 
+  <script src="/js/consent.js"></script>
   <script src="/js/config.js"></script>
   <script src="/pad/js/pad.js"></script>
   <script src="/guide/js/beach-conditions.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="/vendor/qrcodejs-1.0.0.min.js"></script>
   <script>
     (function() {
       var qrEl = document.getElementById('wifi-qr');

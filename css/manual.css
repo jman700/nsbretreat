@@ -1,5 +1,5 @@
 /* manual.css — House Manual Page */
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+/* Dancing Script is self-hosted via /css/fonts.css (imported by styles.css) */
 
 .manual-body {
   background: var(--sand);
